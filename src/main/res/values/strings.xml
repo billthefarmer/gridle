@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="appName">Gridle</string>
+  <string name="help">Help</string>
+  <string name="about">About</string>
+
+  <string name="version" formatted="false"><a
+  href="https://github.com/billthefarmer/worfle/releases/latest">%s</a>\n\nBuilt
+  %s\n\nCopyright \u00A9 2022 <a
+  href="https://github.com/billthefarmer">Bill
+  Farmer</a>\n\nLicence
+  <a href="https://www.gnu.org/licenses/gpl.txt">GNU GPLv3</a>
+  </string>
+
+</resources>

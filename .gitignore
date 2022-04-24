@@ -10,6 +10,12 @@
 # Java class files
 *.class
 
+# Emacs backups
+*~
+
+# Data
+data/
+
 # Generated files
 bin/
 gen/
