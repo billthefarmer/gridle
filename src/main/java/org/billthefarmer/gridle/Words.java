@@ -257,24 +257,25 @@ public class Words
 
     public static void randomise(char puzzle[][])
     {
-        for (int row = 0; row < puzzle.length; row++)
+        for (int row = 0; row < Gridle.SIZE; row++)
         {
-            for (int col = 0; col < puzzle[row].length; col++)
+            for (int col = 0; col < Gridle.SIZE; col++)
             {
                 if (puzzle[row][col] == ' ')
                     continue;
 
-                int r = random.nextInt(puzzle[row].length);
-                int c = random.nextInt(puzzle.length);
+                int r = random.nextInt(Gridle.SIZE);
+                int c = random.nextInt(Gridle.SIZE);
+
                 while (puzzle[r][c] == ' ')
                 {
-                    r = random.nextInt(puzzle.length);
-                    c = random.nextInt(puzzle[row].length);
+                    r = random.nextInt(Gridle.SIZE);
+                    c = random.nextInt(Gridle.SIZE);
                 }
 
-                char w = puzzle[r][c];
-                puzzle[r][c] = puzzle[row][col];
-                puzzle[row][col] = w;
+                char ch = puzzle[row][col];
+                puzzle[row][col] = puzzle[r][c];
+                puzzle[r][c] = ch;
             }
         }
     }

@@ -57,6 +57,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Gridle extends Activity
 {
     public static final String TAG = "Gridle";
@@ -79,11 +82,14 @@ public class Gridle extends Activity
     public static final int BLACK   = 10;
     public static final int WHITE   = 11;
 
-    private char gridle[][];
-    private char puzzle[][];
-
     private TextView display[][];
     private TextView display2[][];
+
+    private boolean scored[][];
+    private boolean used[][];
+
+    private char gridle[][];
+    private char puzzle[][];
 
     private float x;
     private float y;
@@ -142,27 +148,27 @@ public class Gridle extends Activity
             switch (event.getActionMasked())
             {
             case MotionEvent.ACTION_DOWN:
-            x = view.getX();
-            y = view.getY();
-            dX = x - event.getRawX();
-            dY = y - event.getRawY();
-            scale(view, 1.4f);
-            break;
+                x = view.getX();
+                y = view.getY();
+                dX = x - event.getRawX();
+                dY = y - event.getRawY();
+                scale(view, 1.4f);
+                break;
 
             case MotionEvent.ACTION_MOVE:
-            view.setX(event.getRawX() + dX);
-            view.setY(event.getRawY() + dY);
-            break;
+                view.setX(event.getRawX() + dX);
+                view.setY(event.getRawY() + dY);
+                break;
 
             case MotionEvent.ACTION_UP:
-            findNearestView(view);
-            view.setX(x);
-            view.setY(y);
-            scale(view, 1.0f);
-            break;
+                scorePuzzle(view);
+                view.setX(x);
+                view.setY(y);
+                scale(view, 1.0f);
+                break;
 
             default:
-            return false;
+                return false;
             }
 
             return true;
@@ -172,12 +178,12 @@ public class Gridle extends Activity
         for (int i = 0; i < display.length; i++)
             display[i] = new TextView[SIZE];
 
-        ViewGroup grid = (ViewGroup) findViewById(R.id.grid1);
+        ViewGroup grid = (ViewGroup) findViewById(R.id.puzzle);
         for (int i = 0; i < grid.getChildCount(); i++)
         {
-            display[i % SIZE][i / SIZE] =
+            display[i / SIZE][i % SIZE] =
                 (TextView) grid.getChildAt(i);
-            display[i % SIZE][i / SIZE]
+            display[i / SIZE][i % SIZE]
                 .setOnTouchListener(listener);
         }
 
@@ -185,14 +191,10 @@ public class Gridle extends Activity
         for (int i = 0; i < display2.length; i++)
             display2[i] = new TextView[SIZE];
 
-        ViewGroup grid2 = (ViewGroup) findViewById(R.id.grid2);
+        ViewGroup grid2 = (ViewGroup) findViewById(R.id.gridle);
         for (int i = 0; i < grid2.getChildCount(); i++)
-        {
-            display2[i % SIZE][i / SIZE] =
+            display2[i / SIZE][i % SIZE] =
                 (TextView) grid2.getChildAt(i);
-            display2[i % SIZE][i / SIZE]
-                .setOnTouchListener(listener);
-        }
 
         gridle = Words.getGridle();
 
@@ -219,6 +221,22 @@ public class Gridle extends Activity
                     new String(new char[] {puzzle[i][j]}).toUpperCase());
             }
         }
+
+        used = new boolean[SIZE][];
+        for (int row = 0; row < SIZE; row++)
+        {
+            used[row] = new boolean[SIZE];
+            Arrays.fill(used[row], false);
+        }
+
+        scored = new boolean[SIZE][];
+        for (int row = 0; row < SIZE; row++)
+        {
+            scored[row] = new boolean[SIZE];
+            Arrays.fill(scored[row], false);
+        }
+
+        scorePuzzle();
     }
 
     // onResume
@@ -239,6 +257,7 @@ public class Gridle extends Activity
         SharedPreferences.Editor editor = preferences.edit();
 
         editor.putInt(PREF_THEME, theme);
+        editor.apply();
     }
 
     private void scale(View view, float scale)
@@ -269,14 +288,6 @@ public class Gridle extends Activity
         {
         case R.id.refresh:
             refresh();
-            break;
-
-        case R.id.image:
-            shareImage();
-            break;
-
-        case R.id.code:
-            showCode();
             break;
 
         case R.id.dark:
@@ -326,26 +337,201 @@ public class Gridle extends Activity
             recreate();
     }
 
-    private void findNearestView(View view)
+    // scorePuzzle
+    private void scorePuzzle()
+    {
+        for (int row = 0; row < SIZE; row++)
+        {
+            Arrays.fill(used[row], false);
+            Arrays.fill(scored[row], false);
+        }
+
+        for (int row = 0; row < SIZE; row++)
+        {
+            for (int col = 0; col < SIZE; col++)
+            {
+                if (display[row][col].getVisibility() == View.INVISIBLE)
+                    continue;
+
+                if (puzzle[row][col] == gridle[row][col])
+                {
+                    used[row][col] = true;
+                    scored[row][col] = true;
+                    display[row][col].setTextColor(getColour(GREEN));
+                }
+
+                else
+                    display[row][col].setTextColor(getColour(GREY));
+            }
+        }
+
+        for (int row = 0; row < SIZE; row++)
+        {
+            for (int col = 0; col < SIZE; col++)
+            {
+                if (display[row][col].getVisibility() == View.INVISIBLE)
+                    continue;
+
+                if (scored[row][col])
+                    continue;
+
+                switch (row)
+                {
+                case 0:
+                case 2:
+                case 4:
+                    for (int c = 0; c < Gridle.SIZE; c++)
+                    {
+                        if (used[row][c])
+                        {
+                            display[row][col].setTextColor(getColour(GREY));
+                            continue;
+                        }
+
+                        if (puzzle[row][col] == gridle[row][c])
+                        {
+                            used[row][c] = true;
+                            scored[row][col] = true;
+                            display[row][col].setTextColor(getColour(YELLOW));
+                            break;
+                        }
+
+                        else
+                            display[row][col].setTextColor(getColour(GREY));
+                    }
+                }
+
+                switch (col)
+                {
+                case 0:
+                case 2:
+                case 4:
+                    for (int r = 0; r < SIZE; r++)
+                    {
+                        if (used[r][col])
+                        {
+                            display[row][col].setTextColor(getColour(GREY));
+                            continue;
+                        }
+
+                        if (puzzle[row][col] == gridle[r][col])
+                        {
+                            used[r][col] = true;
+                            scored[row][col] = true;
+                            display[row][col].setTextColor(getColour(YELLOW));
+                            break;
+                        }
+
+                        else
+                            display[row][col].setTextColor(getColour(GREY));
+                    }
+                }
+            }
+        }
+    }
+
+    // scorePuzzle
+    private void scorePuzzle(View view)
+    {
+        if (swapLetters(view) == false)
+            return;
+
+        scorePuzzle();
+    }
+
+    // swapLetters
+    private boolean swapLetters(View view)
+    {
+        View v = findNearestView(view);
+
+        if (v == null)
+            return false;
+
+        ViewGroup parent = (ViewGroup) view.getParent();
+        int index = parent.indexOfChild(v);
+        int r = index / SIZE;
+        int c = index % SIZE;
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, String.format("v[%d][%d]='%c'", r, c, puzzle[r][c]));
+
+        if (puzzle[r][c] == ' ')
+            return false;
+
+        index = parent.indexOfChild(view);
+        int row = index / SIZE;
+        int col = index % SIZE;
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, String.format("view[%d][%d]='%c'", row, col,
+                                     puzzle[row][col]));
+
+        char w = puzzle[r][c];
+        puzzle[r][c] = puzzle[row][col];
+        puzzle[row][col] = w;
+
+        CharSequence cs = display[r][c].getText();
+        display[r][c].setText(display[row][col].getText());
+        display[row][col].setText(cs);
+
+        return true;
+    }
+
+    // findNearestView
+    private View findNearestView(View view)
     {
         ViewGroup parent = (ViewGroup) view.getParent();
         double d = Double.MAX_VALUE;
-        TextView nearest = null;
+        View nearest = null;
         for (int i = 0; i < parent.getChildCount(); i++)
         {
             View v = parent.getChildAt(i);
             if (v.equals(view))
                 continue;
 
-            if (v.getClipRect().contains(view.getX(), view.getY()))
+            if (Math.hypot(view.getX() - v.getX(),
+                           view.getY() - v.getY()) < d)
             {
-                nearest = (TextView) v;
-                break;
+                d = Math.hypot(view.getX() - v.getX(),
+                               view.getY() - v.getY());
+                nearest = v;
             }
         }
 
-        Log.d(TAG, String.format("Nearest = '%s'",
-                                 nearest.getText().toString()));
+        if (nearest.getVisibility() == View.INVISIBLE)
+                return null;
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, String.format(
+                      "Nearest = '%s'", ((TextView) nearest).getText()));
+
+        return nearest;
+    }
+
+    // refresh
+    private void refresh()
+    {
+    }
+
+    // getColour
+    private int getColour(int c)
+    {
+        switch (c)
+        {
+        case WHITE:
+            return 0xffffffff;
+
+        case YELLOW:
+            return 0xffffff00;
+
+        case GREEN:
+            return 0xff00ff00;
+
+        case GREY:
+            return 0x7fffffff;
+        }
+
+        return 0;
     }
 
     // about
