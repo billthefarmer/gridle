@@ -7,8 +7,8 @@
     android:layout_height="fill_parent"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    android:layout_marginTop="36dp"
-    android:layout_marginBottom="36dp"
+    android:layout_marginTop="38dp"
+    android:layout_marginBottom="38dp"
     android:orientation="vertical"
     tools:ignore="RtlHardcoded">
 
@@ -30,7 +30,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -43,7 +43,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -56,7 +56,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -69,7 +69,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -82,7 +82,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -94,7 +94,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -107,7 +107,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:visibility="invisible"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -121,7 +121,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -134,7 +134,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:visibility="invisible"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -148,7 +148,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -160,20 +160,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -186,7 +173,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -199,7 +186,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -212,19 +199,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -237,7 +212,32 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:background="@drawable/box"
+        android:minWidth="38dp"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:background="@drawable/box"
+        android:minWidth="38dp"
         android:gravity="center"
         android:visibility="invisible"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -251,7 +251,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -264,7 +264,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:visibility="invisible"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -278,7 +278,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -290,20 +290,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -316,7 +303,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -329,7 +316,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -342,32 +329,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-  </GridLayout>
-
-  <GridLayout
-      android:id="@+id/gridle"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="36dp"
-      android:layout_gravity="center_horizontal"
-      android:rowCount="5"
-      android:columnCount="5"
-      android:useDefaultMargins="true"
-      tools:ignore="HardcodedText">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -380,306 +342,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:visibility="invisible"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:visibility="invisible"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:visibility="invisible"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:visibility="invisible"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/box"
-        android:minWidth="35dp"
+        android:minWidth="38dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

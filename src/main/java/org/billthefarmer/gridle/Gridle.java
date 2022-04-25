@@ -41,6 +41,7 @@ import android.preference.PreferenceManager;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -81,6 +82,8 @@ public class Gridle extends Activity
     public static final int SIZE = 5;
 
     public static final String PREF_THEME = "pref_theme";
+    public static final String PREF_CONT = "pref_cont";
+    public static final String PREF_CORR = "pref_corr";
     public static final String PREF_FARE = "pref_fare";
 
     public static final String PUZZLE_0 = "puzzle_0";
@@ -115,7 +118,8 @@ public class Gridle extends Activity
     public static final int WHITE   = 11;
 
     private TextView display[][];
-    private TextView display2[][];
+
+    private Toast toast;
 
     private MediaPlayer mediaPlayer;
 
@@ -147,6 +151,9 @@ public class Gridle extends Activity
             PreferenceManager.getDefaultSharedPreferences(this);
 
         theme = preferences.getInt(PREF_THEME, DARK);
+        contains = preferences.getInt(PREF_CONT, getColour(YELLOW));
+        correct = preferences.getInt(PREF_CORR, getColour(GREEN));
+        fanfare = preferences.getBoolean(PREF_FARE, true);
 
         switch (theme)
         {
@@ -226,15 +233,6 @@ public class Gridle extends Activity
                 .setOnTouchListener(listener);
         }
 
-        display2 = new TextView[SIZE][];
-        for (int i = 0; i < display2.length; i++)
-            display2[i] = new TextView[SIZE];
-
-        ViewGroup grid2 = (ViewGroup) findViewById(R.id.gridle);
-        for (int i = 0; i < grid2.getChildCount(); i++)
-            display2[i / SIZE][i % SIZE] =
-                (TextView) grid2.getChildAt(i);
-
         if (savedInstanceState != null)
         {
             gridle = new char[SIZE][];
@@ -263,16 +261,6 @@ public class Gridle extends Activity
                 puzzle[i] = Arrays.copyOf(gridle[i], SIZE);
         
             Words.randomise(puzzle);
-        }
-
-        for (int i = 0; i < display2.length; i++)
-        {
-            for (int j = 0; j < display2[i].length; j++)
-            {
-                display2[i][j].setText
-                    (new String(new char[] {gridle[i][j]})
-                     .toUpperCase(Locale.getDefault()));
-            }
         }
 
         for (int i = 0; i < SIZE; i++)
@@ -315,11 +303,20 @@ public class Gridle extends Activity
     {
         super.onPause();
 
+        if (mediaPlayer != null)
+        {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
 
         editor.putInt(PREF_THEME, theme);
+        editor.putInt(PREF_CONT, contains);
+        editor.putInt(PREF_CORR, correct);
+        editor.putBoolean(PREF_FARE, fanfare);
         editor.apply();
     }
 
@@ -356,6 +353,15 @@ public class Gridle extends Activity
         // is present.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+
+        return true;
+    }
+
+    // onPrepareOptionsMenu
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        menu.findItem(R.id.fanfare).setChecked(fanfare);
 
         return true;
     }
@@ -404,6 +410,14 @@ public class Gridle extends Activity
             theme(BLACK);
             break;
 
+        case R.id.fanfare:
+            fanfare(item);
+            break;
+
+        case R.id.highlight:
+            highlight();
+            break;
+
         case R.id.help:
             help();
             break;
@@ -425,6 +439,13 @@ public class Gridle extends Activity
         theme = c;
         if (Build.VERSION.SDK_INT != Build.VERSION_CODES.M)
             recreate();
+    }
+
+    // fanfare
+    private void fanfare(MenuItem item)
+    {
+        fanfare = !fanfare;
+        item.setChecked(fanfare);
     }
 
     // highlight
@@ -567,6 +588,8 @@ public class Gridle extends Activity
             }
         }
 
+        solved = true;
+
         for (int row = 0; row < SIZE; row++)
         {
             for (int col = 0; col < SIZE; col++)
@@ -580,7 +603,21 @@ public class Gridle extends Activity
                     scored[row][col] = true;
                     display[row][col].setTextColor(getColour(GREEN));
                 }
+
+                else
+                    solved = false;
             }
+        }
+
+        if (solved)
+        {
+            if (fanfare)
+            {
+                mediaPlayer = MediaPlayer.create(this, R.raw.fanfare);
+                mediaPlayer.start();
+            }
+
+            showToast(R.string.congratulations);
         }
 
         for (int row = 0; row < SIZE; row++)
@@ -764,6 +801,26 @@ public class Gridle extends Activity
     {
         Intent intent = new Intent(this, Help.class);
         startActivity(intent);
+    }
+
+    // showToast
+    void showToast(int key)
+    {
+        String text = getString(key);
+        showToast(text);
+    }
+
+    // showToast
+    void showToast(String text)
+    {
+        // Cancel the last one
+        if (toast != null)
+            toast.cancel();
+
+        // Make a new one
+        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 
     // about
