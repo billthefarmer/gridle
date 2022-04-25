@@ -69,6 +69,18 @@ public class Gridle extends Activity
     public static final String PREF_THEME = "pref_theme";
     public static final String PREF_FARE = "pref_fare";
 
+    public static final String PUZZLE_0 = "puzzle_0";
+    public static final String PUZZLE_1 = "puzzle_1";
+    public static final String PUZZLE_2 = "puzzle_2";
+    public static final String PUZZLE_3 = "puzzle_3";
+    public static final String PUZZLE_4 = "puzzle_4";
+
+    public static final String GRIDLE_0 = "gridle_0";
+    public static final String GRIDLE_1 = "gridle_1";
+    public static final String GRIDLE_2 = "gridle_2";
+    public static final String GRIDLE_3 = "gridle_3";
+    public static final String GRIDLE_4 = "gridle_4";
+
     public static final int GREY    = 0;
     public static final int DARK    = 1;
     public static final int BLUE    = 2;
@@ -196,29 +208,53 @@ public class Gridle extends Activity
             display2[i / SIZE][i % SIZE] =
                 (TextView) grid2.getChildAt(i);
 
-        gridle = Words.getGridle();
+        if (savedInstanceState != null)
+        {
+            gridle = new char[SIZE][];
+
+            gridle[0] = savedInstanceState.getCharArray(GRIDLE_0);
+            gridle[1] = savedInstanceState.getCharArray(GRIDLE_1);
+            gridle[2] = savedInstanceState.getCharArray(GRIDLE_2);
+            gridle[3] = savedInstanceState.getCharArray(GRIDLE_3);
+            gridle[4] = savedInstanceState.getCharArray(GRIDLE_4);
+
+            puzzle = new char[SIZE][];
+
+            puzzle[0] = savedInstanceState.getCharArray(PUZZLE_0);
+            puzzle[1] = savedInstanceState.getCharArray(PUZZLE_1);
+            puzzle[2] = savedInstanceState.getCharArray(PUZZLE_2);
+            puzzle[3] = savedInstanceState.getCharArray(PUZZLE_3);
+            puzzle[4] = savedInstanceState.getCharArray(PUZZLE_4);
+        }
+
+        else
+        {
+            gridle = Words.getGridle();
+
+            puzzle = new char[SIZE][];
+            for (int i = 0; i < SIZE; i++)
+                puzzle[i] = Arrays.copyOf(gridle[i], SIZE);
+        
+            Words.randomise(puzzle);
+        }
 
         for (int i = 0; i < display2.length; i++)
         {
             for (int j = 0; j < display2[i].length; j++)
             {
-                display2[i][j].setText(
-                    new String(new char[] {gridle[i][j]}).toUpperCase());
+                display2[i][j].setText
+                    (new String(new char[] {gridle[i][j]})
+                     .toUpperCase(Locale.getDefault()));
             }
         }
 
-        puzzle = new char[SIZE][];
-        for (int i = 0; i < puzzle.length; i++)
-            puzzle[i] = Arrays.copyOf(gridle[i], gridle[i].length);
-        
-        Words.randomise(puzzle);
-
-        for (int i = 0; i < display.length; i++)
+        for (int i = 0; i < SIZE; i++)
         {
-            for (int j = 0; j < display[i].length; j++)
+            for (int j = 0; j < SIZE; j++)
             {
-                display[i][j].setText(
-                    new String(new char[] {puzzle[i][j]}).toUpperCase());
+                display[i][j].setText
+                    (new String(new char[] {puzzle[i][j]})
+                     .toUpperCase(Locale.getDefault()));
             }
         }
 
@@ -258,6 +294,25 @@ public class Gridle extends Activity
 
         editor.putInt(PREF_THEME, theme);
         editor.apply();
+    }
+
+    // onSaveInstanceState
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+
+        outState.putCharArray(PUZZLE_0, puzzle[0]);
+        outState.putCharArray(PUZZLE_1, puzzle[1]);
+        outState.putCharArray(PUZZLE_2, puzzle[2]);
+        outState.putCharArray(PUZZLE_3, puzzle[3]);
+        outState.putCharArray(PUZZLE_4, puzzle[4]);
+
+        outState.putCharArray(GRIDLE_0, gridle[0]);
+        outState.putCharArray(GRIDLE_1, gridle[1]);
+        outState.putCharArray(GRIDLE_2, gridle[2]);
+        outState.putCharArray(GRIDLE_3, gridle[3]);
+        outState.putCharArray(GRIDLE_4, gridle[4]);
     }
 
     private void scale(View view, float scale)
@@ -318,6 +373,10 @@ public class Gridle extends Activity
             theme(BLACK);
             break;
 
+        case R.id.help:
+            help();
+            break;
+
         case R.id.about:
             about();
             break;
@@ -350,6 +409,14 @@ public class Gridle extends Activity
         {
             for (int col = 0; col < SIZE; col++)
             {
+                display[row][col].setTextColor(getColour(GREY));
+            }
+        }
+
+        for (int row = 0; row < SIZE; row++)
+        {
+            for (int col = 0; col < SIZE; col++)
+            {
                 if (display[row][col].getVisibility() == View.INVISIBLE)
                     continue;
 
@@ -359,9 +426,6 @@ public class Gridle extends Activity
                     scored[row][col] = true;
                     display[row][col].setTextColor(getColour(GREEN));
                 }
-
-                else
-                    display[row][col].setTextColor(getColour(GREY));
             }
         }
 
@@ -383,10 +447,7 @@ public class Gridle extends Activity
                     for (int c = 0; c < Gridle.SIZE; c++)
                     {
                         if (used[row][c])
-                        {
-                            display[row][col].setTextColor(getColour(GREY));
-                            continue;
-                        }
+                           continue;
 
                         if (puzzle[row][col] == gridle[row][c])
                         {
@@ -395,9 +456,6 @@ public class Gridle extends Activity
                             display[row][col].setTextColor(getColour(YELLOW));
                             break;
                         }
-
-                        else
-                            display[row][col].setTextColor(getColour(GREY));
                     }
                 }
 
@@ -409,10 +467,7 @@ public class Gridle extends Activity
                     for (int r = 0; r < SIZE; r++)
                     {
                         if (used[r][col])
-                        {
-                            display[row][col].setTextColor(getColour(GREY));
                             continue;
-                        }
 
                         if (puzzle[row][col] == gridle[r][col])
                         {
@@ -421,9 +476,6 @@ public class Gridle extends Activity
                             display[row][col].setTextColor(getColour(YELLOW));
                             break;
                         }
-
-                        else
-                            display[row][col].setTextColor(getColour(GREY));
                     }
                 }
             }
@@ -511,6 +563,25 @@ public class Gridle extends Activity
     // refresh
     private void refresh()
     {
+        gridle = Words.getGridle();
+
+        puzzle = new char[SIZE][];
+        for (int i = 0; i < SIZE; i++)
+            puzzle[i] = Arrays.copyOf(gridle[i], SIZE);
+        
+        Words.randomise(puzzle);
+
+        for (int i = 0; i < SIZE; i++)
+        {
+            for (int j = 0; j < SIZE; j++)
+            {
+                display[i][j].setText
+                    (new String(new char[] {puzzle[i][j]})
+                     .toUpperCase(Locale.getDefault()));
+            }
+        }
+
+        scorePuzzle();
     }
 
     // getColour
@@ -532,6 +603,13 @@ public class Gridle extends Activity
         }
 
         return 0;
+    }
+
+    // help
+    private void help()
+    {
+        Intent intent = new Intent(this, Help.class);
+        startActivity(intent);
     }
 
     // about
