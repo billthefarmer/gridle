@@ -23,6 +23,7 @@
     Select highlight colours
   </string>
 
+  <string name="solved">Solved, tap refresh</string>
   <string name="congratulations">
     Congratulations! You have solved Gridle correctly
   </string>

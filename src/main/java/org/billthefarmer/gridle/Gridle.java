@@ -86,6 +86,8 @@ public class Gridle extends Activity
     public static final String PREF_CORR = "pref_corr";
     public static final String PREF_FARE = "pref_fare";
 
+    public static final String SOLVED = "solved";
+
     public static final String PUZZLE_0 = "puzzle_0";
     public static final String PUZZLE_1 = "puzzle_1";
     public static final String PUZZLE_2 = "puzzle_2";
@@ -235,6 +237,8 @@ public class Gridle extends Activity
 
         if (savedInstanceState != null)
         {
+            solved = savedInstanceState.getBoolean(SOLVED);
+
             gridle = new char[SIZE][];
 
             gridle[0] = savedInstanceState.getCharArray(GRIDLE_0);
@@ -325,6 +329,8 @@ public class Gridle extends Activity
     public void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
+
+        outState.putBoolean(SOLVED, solved);
 
         outState.putCharArray(PUZZLE_0, puzzle[0]);
         outState.putCharArray(PUZZLE_1, puzzle[1]);
@@ -588,8 +594,7 @@ public class Gridle extends Activity
             }
         }
 
-        solved = true;
-
+        boolean maybe = true;
         for (int row = 0; row < SIZE; row++)
         {
             for (int col = 0; col < SIZE; col++)
@@ -605,19 +610,8 @@ public class Gridle extends Activity
                 }
 
                 else
-                    solved = false;
+                    maybe = false;
             }
-        }
-
-        if (solved)
-        {
-            if (fanfare)
-            {
-                mediaPlayer = MediaPlayer.create(this, R.raw.fanfare);
-                mediaPlayer.start();
-            }
-
-            showToast(R.string.congratulations);
         }
 
         for (int row = 0; row < SIZE; row++)
@@ -671,11 +665,32 @@ public class Gridle extends Activity
                 }
             }
         }
+
+        if (solved)
+            return;
+
+        if (maybe)
+        {
+            if (fanfare)
+            {
+                mediaPlayer = MediaPlayer.create(this, R.raw.fanfare);
+                mediaPlayer.start();
+            }
+
+            showToast(R.string.congratulations);
+            solved = true;
+        }
     }
 
     // scorePuzzle
     private void scorePuzzle(View view)
     {
+        if (solved)
+        {
+            showToast(R.string.solved);
+            return;
+        }
+
         if (swapLetters(view) == false)
             return;
 
