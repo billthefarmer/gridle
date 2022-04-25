@@ -26,14 +26,22 @@ package org.billthefarmer.gridle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,6 +52,12 @@ import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import android.support.v4.content.FileProvider;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -81,6 +95,12 @@ public class Gridle extends Activity
     public static final String GRIDLE_3 = "gridle_3";
     public static final String GRIDLE_4 = "gridle_4";
 
+    public static final String GRIDLE_IMAGE = "Gridle.png";
+    public static final String IMAGE_PNG = "image/png";
+
+    public static final String FILE_PROVIDER =
+        "org.billthefarmer.gridle.fileprovider";
+
     public static final int GREY    = 0;
     public static final int DARK    = 1;
     public static final int BLUE    = 2;
@@ -97,17 +117,24 @@ public class Gridle extends Activity
     private TextView display[][];
     private TextView display2[][];
 
+    private MediaPlayer mediaPlayer;
+
     private boolean scored[][];
     private boolean used[][];
 
     private char gridle[][];
     private char puzzle[][];
 
+    private boolean fanfare;
+    private boolean solved;
+
     private float x;
     private float y;
     private float dX;
     private float dY;
 
+    private int contains;
+    private int correct;
     private int theme;
 
     // Called when the activity is first created.
@@ -345,6 +372,10 @@ public class Gridle extends Activity
             refresh();
             break;
 
+        case R.id.share:
+            shareImage();
+            break;
+
         case R.id.dark:
             theme(DARK);
             break;
@@ -394,6 +425,129 @@ public class Gridle extends Activity
         theme = c;
         if (Build.VERSION.SDK_INT != Build.VERSION_CODES.M)
             recreate();
+    }
+
+    // highlight
+    private void highlight()
+    {
+        colourDialog();
+    }
+
+    // colourDialog
+    private void colourDialog()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.selectHighlight);
+        builder.setIcon(R.drawable.ic_launcher);
+
+        View view = ((LayoutInflater) builder.getContext()
+                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+            .inflate(R.layout.colours, null);
+        builder.setView(view);
+
+        builder.setNeutralButton(R.string.reset, (dialog, id) ->
+        {
+            contains = getColour(YELLOW);
+            correct = getColour(GREEN);
+        });
+
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.setPositiveButton(android.R.string.ok, (dialog, id) ->
+        {
+            ViewGroup those = (ViewGroup) ((Dialog) dialog)
+                .findViewById(R.id.those);
+            ViewGroup words = (ViewGroup) ((Dialog) dialog)
+                .findViewById(R.id.words);
+            contains = ((TextView) those.getChildAt(2)).getTextColors()
+                .getDefaultColor();
+            correct = ((TextView) words.getChildAt(0)).getTextColors()
+                .getDefaultColor();
+        });
+
+        Dialog dialog = builder.show();
+
+        int grey[] = {0, 1, 4};
+        ViewGroup those = (ViewGroup) dialog.findViewById(R.id.those);
+        for (int l: grey)
+        {
+            TextView t = (TextView) those.getChildAt(l);
+            t.setTextColor(getColour(GREY));
+        }
+
+        int cont[] = {2, 3};
+        for (int l: cont)
+        {
+            TextView t = (TextView) those.getChildAt(l);
+            t.setTextColor(contains);
+        }
+
+        ViewGroup words = (ViewGroup) dialog.findViewById(R.id.words);
+        for (int l = 0; l < words.getChildCount(); l++)
+            ((TextView) words.getChildAt(l)).setTextColor(correct);
+
+        View.OnTouchListener listener = (v, event) ->
+        {
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+
+            int width = v.getWidth();
+            int height = v.getHeight();
+            Bitmap bitmap = Bitmap.createBitmap(width, height,
+                                                Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            v.draw(canvas);
+            int colour = bitmap.getPixel(x, y);
+            switch (v.getId())
+            {
+            case R.id.contains:
+                ((TextView) those.getChildAt(2)).setTextColor(colour);
+                ((TextView) those.getChildAt(3)).setTextColor(colour);
+                break;
+
+            case R.id.correct:
+                for (int l = 0; l < words.getChildCount(); l++)
+                    ((TextView) words.getChildAt(l)).setTextColor(colour);
+                break;
+            }
+
+            return false;
+        };
+
+        view = dialog.findViewById(R.id.contains);
+        view.setOnTouchListener(listener);
+        view = dialog.findViewById(R.id.correct);
+        view.setOnTouchListener(listener);
+    }
+
+    // shareImage
+    @SuppressWarnings("deprecation")
+    private void shareImage()
+    {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        String title = getString(R.string.appName);
+        intent.putExtra(Intent.EXTRA_TITLE, title);
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        intent.setType(IMAGE_PNG);
+
+        View root = findViewById(android.R.id.content).getRootView();
+        root.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(root.getDrawingCache());
+        root.setDrawingCacheEnabled(false);
+
+        File image = new File(getCacheDir(), GRIDLE_IMAGE);
+        try (BufferedOutputStream out = new
+             BufferedOutputStream(new FileOutputStream(image)))
+        {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+        }
+
+        catch (Exception e) {}
+
+        Uri imageUri = FileProvider
+            .getUriForFile(this, FILE_PROVIDER, image);
+        intent.putExtra(Intent.EXTRA_STREAM, imageUri);
+
+        startActivity(Intent.createChooser(intent, null));
     }
 
     // scorePuzzle

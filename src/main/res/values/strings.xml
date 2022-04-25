@@ -3,7 +3,9 @@
 
   <string name="appName">Gridle</string>
   <string name="help">Help</string>
+  <string name="share">Share</string>
   <string name="refresh">Refresh</string>
+  <string name="fanfare">Fanfare</string>
   <string name="about">About</string>
 
   <string name="theme">Theme</string>
@@ -14,6 +16,16 @@
   <string name="purple">Purple</string>
   <string name="black">Black</string>
   <string name="red">Red</string>
+
+  <string name="highlight">Highlight colours</string>
+  <string name="reset">Reset</string>
+  <string name="selectHighlight">
+    Select highlight colours
+  </string>
+
+  <string name="congratulations">
+    Congratulations! You have solved Gridle correctly
+  </string>
 
   <string name="version" formatted="false"><a
   href="https://github.com/billthefarmer/worfle/releases/latest">%s</a>\n\nBuilt
