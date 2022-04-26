@@ -20,7 +20,7 @@
       android:rowCount="5"
       android:columnCount="5"
       android:useDefaultMargins="true"
-      tools:ignore="HardcodedText">
+      tools:ignore="UselessParent">
 
     <TextView
         android:layout_width="wrap_content"

@@ -265,6 +265,8 @@ public class Gridle extends Activity
                 puzzle[i] = Arrays.copyOf(gridle[i], SIZE);
         
             Words.randomise(puzzle);
+
+            solved = false;
         }
 
         for (int i = 0; i < SIZE; i++)
@@ -606,7 +608,7 @@ public class Gridle extends Activity
                 {
                     used[row][col] = true;
                     scored[row][col] = true;
-                    display[row][col].setTextColor(getColour(GREEN));
+                    display[row][col].setTextColor(correct);
                 }
 
                 else
@@ -638,7 +640,7 @@ public class Gridle extends Activity
                         {
                             used[row][c] = true;
                             scored[row][col] = true;
-                            display[row][col].setTextColor(getColour(YELLOW));
+                            display[row][col].setTextColor(contains);
                             break;
                         }
                     }
@@ -658,7 +660,7 @@ public class Gridle extends Activity
                         {
                             used[r][col] = true;
                             scored[row][col] = true;
-                            display[row][col].setTextColor(getColour(YELLOW));
+                            display[row][col].setTextColor(contains);
                             break;
                         }
                     }
@@ -759,10 +761,6 @@ public class Gridle extends Activity
         if (nearest.getVisibility() == View.INVISIBLE)
                 return null;
 
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, String.format(
-                      "Nearest = '%s'", ((TextView) nearest).getText()));
-
         return nearest;
     }
 
@@ -787,6 +785,7 @@ public class Gridle extends Activity
             }
         }
 
+        solved = false;
         scorePuzzle();
     }
 
