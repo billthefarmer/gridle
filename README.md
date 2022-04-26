@@ -21,7 +21,7 @@ in the menu.
 
 ## Refresh
 Tap the **Refresh** button in the toolbar to clear the display and
-guess another gridle of words. Words are chosen at random from a list,
+generate another gridle of words. Words are chosen at random from a list,
 and are checked that they haven't been used recently.
 
 ## Share

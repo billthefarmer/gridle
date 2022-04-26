@@ -1,0 +1,9 @@
+Guess those words
+
+Move letters in the grid to make a gridle of words. It's a good idea to use a soft tipped stylus to see what you are doing, as it's difficult to see past stubby fingers.
+
+Letters which are in the word but in the wrong place will turn yellow. If they are in the right place they will turn green. If they are not in the word they will turn grey. Keep trying until you have guessed all the words.
+
+Tap the Refresh button in the toolbar to clear the display and generate another gridle of words. Words are chosen at random from a list, and are checked that they haven't been used recently.
+
+Use my <a href="https://f-droid.org/packages/org.billthefarmer.crossword/">Crossword</a> or <a href="https://github.com/billthefarmer/wordlesolver">WordleSolver</a> app to cheat.
