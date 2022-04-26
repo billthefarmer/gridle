@@ -193,6 +193,9 @@ public class Gridle extends Activity
 
         View.OnTouchListener listener = (view, event) ->
         {
+            View item = findViewById(R.id.item);
+            View grid = findViewById(R.id.puzzle);
+
             switch (event.getActionMasked())
             {
             case MotionEvent.ACTION_DOWN:
@@ -200,19 +203,30 @@ public class Gridle extends Activity
                 y = view.getY();
                 dX = x - event.getRawX();
                 dY = y - event.getRawY();
-                scale(view, 1.4f);
+                item.setX(x + grid.getX());
+                item.setY(y + grid.getY());
+                item.setVisibility(View.VISIBLE);
+                ((TextView) item).setText(((TextView) view).getText()); 
+                ((TextView) item).setTextColor(((TextView)
+                                                view).getTextColors()); 
+                scale(item, 1.4f);
                 break;
 
             case MotionEvent.ACTION_MOVE:
                 view.setX(event.getRawX() + dX);
                 view.setY(event.getRawY() + dY);
+                item.setX(event.getRawX() + grid.getX() + dX);
+                item.setY(event.getRawY() + grid.getY() + dY);
                 break;
 
             case MotionEvent.ACTION_UP:
                 scorePuzzle(view);
                 view.setX(x);
                 view.setY(y);
-                scale(view, 1.0f);
+                scale(item, 1.0f);
+                item.setX(0);
+                item.setY(0);
+                item.setVisibility(View.INVISIBLE);
                 break;
 
             default:
