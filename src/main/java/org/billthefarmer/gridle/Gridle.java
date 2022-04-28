@@ -198,11 +198,18 @@ public class Gridle extends Activity
 
             switch (event.getActionMasked())
             {
+                // Because views at the top of the grid will appear to
+                // slide under views further down when moved, due to
+                // z-order, use another text view outside the grid as
+                // a proxy. This view will not be clipped if it is
+                // moved outside the grid.
             case MotionEvent.ACTION_DOWN:
                 x = view.getX();
                 y = view.getY();
                 dX = x - event.getRawX();
                 dY = y - event.getRawY();
+                // Move the proxy view, make it visible, copy the
+                // text, and scale it.
                 item.setX(x + grid.getX());
                 item.setY(y + grid.getY());
                 item.setVisibility(View.VISIBLE);
@@ -213,6 +220,7 @@ public class Gridle extends Activity
                 break;
 
             case MotionEvent.ACTION_MOVE:
+                // Move the selected view and the proxy above it
                 view.setX(event.getRawX() + dX);
                 view.setY(event.getRawY() + dY);
                 item.setX(event.getRawX() + grid.getX() + dX);
@@ -220,7 +228,10 @@ public class Gridle extends Activity
                 break;
 
             case MotionEvent.ACTION_UP:
+                // Swap texts and colour letters
                 scorePuzzle(view);
+                // Put the selected view back, scale the proxy view,
+                // move it into the top corner, and make it invisible
                 view.setX(x);
                 view.setY(y);
                 scale(item, 1.0f);
@@ -645,7 +656,7 @@ public class Gridle extends Activity
                 case 0:
                 case 2:
                 case 4:
-                    for (int c = 0; c < Gridle.SIZE; c++)
+                    for (int c = 0; c < SIZE; c++)
                     {
                         if (used[row][c])
                            continue;
@@ -740,9 +751,9 @@ public class Gridle extends Activity
             Log.d(TAG, String.format("view[%d][%d]='%c'", row, col,
                                      puzzle[row][col]));
 
-        char w = puzzle[r][c];
+        char ch = puzzle[r][c];
         puzzle[r][c] = puzzle[row][col];
-        puzzle[row][col] = w;
+        puzzle[row][col] = ch;
 
         CharSequence cs = display[r][c].getText();
         display[r][c].setText(display[row][col].getText());

@@ -259,23 +259,29 @@ public class Words
     {
         for (int row = 0; row < Gridle.SIZE; row++)
         {
-            for (int col = 0; col < Gridle.SIZE; col++)
+            switch (row)
             {
-                if (puzzle[row][col] == ' ')
-                    continue;
-
-                int r = random.nextInt(Gridle.SIZE);
-                int c = random.nextInt(Gridle.SIZE);
-
-                while (puzzle[r][c] == ' ')
+            case 0:
+            case 2:
+            case 4:
+                for (int col = 0; col < Gridle.SIZE; col++)
                 {
-                    r = random.nextInt(Gridle.SIZE);
-                    c = random.nextInt(Gridle.SIZE);
-                }
+                    if (puzzle[row][col] == ' ')
+                        continue;
 
-                char ch = puzzle[row][col];
-                puzzle[row][col] = puzzle[r][c];
-                puzzle[r][c] = ch;
+                    int r = random.nextInt(Gridle.SIZE);
+                    int c = random.nextInt(Gridle.SIZE);
+
+                    while (puzzle[r][c] == ' ')
+                    {
+                        r = random.nextInt(Gridle.SIZE);
+                        c = random.nextInt(Gridle.SIZE);
+                    }
+
+                    char ch = puzzle[row][col];
+                    puzzle[row][col] = puzzle[r][c];
+                    puzzle[r][c] = ch;
+                }
             }
         }
     }
