@@ -98,6 +98,7 @@ public class Words
 
     private static Random random;
 
+    // getGridle
     public static char[][] getGridle()
     {
         if (random == null)
@@ -244,6 +245,7 @@ public class Words
         return null;
     }
 
+    // randomise
     private static void randomise(List<String> list)
     {
         int index = 0;
@@ -255,6 +257,7 @@ public class Words
         }
     }
 
+    // randomise
     public static void randomise(char puzzle[][])
     {
         for (int row = 0; row < Gridle.SIZE; row++)
@@ -286,6 +289,7 @@ public class Words
         }
     }
 
+    // getWord
     private static String getWord(char a, char b, char c)
     {
         Iterator<String> iterator = getIterator(a);
@@ -305,6 +309,7 @@ public class Words
         return null;
     }
 
+    // getWord
     private static String getWord(char c)
     {
         Iterator<String> iterator = getIterator(c);
@@ -321,6 +326,7 @@ public class Words
         return null;
     }
 
+    // getIterator
     private static Iterator<String> getIterator(char c)
     {
         switch (c)

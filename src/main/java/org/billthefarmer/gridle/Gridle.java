@@ -372,6 +372,7 @@ public class Gridle extends Activity
         outState.putCharArray(GRIDLE_4, gridle[4]);
     }
 
+    // scale
     private void scale(View view, float scale)
     {
         view.setScaleX(scale);
@@ -737,19 +738,12 @@ public class Gridle extends Activity
         int r = index / SIZE;
         int c = index % SIZE;
 
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, String.format("v[%d][%d]='%c'", r, c, puzzle[r][c]));
-
         if (puzzle[r][c] == ' ')
             return false;
 
         index = parent.indexOfChild(view);
         int row = index / SIZE;
         int col = index % SIZE;
-
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, String.format("view[%d][%d]='%c'", row, col,
-                                     puzzle[row][col]));
 
         char ch = puzzle[r][c];
         puzzle[r][c] = puzzle[row][col];
