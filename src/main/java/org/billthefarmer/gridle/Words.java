@@ -262,29 +262,33 @@ public class Words
     {
         for (int row = 0; row < Gridle.SIZE; row++)
         {
-            switch (row)
+            for (int col = 0; col < Gridle.SIZE; col++)
             {
-            case 0:
-            case 2:
-            case 4:
-                for (int col = 0; col < Gridle.SIZE; col++)
+                if ((puzzle[row][col] == ' ') ||
+                    (row == 0 && col == 0) ||
+                    (row == 0 && col == 4) ||
+                    (row == 2 && col == 2) ||
+                    (row == 4 && col == 0) ||
+                    (row == 4 && col == 4))
+                    continue;
+
+                int r = random.nextInt(Gridle.SIZE);
+                int c = random.nextInt(Gridle.SIZE);
+
+                while ((puzzle[r][c] == ' ') ||
+                       (r == 0 && c == 0) ||
+                       (r == 0 && c == 4) ||
+                       (r == 2 && c == 2) ||
+                       (r == 4 && c == 0) ||
+                       (r == 4 && c == 4))
                 {
-                    if (puzzle[row][col] == ' ')
-                        continue;
-
-                    int r = random.nextInt(Gridle.SIZE);
-                    int c = random.nextInt(Gridle.SIZE);
-
-                    while (puzzle[r][c] == ' ')
-                    {
-                        r = random.nextInt(Gridle.SIZE);
-                        c = random.nextInt(Gridle.SIZE);
-                    }
-
-                    char ch = puzzle[row][col];
-                    puzzle[row][col] = puzzle[r][c];
-                    puzzle[r][c] = ch;
+                    r = random.nextInt(Gridle.SIZE);
+                    c = random.nextInt(Gridle.SIZE);
                 }
+
+                char ch = puzzle[row][col];
+                puzzle[row][col] = puzzle[r][c];
+                puzzle[r][c] = ch;
             }
         }
     }
