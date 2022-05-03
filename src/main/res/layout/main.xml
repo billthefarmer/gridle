@@ -355,6 +355,8 @@
       android:background="@drawable/box"
       android:minWidth="38dp"
       android:gravity="center"
+      android:scaleX="1.4"
+      android:scaleY="1.4"
       android:visibility="invisible"
       android:textAppearance="?android:attr/textAppearanceLarge" />
 

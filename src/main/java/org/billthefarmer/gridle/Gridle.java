@@ -208,15 +208,14 @@ public class Gridle extends Activity
                 y = view.getY();
                 dX = x - event.getRawX();
                 dY = y - event.getRawY();
-                // Move the proxy view, make it visible, copy the
-                // text, and scale it.
+                // Move the proxy view, make it visible, and copy the
+                // text.
                 item.setX(x + grid.getX());
                 item.setY(y + grid.getY());
                 item.setVisibility(View.VISIBLE);
                 ((TextView) item).setText(((TextView) view).getText()); 
                 ((TextView) item).setTextColor(((TextView)
                                                 view).getTextColors()); 
-                scale(item, 1.4f);
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -230,11 +229,10 @@ public class Gridle extends Activity
             case MotionEvent.ACTION_UP:
                 // Swap texts and colour letters
                 scorePuzzle(view);
-                // Put the selected view back, scale the proxy view,
-                // move it into the top corner, and make it invisible
+                // Put the selected view back, move it into the top
+                // corner, and make it invisible
                 view.setX(x);
                 view.setY(y);
-                scale(item, 1.0f);
                 item.setX(0);
                 item.setY(0);
                 item.setVisibility(View.INVISIBLE);
@@ -285,11 +283,11 @@ public class Gridle extends Activity
         {
             gridle = Words.getGridle();
 
-            puzzle = new char[SIZE][];
-            for (int i = 0; i < SIZE; i++)
-                puzzle[i] = Arrays.copyOf(gridle[i], SIZE);
-        
-            Words.randomise(puzzle);
+            // puzzle = new char[SIZE][];
+            // for (int i = 0; i < SIZE; i++)
+            //     puzzle[i] = Arrays.copyOf(gridle[i], SIZE);
+
+            puzzle = Words.randomise(gridle);
 
             solved = false;
         }
@@ -788,11 +786,11 @@ public class Gridle extends Activity
     {
         gridle = Words.getGridle();
 
-        puzzle = new char[SIZE][];
-        for (int i = 0; i < SIZE; i++)
-            puzzle[i] = Arrays.copyOf(gridle[i], SIZE);
-        
-        Words.randomise(puzzle);
+        // puzzle = new char[SIZE][];
+        // for (int i = 0; i < SIZE; i++)
+        //     puzzle[i] = Arrays.copyOf(gridle[i], SIZE);
+
+        puzzle = Words.randomise(gridle);
 
         for (int i = 0; i < SIZE; i++)
         {

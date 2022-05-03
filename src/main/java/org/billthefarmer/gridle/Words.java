@@ -258,8 +258,12 @@ public class Words
     }
 
     // randomise
-    public static void randomise(char puzzle[][])
+    public static char[][] randomise(char gridle[][])
     {
+        char puzzle[][] = new char[Gridle.SIZE][];
+        for (int i = 0; i < Gridle.SIZE; i++)
+            puzzle[i] = Arrays.copyOf(gridle[i], Gridle.SIZE);
+
         for (int row = 0; row < Gridle.SIZE; row++)
         {
             for (int col = 0; col < Gridle.SIZE; col++)
@@ -291,6 +295,8 @@ public class Words
                 puzzle[r][c] = ch;
             }
         }
+
+        return puzzle;
     }
 
     // getWord
