@@ -1,5 +1,9 @@
 # ![Logo](src/main/res/drawable-hdpi/ic_launcher.png) Gridle [![.github/workflows/build.yml](https://github.com/billthefarmer/gridle/actions/workflows/build.yml/badge.svg)](https://github.com/billthefarmer/gridle/actions/workflows/build.yml)
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.svg"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/org.billthefarmer.gridle/)
+
 Fairly simple android word game.
 
 ![Gridle](https://github.com/billthefarmer/billthefarmer.github.io/raw/master/images/Gridle.png) ![Help](https://github.com/billthefarmer/billthefarmer.github.io/raw/master/images/Gridle-help.png)
