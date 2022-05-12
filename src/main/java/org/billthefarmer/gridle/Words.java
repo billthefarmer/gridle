@@ -183,7 +183,7 @@ public class Words
             }
         }
 
-        gridle = new char[5][];
+        gridle = new char[Gridle.SIZE][];
 
         for (String word: wordList.toArray(new String[0]))
         {
@@ -222,14 +222,14 @@ public class Words
                 continue;
 
             gridle[0] = s.toCharArray();
-            gridle[1] = new char[5];
+            gridle[1] = new char[Gridle.SIZE];
             Arrays.fill(gridle[1], ' ');
             s = getWord(word.charAt(2));
             if (s == null)
                 continue;
 
             gridle[2] = s.toCharArray();
-            gridle[3] = new char[5];
+            gridle[3] = new char[Gridle.SIZE];
             Arrays.fill(gridle[3], ' ');
             s = getWord(word.charAt(4));
             if (s == null)

@@ -75,11 +75,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Gridle extends Activity
+public class Large extends Activity
 {
-    public static final String TAG = "Gridle";
+    public static final String TAG = "Large";
 
-    public static final int SIZE = 5;
+    public static final int SIZE = 7;
 
     public static final String PREF_THEME = "pref_theme";
     public static final String PREF_CONT = "pref_cont";
@@ -93,12 +93,16 @@ public class Gridle extends Activity
     public static final String PUZZLE_2 = "puzzle_2";
     public static final String PUZZLE_3 = "puzzle_3";
     public static final String PUZZLE_4 = "puzzle_4";
+    public static final String PUZZLE_5 = "puzzle_5";
+    public static final String PUZZLE_6 = "puzzle_6";
 
     public static final String GRIDLE_0 = "gridle_0";
     public static final String GRIDLE_1 = "gridle_1";
     public static final String GRIDLE_2 = "gridle_2";
     public static final String GRIDLE_3 = "gridle_3";
     public static final String GRIDLE_4 = "gridle_4";
+    public static final String GRIDLE_5 = "gridle_5";
+    public static final String GRIDLE_6 = "gridle_6";
 
     public static final String GRIDLE_IMAGE = "Gridle.png";
     public static final String IMAGE_PNG = "image/png";
@@ -189,7 +193,7 @@ public class Gridle extends Activity
             break;
         }
 
-        setContentView(R.layout.main);
+        setContentView(R.layout.large);
 
         View.OnTouchListener listener = (view, event) ->
         {
@@ -245,6 +249,9 @@ public class Gridle extends Activity
             return true;
         };
 
+        View progress = findViewById(R.id.progress);
+        progress.setVisibility(View.VISIBLE);
+
         display = new TextView[SIZE][];
         for (int i = 0; i < display.length; i++)
             display[i] = new TextView[SIZE];
@@ -269,6 +276,8 @@ public class Gridle extends Activity
             gridle[2] = savedInstanceState.getCharArray(GRIDLE_2);
             gridle[3] = savedInstanceState.getCharArray(GRIDLE_3);
             gridle[4] = savedInstanceState.getCharArray(GRIDLE_4);
+            gridle[5] = savedInstanceState.getCharArray(GRIDLE_5);
+            gridle[6] = savedInstanceState.getCharArray(GRIDLE_6);
 
             puzzle = new char[SIZE][];
 
@@ -277,17 +286,17 @@ public class Gridle extends Activity
             puzzle[2] = savedInstanceState.getCharArray(PUZZLE_2);
             puzzle[3] = savedInstanceState.getCharArray(PUZZLE_3);
             puzzle[4] = savedInstanceState.getCharArray(PUZZLE_4);
+            puzzle[5] = savedInstanceState.getCharArray(PUZZLE_5);
+            puzzle[6] = savedInstanceState.getCharArray(PUZZLE_6);
         }
 
         else
         {
-            gridle = Words.getGridle();
+            gridle = LargeWords.getGridle();
+            while (gridle == null)
+                gridle = LargeWords.getGridle();
 
-            // puzzle = new char[SIZE][];
-            // for (int i = 0; i < SIZE; i++)
-            //     puzzle[i] = Arrays.copyOf(gridle[i], SIZE);
-
-            puzzle = Words.randomise(gridle);
+            puzzle = LargeWords.randomise(gridle);
 
             solved = false;
         }
@@ -317,6 +326,7 @@ public class Gridle extends Activity
         }
 
         scorePuzzle();
+        progress.setVisibility(View.GONE);
     }
 
     // onResume
@@ -362,12 +372,16 @@ public class Gridle extends Activity
         outState.putCharArray(PUZZLE_2, puzzle[2]);
         outState.putCharArray(PUZZLE_3, puzzle[3]);
         outState.putCharArray(PUZZLE_4, puzzle[4]);
+        outState.putCharArray(PUZZLE_5, puzzle[5]);
+        outState.putCharArray(PUZZLE_6, puzzle[6]);
 
         outState.putCharArray(GRIDLE_0, gridle[0]);
         outState.putCharArray(GRIDLE_1, gridle[1]);
         outState.putCharArray(GRIDLE_2, gridle[2]);
         outState.putCharArray(GRIDLE_3, gridle[3]);
         outState.putCharArray(GRIDLE_4, gridle[4]);
+        outState.putCharArray(GRIDLE_5, gridle[5]);
+        outState.putCharArray(GRIDLE_6, gridle[6]);
     }
 
     // scale
@@ -384,16 +398,7 @@ public class Gridle extends Activity
         // Inflate the menu; this adds items to the action bar if it
         // is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-
-        return true;
-    }
-
-    // onPrepareOptionsMenu
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
-        menu.findItem(R.id.fanfare).setChecked(fanfare);
+        inflater.inflate(R.menu.large, menu);
 
         return true;
     }
@@ -414,166 +419,11 @@ public class Gridle extends Activity
             shareImage();
             break;
 
-        case R.id.large:
-            large();
-            break;
-
-        case R.id.dark:
-            theme(DARK);
-            break;
-
-        case R.id.cyan:
-            theme(CYAN);
-            break;
-
-        case R.id.blue:
-            theme(BLUE);
-            break;
-
-        case R.id.orange:
-            theme(ORANGE);
-            break;
-
-        case R.id.purple:
-            theme(PURPLE);
-            break;
-
-        case R.id.red:
-            theme(RED);
-            break;
-
-        case R.id.black:
-            theme(BLACK);
-            break;
-
-        case R.id.fanfare:
-            fanfare(item);
-            break;
-
-        case R.id.highlight:
-            highlight();
-            break;
-
-        case R.id.help:
-            help();
-            break;
-
-        case R.id.about:
-            about();
-            break;
-
         default:
             return false;
         }
 
         return true;
-    }
-
-    // theme
-    private void theme(int c)
-    {
-        theme = c;
-        if (Build.VERSION.SDK_INT != Build.VERSION_CODES.M)
-            recreate();
-    }
-
-    // fanfare
-    private void fanfare(MenuItem item)
-    {
-        fanfare = !fanfare;
-        item.setChecked(fanfare);
-    }
-
-    // highlight
-    private void highlight()
-    {
-        colourDialog();
-    }
-
-    // colourDialog
-    private void colourDialog()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.selectHighlight);
-        builder.setIcon(R.drawable.ic_launcher);
-
-        View view = ((LayoutInflater) builder.getContext()
-                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-            .inflate(R.layout.colours, null);
-        builder.setView(view);
-
-        builder.setNeutralButton(R.string.reset, (dialog, id) ->
-        {
-            contains = getColour(YELLOW);
-            correct = getColour(GREEN);
-        });
-
-        builder.setNegativeButton(android.R.string.cancel, null);
-        builder.setPositiveButton(android.R.string.ok, (dialog, id) ->
-        {
-            ViewGroup those = (ViewGroup) ((Dialog) dialog)
-                .findViewById(R.id.those);
-            ViewGroup words = (ViewGroup) ((Dialog) dialog)
-                .findViewById(R.id.words);
-            contains = ((TextView) those.getChildAt(2)).getTextColors()
-                .getDefaultColor();
-            correct = ((TextView) words.getChildAt(0)).getTextColors()
-                .getDefaultColor();
-        });
-
-        Dialog dialog = builder.show();
-
-        int grey[] = {0, 1, 4};
-        ViewGroup those = (ViewGroup) dialog.findViewById(R.id.those);
-        for (int l: grey)
-        {
-            TextView t = (TextView) those.getChildAt(l);
-            t.setTextColor(getColour(GREY));
-        }
-
-        int cont[] = {2, 3};
-        for (int l: cont)
-        {
-            TextView t = (TextView) those.getChildAt(l);
-            t.setTextColor(contains);
-        }
-
-        ViewGroup words = (ViewGroup) dialog.findViewById(R.id.words);
-        for (int l = 0; l < words.getChildCount(); l++)
-            ((TextView) words.getChildAt(l)).setTextColor(correct);
-
-        View.OnTouchListener listener = (v, event) ->
-        {
-            int x = (int) event.getX();
-            int y = (int) event.getY();
-
-            int width = v.getWidth();
-            int height = v.getHeight();
-            Bitmap bitmap = Bitmap.createBitmap(width, height,
-                                                Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            v.draw(canvas);
-            int colour = bitmap.getPixel(x, y);
-            switch (v.getId())
-            {
-            case R.id.contains:
-                ((TextView) those.getChildAt(2)).setTextColor(colour);
-                ((TextView) those.getChildAt(3)).setTextColor(colour);
-                break;
-
-            case R.id.correct:
-                for (int l = 0; l < words.getChildCount(); l++)
-                    ((TextView) words.getChildAt(l)).setTextColor(colour);
-                break;
-            }
-
-            return false;
-        };
-
-        view = dialog.findViewById(R.id.contains);
-        view.setOnTouchListener(listener);
-        view = dialog.findViewById(R.id.correct);
-        view.setOnTouchListener(listener);
     }
 
     // shareImage
@@ -659,6 +509,7 @@ public class Gridle extends Activity
                 case 0:
                 case 2:
                 case 4:
+                case 6:
                     for (int c = 0; c < SIZE; c++)
                     {
                         if (used[row][c])
@@ -679,6 +530,7 @@ public class Gridle extends Activity
                 case 0:
                 case 2:
                 case 4:
+                case 6:
                     for (int r = 0; r < SIZE; r++)
                     {
                         if (used[r][col])
@@ -788,13 +640,14 @@ public class Gridle extends Activity
     // refresh
     private void refresh()
     {
-        gridle = Words.getGridle();
+        View progress = findViewById(R.id.progress);
+        progress.setVisibility(View.VISIBLE);
 
-        // puzzle = new char[SIZE][];
-        // for (int i = 0; i < SIZE; i++)
-        //     puzzle[i] = Arrays.copyOf(gridle[i], SIZE);
+        gridle = LargeWords.getGridle();
+        while (gridle == null)
+            gridle = LargeWords.getGridle();
 
-        puzzle = Words.randomise(gridle);
+        puzzle = LargeWords.randomise(gridle);
 
         for (int i = 0; i < SIZE; i++)
         {
@@ -808,6 +661,7 @@ public class Gridle extends Activity
 
         solved = false;
         scorePuzzle();
+        progress.setVisibility(View.GONE);
     }
 
     // getColour
@@ -831,20 +685,6 @@ public class Gridle extends Activity
         return 0;
     }
 
-    // large
-    private void large()
-    {
-        Intent intent = new Intent(this, Large.class);
-        startActivity(intent);
-    }
-
-    // help
-    private void help()
-    {
-        Intent intent = new Intent(this, Help.class);
-        startActivity(intent);
-    }
-
     // showToast
     void showToast(int key)
     {
@@ -863,43 +703,5 @@ public class Gridle extends Activity
         toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
-    }
-
-    // about
-    @SuppressWarnings("deprecation")
-    private void about()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.appName);
-        builder.setIcon(R.drawable.ic_launcher);
-
-        DateFormat dateFormat = DateFormat.getDateTimeInstance();
-        SpannableStringBuilder spannable =
-            new SpannableStringBuilder(getText(R.string.version));
-        Pattern pattern = Pattern.compile("%s");
-        Matcher matcher = pattern.matcher(spannable);
-        if (matcher.find())
-            spannable.replace(matcher.start(), matcher.end(),
-                              BuildConfig.VERSION_NAME);
-        matcher.reset(spannable);
-        if (matcher.find())
-            spannable.replace(matcher.start(), matcher.end(),
-                              dateFormat.format(BuildConfig.BUILT));
-        builder.setMessage(spannable);
-
-        // Add the button
-        builder.setPositiveButton(android.R.string.ok, null);
-
-        // Create the AlertDialog
-        Dialog dialog = builder.show();
-
-        // Set movement method
-        TextView text = dialog.findViewById(android.R.id.message);
-        if (text != null)
-        {
-            text.setTextAppearance(builder.getContext(),
-                                   android.R.style.TextAppearance_Small);
-            text.setMovementMethod(LinkMovementMethod.getInstance());
-        }
     }
 }

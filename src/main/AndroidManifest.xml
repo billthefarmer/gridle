@@ -23,6 +23,10 @@
     </activity>
 
     <activity
+        android:name="Large"
+        android:label="@string/large" />
+
+    <activity
         android:name="Help"
         android:label="@string/help" />
 

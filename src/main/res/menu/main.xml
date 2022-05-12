@@ -17,6 +17,11 @@
       android:title="@string/share" />
 
   <item
+      android:id="@+id/large"
+      android:showAsAction="never"
+      android:title="@string/large" />
+
+  <item
       android:id="@+id/theme"
       android:showAsAction="never"
       android:title="@string/theme">
