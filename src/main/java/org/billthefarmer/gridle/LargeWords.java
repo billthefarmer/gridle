@@ -24,7 +24,10 @@
 package org.billthefarmer.gridle;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
+
+import java.lang.ref.WeakReference;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -404,6 +407,56 @@ public class LargeWords
         }
 
         return null;
+    }
+
+    // WordsTask
+    public static class WordsTask
+            extends AsyncTask<Void, char[][], char[][]>
+    {
+        private WeakReference<Large> largeWeakReference;
+
+        // WordsTask
+        public WordsTask(Large large)
+        {
+            largeWeakReference = new WeakReference<>(large);
+        }
+
+        // doInBackground
+        @Override
+        protected char[][] doInBackground(Void... params)
+        {
+            final Large large = largeWeakReference.get();
+            if (large == null)
+                return null;
+
+            char gridle[][] = getGridle();
+            while (gridle == null)
+                gridle = getGridle();
+            publishProgress(gridle);
+
+            return randomise(gridle);
+        }
+
+        // onProgressUpdate
+        protected void onProgressUpdate(char[][]... gridles)
+        {
+            final Large large = largeWeakReference.get();
+            if (large == null)
+                return;
+
+            large.setGridle(gridles[0]);
+        }
+
+        // onPostExecute
+        @Override
+        protected void onPostExecute(char puzzle[][])
+        {
+            final Large large = largeWeakReference.get();
+            if (large == null)
+                return;
+
+            large.setPuzzle(puzzle);
+        }
     }
 
     public static final String WORDS[] =

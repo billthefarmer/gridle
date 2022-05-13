@@ -195,6 +195,9 @@ public class Large extends Activity
 
         setContentView(R.layout.large);
 
+        // Enable back navigation on action bar
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         View.OnTouchListener listener = (view, event) ->
         {
             View item = findViewById(R.id.item);
@@ -249,9 +252,6 @@ public class Large extends Activity
             return true;
         };
 
-        View progress = findViewById(R.id.progress);
-        progress.setVisibility(View.VISIBLE);
-
         display = new TextView[SIZE][];
         for (int i = 0; i < display.length; i++)
             display[i] = new TextView[SIZE];
@@ -263,6 +263,14 @@ public class Large extends Activity
                 (TextView) grid.getChildAt(i);
             display[i / SIZE][i % SIZE]
                 .setOnTouchListener(listener);
+        }
+
+        used = new boolean[SIZE][];
+        scored = new boolean[SIZE][];
+        for (int row = 0; row < SIZE; row++)
+        {
+            used[row] = new boolean[SIZE];
+            scored[row] = new boolean[SIZE];
         }
 
         if (savedInstanceState != null)
@@ -288,45 +296,28 @@ public class Large extends Activity
             puzzle[4] = savedInstanceState.getCharArray(PUZZLE_4);
             puzzle[5] = savedInstanceState.getCharArray(PUZZLE_5);
             puzzle[6] = savedInstanceState.getCharArray(PUZZLE_6);
+
+            for (int i = 0; i < SIZE; i++)
+            {
+                for (int j = 0; j < SIZE; j++)
+                {
+                    display[i][j].setText
+                        (new String(new char[] {puzzle[i][j]})
+                         .toUpperCase(Locale.getDefault()));
+                }
+            }
+
+            scorePuzzle();
         }
 
         else
         {
-            gridle = LargeWords.getGridle();
-            while (gridle == null)
-                gridle = LargeWords.getGridle();
+            View progress = findViewById(R.id.progress);
+            progress.setVisibility(View.VISIBLE);
 
-            puzzle = LargeWords.randomise(gridle);
-
-            solved = false;
+            LargeWords.WordsTask task = new LargeWords.WordsTask(this);
+            task.execute();
         }
-
-        for (int i = 0; i < SIZE; i++)
-        {
-            for (int j = 0; j < SIZE; j++)
-            {
-                display[i][j].setText
-                    (new String(new char[] {puzzle[i][j]})
-                     .toUpperCase(Locale.getDefault()));
-            }
-        }
-
-        used = new boolean[SIZE][];
-        for (int row = 0; row < SIZE; row++)
-        {
-            used[row] = new boolean[SIZE];
-            Arrays.fill(used[row], false);
-        }
-
-        scored = new boolean[SIZE][];
-        for (int row = 0; row < SIZE; row++)
-        {
-            scored[row] = new boolean[SIZE];
-            Arrays.fill(scored[row], false);
-        }
-
-        scorePuzzle();
-        progress.setVisibility(View.GONE);
     }
 
     // onResume
@@ -384,13 +375,6 @@ public class Large extends Activity
         outState.putCharArray(GRIDLE_6, gridle[6]);
     }
 
-    // scale
-    private void scale(View view, float scale)
-    {
-        view.setScaleX(scale);
-        view.setScaleY(scale);
-    }
-
     // On create options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -411,6 +395,10 @@ public class Large extends Activity
         int id = item.getItemId();
         switch (id)
         {
+        case android.R.id.home:
+            finish();
+            break;
+
         case R.id.refresh:
             refresh();
             break;
@@ -424,6 +412,32 @@ public class Large extends Activity
         }
 
         return true;
+    }
+
+    public void setGridle(char gridle[][])
+    {
+        this.gridle = gridle;
+    }
+
+    public void setPuzzle(char puzzle[][])
+    {
+        this.puzzle = puzzle;
+
+        for (int i = 0; i < SIZE; i++)
+        {
+            for (int j = 0; j < SIZE; j++)
+            {
+                display[i][j].setText
+                    (new String(new char[] {puzzle[i][j]})
+                     .toUpperCase(Locale.getDefault()));
+            }
+        }
+
+        solved = false;
+        scorePuzzle();
+
+        View progress = findViewById(R.id.progress);
+        progress.setVisibility(View.GONE);
     }
 
     // shareImage
@@ -567,6 +581,9 @@ public class Large extends Activity
     // scorePuzzle
     private void scorePuzzle(View view)
     {
+        if (puzzle == null)
+            return;
+
         if (solved)
         {
             showToast(R.string.solved);
@@ -643,25 +660,8 @@ public class Large extends Activity
         View progress = findViewById(R.id.progress);
         progress.setVisibility(View.VISIBLE);
 
-        gridle = LargeWords.getGridle();
-        while (gridle == null)
-            gridle = LargeWords.getGridle();
-
-        puzzle = LargeWords.randomise(gridle);
-
-        for (int i = 0; i < SIZE; i++)
-        {
-            for (int j = 0; j < SIZE; j++)
-            {
-                display[i][j].setText
-                    (new String(new char[] {puzzle[i][j]})
-                     .toUpperCase(Locale.getDefault()));
-            }
-        }
-
-        solved = false;
-        scorePuzzle();
-        progress.setVisibility(View.GONE);
+        LargeWords.WordsTask task = new LargeWords.WordsTask(this);
+        task.execute();
     }
 
     // getColour
