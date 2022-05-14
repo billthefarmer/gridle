@@ -42,15 +42,6 @@ import java.util.Set;
 
 public class Words
 {
-    public static final String ENGLISH_FILE    = "English.txt";
-    public static final String ITALIAN_FILE    = "Italian.txt";
-    public static final String SPANISH_FILE    = "Spanish.txt";
-    public static final String CATALAN_FILE    = "Catalan.txt";
-    public static final String FRENCH_FILE     = "French.txt";
-    public static final String PORTUGUESE_FILE = "Portuguese.txt";
-    public static final String GERMAN_FILE     = "German.txt";
-    public static final String DUTCH_FILE      = "Dutch.txt";
-
     private static char gridle[][];
 
     private static List<String> wordList;
@@ -385,24 +376,6 @@ public class Words
         }
 
         return null;
-    }
-
-    // readWords
-    private static void readWords(Context context, String file,
-                                  Collection<String> collection)
-    {
-        try (BufferedReader reader = new BufferedReader
-             (new InputStreamReader(context.getAssets().open(file))))
-        {
-            String line;
-            while ((line = reader.readLine()) != null)
-                collection.add(line);
-        }
-
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public static final String WORDS[] =

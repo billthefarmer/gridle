@@ -407,6 +407,10 @@ public class Large extends Activity
             shareImage();
             break;
 
+        case R.id.help:
+            help();
+            break;
+
         default:
             return false;
         }
@@ -683,6 +687,13 @@ public class Large extends Activity
         }
 
         return 0;
+    }
+
+    // help
+    private void help()
+    {
+        Intent intent = new Intent(this, Help.class);
+        startActivity(intent);
     }
 
     // showToast
