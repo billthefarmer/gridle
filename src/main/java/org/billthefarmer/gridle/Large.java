@@ -277,6 +277,9 @@ public class Large extends Activity
         {
             solved = savedInstanceState.getBoolean(SOLVED);
 
+            if (savedInstanceState.getCharArray(GRIDLE_0) == null)
+                return;
+
             gridle = new char[SIZE][];
 
             gridle[0] = savedInstanceState.getCharArray(GRIDLE_0);
@@ -357,6 +360,9 @@ public class Large extends Activity
         super.onSaveInstanceState(outState);
 
         outState.putBoolean(SOLVED, solved);
+
+        if (puzzle == null)
+            return;
 
         outState.putCharArray(PUZZLE_0, puzzle[0]);
         outState.putCharArray(PUZZLE_1, puzzle[1]);

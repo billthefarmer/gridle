@@ -285,7 +285,8 @@ public class Words
                 int r = random.nextInt(Gridle.SIZE);
                 int c = random.nextInt(Gridle.SIZE);
 
-                while ((puzzle[r][c] == ' ') ||
+                while ((puzzle[row][col] == gridle[r][c]) ||
+                       (puzzle[r][c] == ' ') ||
                        (r == 0 && c == 0) ||
                        (r == 0 && c == 4) ||
                        (r == 2 && c == 2) ||
