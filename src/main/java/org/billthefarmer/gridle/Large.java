@@ -137,6 +137,7 @@ public class Large extends Activity
 
     private boolean fanfare;
     private boolean solved;
+    private boolean moved;
 
     private float x;
     private float y;
@@ -220,9 +221,9 @@ public class Large extends Activity
                 item.setX(x + grid.getX());
                 item.setY(y + grid.getY());
                 item.setVisibility(View.VISIBLE);
-                ((TextView) item).setText(((TextView) view).getText()); 
-                ((TextView) item).setTextColor(((TextView)
-                                                view).getTextColors()); 
+                ((TextView) item).setText(((TextView) view).getText());
+                ((TextView) item).setTextColor(((TextView) view).getTextColors());
+                moved = false;
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -231,11 +232,13 @@ public class Large extends Activity
                 view.setY(event.getRawY() + dY);
                 item.setX(event.getRawX() + grid.getX() + dX);
                 item.setY(event.getRawY() + grid.getY() + dY);
+                moved = true;
                 break;
 
             case MotionEvent.ACTION_UP:
                 // Swap texts and colour letters
-                scorePuzzle(view);
+                if (moved)
+                    scorePuzzle(view);
                 // Put the selected view back, move it into the top
                 // corner, and make it invisible
                 view.setX(x);
