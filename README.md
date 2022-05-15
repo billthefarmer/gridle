@@ -6,7 +6,7 @@
 
 Fairly simple android word game.
 
-![Gridle](https://github.com/billthefarmer/billthefarmer.github.io/raw/master/images/Gridle.png) ![Help](https://github.com/billthefarmer/billthefarmer.github.io/raw/master/images/Gridle-help.png)
+![Gridle](https://github.com/billthefarmer/billthefarmer.github.io/raw/master/images/Gridle.png) ![Large](https://github.com/billthefarmer/billthefarmer.github.io/raw/master/images/Gridle-large.png)
 
  * Multiple coloured themes
 
