@@ -38,6 +38,10 @@ and rotating working symbol while the larger puzzle is
 created. Similarly, tapping the refresh button will not create a new
 puzzle immediately.
 
+## Meaning
+Once you have solved the word grid, tap on a letter that uniquely
+identifies a word to display the meaning.
+
 ## Themes
 Select coloured themes from the **Theme** item in the menu.
 
