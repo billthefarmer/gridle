@@ -25,6 +25,9 @@
   </string>
 
   <string name="solved">Solved, tap refresh</string>
+  <string name="finish">Finish the word grid first</string>
+  <string name="which">Which word?</string>
+
   <string name="congratulations">
     Congratulations! You have solved Gridle correctly
   </string>

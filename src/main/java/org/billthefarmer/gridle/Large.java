@@ -137,7 +137,6 @@ public class Large extends Activity
 
     private boolean fanfare;
     private boolean solved;
-    private boolean moved;
 
     private float x;
     private float y;
@@ -223,7 +222,6 @@ public class Large extends Activity
                 item.setVisibility(View.VISIBLE);
                 ((TextView) item).setText(((TextView) view).getText());
                 ((TextView) item).setTextColor(((TextView) view).getTextColors());
-                moved = false;
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -232,13 +230,17 @@ public class Large extends Activity
                 view.setY(event.getRawY() + dY);
                 item.setX(event.getRawX() + grid.getX() + dX);
                 item.setY(event.getRawY() + grid.getY() + dY);
-                moved = true;
                 break;
 
             case MotionEvent.ACTION_UP:
                 // Swap texts and colour letters
-                if (moved)
+                if (Math.hypot(view.getX() - x, view.getY() - y) >
+                    Math.hypot(view.getWidth() / 2, view.getHeight() / 2))
                     scorePuzzle(view);
+
+                else
+                    search(view);
+
                 // Put the selected view back, move it into the top
                 // corner, and make it invisible
                 view.setX(x);
@@ -696,6 +698,51 @@ public class Large extends Activity
         }
 
         return 0;
+    }
+
+    // search
+    private void search(View view)
+    {
+        if (!solved)
+        {
+            showToast(R.string.finish);
+            return;
+        }
+
+        ViewGroup parent = (ViewGroup) view.getParent();
+        int index = parent.indexOfChild(view);
+        int row = index / SIZE;
+        int col = index % SIZE;
+
+        StringBuilder builder = new StringBuilder();
+        switch(row)
+        {
+        case 1:
+        case 3:
+        case 5:
+            for (int i = 0; i < SIZE; i++)
+                builder.append(gridle[i][col]);
+        }
+
+        switch(col)
+        {
+        case 1:
+        case 3:
+        case 5:
+            for (int i = 0; i < SIZE; i++)
+                builder.append(gridle[row][i]);
+        }
+
+        if (builder.length() == 0)
+        {
+            showToast(R.string.which);
+            return;
+        }
+
+        // Start the web search
+        Intent intent = new Intent(this, Search.class);
+        intent.putExtra(Gridle.WORD, builder.toString());
+        startActivity(intent);
     }
 
     // help
