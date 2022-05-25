@@ -42,8 +42,20 @@ import java.util.Set;
 
 public class Words
 {
+
+    public static final String WORDS_FILE       = "Words.txt";
+    public static final String ENGLISH_FILE     = "English.txt";
+    public static final String ITALIAN_FILE     = "Italian.txt";
+    public static final String SPANISH_FILE     = "Spanish.txt";
+    public static final String CATALAN_FILE     = "Catalan.txt";
+    public static final String FRENCH_FILE      = "French.txt";
+    public static final String PORTUGUESE_FILE  = "Portuguese.txt";
+    public static final String GERMAN_FILE      = "German.txt";
+    public static final String DUTCH_FILE       = "Dutch.txt";
+
     private static char gridle[][];
 
+    private static List<String> words;
     private static List<String> wordList;
 
     private static List<String> aList;
@@ -110,7 +122,7 @@ public class Words
         if (random == null)
             random = new Random(new Date().getTime());
 
-        wordList = new ArrayList<String>(Arrays.asList(WORDS));
+        wordList = new ArrayList<String>(words);
 
         randomise(wordList);
 
@@ -377,6 +389,64 @@ public class Words
         }
 
         return null;
+    }
+
+    public static void setLanguage(Context context, int l)
+    {
+        words = new ArrayList<String>();
+
+        switch (l)
+        {
+        case Gridle.ENGLISH:
+            readWords(context, WORDS_FILE, words);
+            break;
+
+        case Gridle.ITALIAN:
+            readWords(context, ITALIAN_FILE, words);
+            break;
+
+        case Gridle.SPANISH:
+            readWords(context, SPANISH_FILE, words);
+            break;
+
+        case Gridle.CATALAN:
+            readWords(context, CATALAN_FILE, words);
+            break;
+
+        case Gridle.FRENCH:
+            readWords(context, FRENCH_FILE, words);
+            break;
+
+        case Gridle.PORTUGUESE:
+            readWords(context, PORTUGUESE_FILE, words);
+            break;
+
+        case Gridle.GERMAN:
+            readWords(context, GERMAN_FILE, words);
+            break;
+
+        case Gridle.DUTCH:
+            readWords(context, DUTCH_FILE, words);
+            break;
+        }
+    }
+
+    // readWords
+    private static void readWords(Context context, String file,
+                                  Collection<String> collection)
+    {
+        try (BufferedReader reader = new BufferedReader
+             (new InputStreamReader(context.getAssets().open(file))))
+        {
+            String line;
+            while ((line = reader.readLine()) != null)
+                collection.add(line);
+        }
+
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public static final String WORDS[] =

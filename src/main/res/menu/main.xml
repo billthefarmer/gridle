@@ -73,6 +73,55 @@
       android:title="@string/fanfare" />
 
   <item
+      android:id="@+id/language"
+      android:showAsAction="never"
+      android:title="@string/language">
+    <menu>
+
+      <item
+          android:id="@+id/english"
+          android:showAsAction="never"
+          android:title="@string/english" />
+
+      <item
+          android:id="@+id/italian"
+          android:showAsAction="never"
+          android:title="@string/italian" />
+
+      <item
+          android:id="@+id/spanish"
+          android:showAsAction="never"
+          android:title="@string/spanish" />
+
+      <item
+          android:id="@+id/catalan"
+          android:showAsAction="never"
+          android:title="@string/catalan" />
+
+      <item
+          android:id="@+id/french"
+          android:showAsAction="never"
+          android:title="@string/french" />
+
+      <item
+          android:id="@+id/portuguese"
+          android:showAsAction="never"
+          android:title="@string/portuguese" />
+
+      <item
+          android:id="@+id/german"
+          android:showAsAction="never"
+          android:title="@string/german" />
+
+      <item
+          android:id="@+id/dutch"
+          android:showAsAction="never"
+          android:title="@string/dutch" />
+
+    </menu>
+  </item>
+
+  <item
       android:id="@+id/highlight"
       android:showAsAction="never"
       android:title="@string/highlight" />

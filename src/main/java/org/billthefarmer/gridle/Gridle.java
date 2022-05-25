@@ -82,6 +82,7 @@ public class Gridle extends Activity
     public static final int SIZE = 5;
 
     public static final String PREF_THEME = "pref_theme";
+    public static final String PREF_LANG = "pref_lang";
     public static final String PREF_CONT = "pref_cont";
     public static final String PREF_CORR = "pref_corr";
     public static final String PREF_FARE = "pref_fare";
@@ -106,6 +107,15 @@ public class Gridle extends Activity
 
     public static final String FILE_PROVIDER =
         "org.billthefarmer.gridle.fileprovider";
+
+    public static final int ENGLISH    = 0;
+    public static final int ITALIAN    = 1;
+    public static final int SPANISH    = 2;
+    public static final int CATALAN    = 3;
+    public static final int FRENCH     = 4;
+    public static final int PORTUGUESE = 5;
+    public static final int GERMAN     = 6;
+    public static final int DUTCH      = 7;
 
     public static final int GREY    = 0;
     public static final int DARK    = 1;
@@ -140,6 +150,7 @@ public class Gridle extends Activity
     private float dX;
     private float dY;
 
+    private int language;
     private int contains;
     private int correct;
     private int theme;
@@ -154,6 +165,7 @@ public class Gridle extends Activity
             PreferenceManager.getDefaultSharedPreferences(this);
 
         theme = preferences.getInt(PREF_THEME, DARK);
+        language = preferences.getInt(PREF_LANG, ENGLISH);
         contains = preferences.getInt(PREF_CONT, getColour(YELLOW));
         correct = preferences.getInt(PREF_CORR, getColour(GREEN));
         fanfare = preferences.getBoolean(PREF_FARE, true);
@@ -191,6 +203,8 @@ public class Gridle extends Activity
         }
 
         setContentView(R.layout.main);
+
+        setLanguage();
 
         View.OnTouchListener listener = (view, event) ->
         {
@@ -345,6 +359,7 @@ public class Gridle extends Activity
         SharedPreferences.Editor editor = preferences.edit();
 
         editor.putInt(PREF_THEME, theme);
+        editor.putInt(PREF_LANG, language);
         editor.putInt(PREF_CONT, contains);
         editor.putInt(PREF_CORR, correct);
         editor.putBoolean(PREF_FARE, fanfare);
@@ -447,6 +462,38 @@ public class Gridle extends Activity
         case R.id.black:
             theme(BLACK);
             break;
+
+        case R.id.english:
+            setLanguage(ENGLISH);
+            break;
+
+        case R.id.italian:
+            setLanguage(ITALIAN);
+            break;
+
+        case R.id.spanish:
+            setLanguage(SPANISH);
+            break;
+
+        case R.id.catalan:
+            setLanguage(CATALAN);
+            break;
+
+        case R.id.french:
+           setLanguage(FRENCH);
+           break;
+
+       case R.id.portuguese:
+           setLanguage(PORTUGUESE);
+           break;
+
+        case R.id.german:
+           setLanguage(GERMAN);
+           break;
+
+        case R.id.dutch:
+           setLanguage(DUTCH);
+           break;
 
         case R.id.fanfare:
             fanfare(item);
@@ -827,6 +874,56 @@ public class Gridle extends Activity
         }
 
         return 0;
+    }
+
+    // setLanguage
+    private void setLanguage(int l)
+    {
+        language = l;
+        setLanguage();
+        refresh();
+    }
+
+    // setLanguage
+    private void setLanguage()
+    {
+        Words.setLanguage(this, language);
+
+        switch (language)
+        {
+        default:
+        case ENGLISH:
+            getActionBar().setSubtitle(R.string.english);
+            break;
+
+        case ITALIAN:
+            getActionBar().setSubtitle(R.string.italian);
+            break;
+
+        case SPANISH:
+            getActionBar().setSubtitle(R.string.spanish);
+            break;
+
+        case CATALAN:
+            getActionBar().setSubtitle(R.string.catalan);
+            break;
+
+        case FRENCH:
+            getActionBar().setSubtitle(R.string.french);
+            break;
+
+        case PORTUGUESE:
+            getActionBar().setSubtitle(R.string.portuguese);
+            break;
+
+        case GERMAN:
+            getActionBar().setSubtitle(R.string.german);
+            break;
+
+        case DUTCH:
+            getActionBar().setSubtitle(R.string.dutch);
+            break;
+        }
     }
 
     // large
