@@ -45,6 +45,9 @@ identifies a word to display the meaning.
 ## Themes
 Select coloured themes from the **Theme** item in the menu.
 
+## Language
+Select **Language** from the menu.
+
 ## Highlight colours
 A dialog will pop up showing two guesses, one containing some letters
 in the word in the wrong place and a correct guess, and two
