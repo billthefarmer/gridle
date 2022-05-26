@@ -195,6 +195,8 @@ public class Large extends Activity
 
         setContentView(R.layout.large);
 
+        setLanguage();
+
         // Enable back navigation on action bar
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -698,6 +700,12 @@ public class Large extends Activity
         }
 
         return 0;
+    }
+
+    // setLanguage
+    private void setLanguage()
+    {
+        LargeWords.setLanguage(this, Gridle.ENGLISH);
     }
 
     // search
