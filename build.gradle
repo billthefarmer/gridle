@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath 'com.android.tools.build:gradle:7.2.1'
     }
 }
 
@@ -29,8 +29,8 @@ android {
         applicationId "org.billthefarmer.gridle"
         minSdkVersion 14
         targetSdkVersion 28
-        versionName "1.02"
-        versionCode 102
+        versionName "1.03"
+        versionCode 103
 
         buildConfigField "long", "BUILT", System.currentTimeMillis() + "L"
     }
