@@ -48,8 +48,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -124,6 +122,7 @@ public class Large extends Activity
     public static final int WHITE   = 11;
 
     private TextView display[][];
+    private TextView customView;
 
     private Toast toast;
 
@@ -145,6 +144,7 @@ public class Large extends Activity
 
     private int contains;
     private int correct;
+    private int count;
     private int theme;
 
     // Called when the activity is first created.
@@ -271,6 +271,10 @@ public class Large extends Activity
             display[i / SIZE][i % SIZE]
                 .setOnTouchListener(listener);
         }
+
+        getActionBar().setCustomView(R.layout.custom);
+        getActionBar().setDisplayShowCustomEnabled(true);
+        customView = (TextView) getActionBar().getCustomView();
 
         used = new boolean[SIZE][];
         scored = new boolean[SIZE][];
@@ -450,6 +454,7 @@ public class Large extends Activity
             }
         }
 
+        count = 0;
         solved = false;
         scorePuzzle();
 
@@ -593,6 +598,8 @@ public class Large extends Activity
             showToast(R.string.congratulations);
             solved = true;
         }
+
+        customView.setText(Integer.toString(count));
     }
 
     // scorePuzzle
@@ -610,6 +617,7 @@ public class Large extends Activity
         if (swapLetters(view) == false)
             return;
 
+        count++;
         scorePuzzle();
     }
 

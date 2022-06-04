@@ -48,8 +48,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -88,6 +86,7 @@ public class Gridle extends Activity
     public static final String PREF_FARE = "pref_fare";
 
     public static final String SOLVED = "solved";
+    public static final String COUNT = "count";
     public static final String WORD = "word";
 
     public static final String PUZZLE_0 = "puzzle_0";
@@ -131,6 +130,7 @@ public class Gridle extends Activity
     public static final int WHITE   = 11;
 
     private TextView display[][];
+    private TextView customView;
 
     private Toast toast;
 
@@ -153,6 +153,7 @@ public class Gridle extends Activity
     private int language;
     private int contains;
     private int correct;
+    private int count;
     private int theme;
 
     // Called when the activity is first created.
@@ -272,11 +273,13 @@ public class Gridle extends Activity
         ViewGroup grid = (ViewGroup) findViewById(R.id.puzzle);
         for (int i = 0; i < grid.getChildCount(); i++)
         {
-            display[i / SIZE][i % SIZE] =
-                (TextView) grid.getChildAt(i);
-            display[i / SIZE][i % SIZE]
-                .setOnTouchListener(listener);
+            display[i / SIZE][i % SIZE] = (TextView) grid.getChildAt(i);
+            display[i / SIZE][i % SIZE].setOnTouchListener(listener);
         }
+
+        getActionBar().setCustomView(R.layout.custom);
+        getActionBar().setDisplayShowCustomEnabled(true);
+        customView = (TextView) getActionBar().getCustomView();
 
         if (savedInstanceState != null)
         {
@@ -759,6 +762,8 @@ public class Gridle extends Activity
             showToast(R.string.congratulations);
             solved = true;
         }
+
+        customView.setText(Integer.toString(count));
     }
 
     // scorePuzzle
@@ -773,6 +778,7 @@ public class Gridle extends Activity
         if (swapLetters(view) == false)
             return;
 
+        count++;
         scorePuzzle();
     }
 
@@ -851,6 +857,7 @@ public class Gridle extends Activity
             }
         }
 
+        count = 0;
         solved = false;
         scorePuzzle();
     }

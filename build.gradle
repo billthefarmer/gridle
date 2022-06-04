@@ -37,7 +37,7 @@ android {
 
     lintOptions {
         disable 'NonConstantResourceId', 'ExpiredTargetSdkVersion',
-            'ClickableViewAccessibility', 'SetJavaScriptEnabled'
+            'ClickableViewAccessibility', 'SetJavaScriptEnabled', 'SetTextI18n'
         // abortOnError false
     }
 
