@@ -283,6 +283,7 @@ public class Gridle extends Activity
 
         if (savedInstanceState != null)
         {
+            count = savedInstanceState.getInt(COUNT);
             solved = savedInstanceState.getBoolean(SOLVED);
 
             gridle = new char[SIZE][];
@@ -375,6 +376,7 @@ public class Gridle extends Activity
     {
         super.onSaveInstanceState(outState);
 
+        outState.putInt(COUNT, count);
         outState.putBoolean(SOLVED, solved);
 
         outState.putCharArray(PUZZLE_0, puzzle[0]);

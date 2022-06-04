@@ -84,6 +84,7 @@ public class Large extends Activity
     public static final String PREF_CORR = "pref_corr";
     public static final String PREF_FARE = "pref_fare";
 
+    public static final String COUNT = "count";
     public static final String SOLVED = "solved";
 
     public static final String PUZZLE_0 = "puzzle_0";
@@ -286,6 +287,7 @@ public class Large extends Activity
 
         if (savedInstanceState != null)
         {
+            count = savedInstanceState.getInt(COUNT);
             solved = savedInstanceState.getBoolean(SOLVED);
 
             if (savedInstanceState.getCharArray(GRIDLE_0) == null)
@@ -370,6 +372,7 @@ public class Large extends Activity
     {
         super.onSaveInstanceState(outState);
 
+        outState.putInt(COUNT, count);
         outState.putBoolean(SOLVED, solved);
 
         if (puzzle == null)
