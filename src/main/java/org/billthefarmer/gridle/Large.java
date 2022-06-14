@@ -80,6 +80,7 @@ public class Large extends Activity
     public static final int SIZE = 7;
 
     public static final String PREF_THEME = "pref_theme";
+    public static final String PREF_LANG = "pref_lang";
     public static final String PREF_CONT = "pref_cont";
     public static final String PREF_CORR = "pref_corr";
     public static final String PREF_FARE = "pref_fare";
@@ -143,6 +144,7 @@ public class Large extends Activity
     private float dX;
     private float dY;
 
+    private int language;
     private int contains;
     private int correct;
     private int count;
@@ -158,6 +160,7 @@ public class Large extends Activity
             PreferenceManager.getDefaultSharedPreferences(this);
 
         theme = preferences.getInt(PREF_THEME, DARK);
+        language = preferences.getInt(PREF_LANG, Gridle.ENGLISH);
         contains = preferences.getInt(PREF_CONT, getColour(YELLOW));
         correct = preferences.getInt(PREF_CORR, getColour(GREEN));
         fanfare = preferences.getBoolean(PREF_FARE, true);
@@ -716,7 +719,43 @@ public class Large extends Activity
     // setLanguage
     private void setLanguage()
     {
-        LargeWords.setLanguage(this, Gridle.ENGLISH);
+        LargeWords.setLanguage(this, language);
+
+        switch (language)
+        {
+        default:
+        case Gridle.ENGLISH:
+            getActionBar().setSubtitle(R.string.english);
+            break;
+
+        case Gridle.ITALIAN:
+            getActionBar().setSubtitle(R.string.italian);
+            break;
+
+        case Gridle.SPANISH:
+            getActionBar().setSubtitle(R.string.spanish);
+            break;
+
+        case Gridle.CATALAN:
+            getActionBar().setSubtitle(R.string.catalan);
+            break;
+
+        case Gridle.FRENCH:
+            getActionBar().setSubtitle(R.string.french);
+            break;
+
+        case Gridle.PORTUGUESE:
+            getActionBar().setSubtitle(R.string.portuguese);
+            break;
+
+        case Gridle.GERMAN:
+            getActionBar().setSubtitle(R.string.german);
+            break;
+
+        case Gridle.DUTCH:
+            getActionBar().setSubtitle(R.string.dutch);
+            break;
+        }
     }
 
     // search

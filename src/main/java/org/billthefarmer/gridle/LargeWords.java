@@ -45,7 +45,14 @@ import java.util.Set;
 
 public class LargeWords
 {
-    public static final String WORDS_FILE = "Words-large.txt";
+    public static final String WORDS_FILE       = "Words-large.txt";
+    public static final String ITALIAN_FILE     = "Italian-large.txt";
+    public static final String SPANISH_FILE     = "Spanish-large.txt";
+    public static final String CATALAN_FILE     = "Catalan-large.txt";
+    public static final String FRENCH_FILE      = "French-large.txt";
+    public static final String PORTUGUESE_FILE  = "Portuguese-large.txt";
+    public static final String GERMAN_FILE      = "German-large.txt";
+    public static final String DUTCH_FILE       = "Dutch-large.txt";
 
     private static char gridle[][];
 
@@ -147,7 +154,7 @@ public class LargeWords
         yList = new ArrayList<String>();
         zList = new ArrayList<String>();
 
-        for (String word: wordList.toArray(new String[0]))
+        for (String word: wordList)
         {
             switch (word.charAt(0))
             {
@@ -182,7 +189,7 @@ public class LargeWords
 
         gridle = new char[Large.SIZE][];
 
-        for (String word: wordList.toArray(new String[0]))
+        for (String word: wordList)
         {
             aIterator = aList.iterator();
             bIterator = bList.iterator();
@@ -281,7 +288,7 @@ public class LargeWords
     private static void randomise(List<String> list)
     {
         int index = 0;
-        for (String w: list.toArray(new String[0]))
+        for (String w: list)
         {
             int r = random.nextInt(list.size());
             list.set(index++, list.get(r));
@@ -301,28 +308,37 @@ public class LargeWords
             for (int col = 0; col < Large.SIZE; col++)
             {
                 if ((puzzle[row][col] == ' ') ||
-                    (row == 0 && col == 0) ||
-                    (row == 0 && col == 6) ||
+                    (row == 0 && col == 2) ||
+                    (row == 0 && col == 4) ||
+                    (row == 2 && col == 0) ||
                     (row == 2 && col == 2) ||
                     (row == 2 && col == 4) ||
+                    (row == 2 && col == 6) ||
+                    (row == 4 && col == 0) ||
                     (row == 4 && col == 2) ||
                     (row == 4 && col == 4) ||
-                    (row == 6 && col == 0) ||
-                    (row == 6 && col == 6))
+                    (row == 4 && col == 6) ||
+                    (row == 6 && col == 2) ||
+                    (row == 6 && col == 4))
                     continue;
 
                 int r = random.nextInt(Large.SIZE);
                 int c = random.nextInt(Large.SIZE);
 
-                while ((puzzle[r][c] == ' ') ||
-                       (r == 0 && c == 0) ||
-                       (r == 0 && c == 6) ||
+                while ((puzzle[row][col] == gridle[r][c]) ||
+                       (puzzle[r][c] == ' ') ||
+                       (r == 0 && c == 2) ||
+                       (r == 0 && c == 4) ||
+                       (r == 2 && c == 0) ||
                        (r == 2 && c == 2) ||
                        (r == 2 && c == 4) ||
+                       (r == 2 && c == 6) ||
+                       (r == 4 && c == 0) ||
                        (r == 4 && c == 2) ||
                        (r == 4 && c == 4) ||
-                       (r == 6 && c == 0) ||
-                       (r == 6 && c == 6))
+                       (r == 4 && c == 6) ||
+                       (r == 6 && c == 2) ||
+                       (r == 6 && c == 4))
                 {
                     r = random.nextInt(Large.SIZE);
                     c = random.nextInt(Large.SIZE);
@@ -470,6 +486,34 @@ public class LargeWords
         default:
         case Gridle.ENGLISH:
             readWords(context, WORDS_FILE, words);
+            break;
+
+        case Gridle.ITALIAN:
+            readWords(context, ITALIAN_FILE, words);
+            break;
+
+        case Gridle.SPANISH:
+            readWords(context, SPANISH_FILE, words);
+            break;
+
+        case Gridle.CATALAN:
+            readWords(context, CATALAN_FILE, words);
+            break;
+
+        case Gridle.FRENCH:
+            readWords(context, FRENCH_FILE, words);
+            break;
+
+        case Gridle.PORTUGUESE:
+            readWords(context, PORTUGUESE_FILE, words);
+            break;
+
+        case Gridle.GERMAN:
+            readWords(context, GERMAN_FILE, words);
+            break;
+
+        case Gridle.DUTCH:
+            readWords(context, DUTCH_FILE, words);
             break;
         }
     }

@@ -153,7 +153,7 @@ public class Words
         yList = new ArrayList<String>();
         zList = new ArrayList<String>();
 
-        for (String word: wordList.toArray(new String[0]))
+        for (String word: wordList)
         {
             switch (word.charAt(0))
             {
@@ -188,7 +188,7 @@ public class Words
 
         gridle = new char[Gridle.SIZE][];
 
-        for (String word: wordList.toArray(new String[0]))
+        for (String word: wordList)
         {
             aIterator = aList.iterator();
             bIterator = bList.iterator();
@@ -267,7 +267,7 @@ public class Words
     private static void randomise(List<String> list)
     {
         int index = 0;
-        for (String w: list.toArray(new String[0]))
+        for (String w: list)
         {
             int r = random.nextInt(list.size());
             list.set(index++, list.get(r));
@@ -397,6 +397,7 @@ public class Words
 
         switch (l)
         {
+        default:
         case Gridle.ENGLISH:
             readWords(context, WORDS_FILE, words);
             break;
