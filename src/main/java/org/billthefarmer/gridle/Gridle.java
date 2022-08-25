@@ -750,6 +750,8 @@ public class Gridle extends Activity
             }
         }
 
+        customView.setText(Integer.toString(count));
+
         if (solved)
             return;
 
@@ -764,8 +766,6 @@ public class Gridle extends Activity
             showToast(R.string.congratulations);
             solved = true;
         }
-
-        customView.setText(Integer.toString(count));
     }
 
     // scorePuzzle
@@ -879,7 +879,7 @@ public class Gridle extends Activity
             return 0xff00ff00;
 
         case GREY:
-            return 0x7fffffff;
+            return 0x3fffffff;
         }
 
         return 0;

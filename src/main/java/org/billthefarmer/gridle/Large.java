@@ -590,6 +590,8 @@ public class Large extends Activity
             }
         }
 
+        customView.setText(Integer.toString(count));
+
         if (solved)
             return;
 
@@ -604,8 +606,6 @@ public class Large extends Activity
             showToast(R.string.congratulations);
             solved = true;
         }
-
-        customView.setText(Integer.toString(count));
     }
 
     // scorePuzzle
