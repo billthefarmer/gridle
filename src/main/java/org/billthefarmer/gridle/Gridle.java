@@ -87,6 +87,7 @@ public class Gridle extends Activity
 
     public static final String SOLVED = "solved";
     public static final String COUNT = "count";
+    public static final String LANG = "lang";
     public static final String WORD = "word";
 
     public static final String PUZZLE_0 = "puzzle_0";
@@ -885,6 +886,38 @@ public class Gridle extends Activity
         return 0;
     }
 
+    // languageToString
+    private static String languageToString(int l)
+    {
+        switch (l)
+        {
+        default:
+        case ENGLISH:
+		return "en";
+
+        case ITALIAN:
+		return "it";
+
+        case SPANISH:
+		return "es";
+
+        case CATALAN:
+		return "ca";
+
+        case FRENCH:
+		return "fr";
+
+        case PORTUGUESE:
+		return "pt";
+
+        case GERMAN:
+		return "de";
+
+        case DUTCH:
+		return "nl";
+        }
+    }
+
     // setLanguage
     private void setLanguage(int l)
     {
@@ -982,6 +1015,7 @@ public class Gridle extends Activity
         // Start the web search
         Intent intent = new Intent(this, Search.class);
         intent.putExtra(WORD, builder.toString());
+        intent.putExtra(LANG, languageToString(language));
         startActivity(intent);
     }
 
