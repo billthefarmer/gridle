@@ -161,8 +161,8 @@ public class Large extends Activity
 
         theme = preferences.getInt(PREF_THEME, DARK);
         language = preferences.getInt(PREF_LANG, Gridle.ENGLISH);
-        contains = preferences.getInt(PREF_CONT, getColour(YELLOW));
-        correct = preferences.getInt(PREF_CORR, getColour(GREEN));
+        contains = preferences.getInt(PREF_CONT, Gridle.getColour(YELLOW));
+        correct = preferences.getInt(PREF_CORR, Gridle.getColour(GREEN));
         fanfare = preferences.getBoolean(PREF_FARE, true);
 
         switch (theme)
@@ -512,7 +512,7 @@ public class Large extends Activity
         {
             for (int col = 0; col < SIZE; col++)
             {
-                display[row][col].setTextColor(getColour(GREY));
+                display[row][col].setTextColor(Gridle.getColour(GREY));
             }
         }
 
@@ -630,7 +630,7 @@ public class Large extends Activity
     // swapLetters
     private boolean swapLetters(View view)
     {
-        View v = findNearestView(view);
+        View v = Gridle.findNearestView(view);
 
         if (v == null)
             return false;
@@ -658,33 +658,6 @@ public class Large extends Activity
         return true;
     }
 
-    // findNearestView
-    private View findNearestView(View view)
-    {
-        ViewGroup parent = (ViewGroup) view.getParent();
-        double d = Double.MAX_VALUE;
-        View nearest = null;
-        for (int i = 0; i < parent.getChildCount(); i++)
-        {
-            View v = parent.getChildAt(i);
-            if (v.equals(view))
-                continue;
-
-            if (Math.hypot(view.getX() - v.getX(),
-                           view.getY() - v.getY()) < d)
-            {
-                d = Math.hypot(view.getX() - v.getX(),
-                               view.getY() - v.getY());
-                nearest = v;
-            }
-        }
-
-        if (nearest.getVisibility() == View.INVISIBLE)
-                return null;
-
-        return nearest;
-    }
-
     // refresh
     private void refresh()
     {
@@ -693,27 +666,6 @@ public class Large extends Activity
 
         LargeWords.WordsTask task = new LargeWords.WordsTask(this);
         task.execute();
-    }
-
-    // getColour
-    private int getColour(int c)
-    {
-        switch (c)
-        {
-        case WHITE:
-            return 0xffffffff;
-
-        case YELLOW:
-            return 0xffffff00;
-
-        case GREEN:
-            return 0xff00ff00;
-
-        case GREY:
-            return 0x7fffffff;
-        }
-
-        return 0;
     }
 
     // setLanguage
@@ -800,6 +752,7 @@ public class Large extends Activity
         // Start the web search
         Intent intent = new Intent(this, Search.class);
         intent.putExtra(Gridle.WORD, builder.toString());
+        intent.putExtra(Gridle.LANG, Gridle.languageToString(language));
         startActivity(intent);
     }
 

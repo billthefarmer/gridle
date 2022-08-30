@@ -817,7 +817,7 @@ public class Gridle extends Activity
     }
 
     // findNearestView
-    private View findNearestView(View view)
+    public static View findNearestView(View view)
     {
         ViewGroup parent = (ViewGroup) view.getParent();
         double d = Double.MAX_VALUE;
@@ -866,7 +866,7 @@ public class Gridle extends Activity
     }
 
     // getColour
-    private int getColour(int c)
+    public static int getColour(int c)
     {
         switch (c)
         {
@@ -887,7 +887,7 @@ public class Gridle extends Activity
     }
 
     // languageToString
-    private static String languageToString(int l)
+    public static String languageToString(int l)
     {
         switch (l)
         {
