@@ -79,15 +79,6 @@ public class Large extends Activity
 
     public static final int SIZE = 7;
 
-    public static final String PREF_THEME = "pref_theme";
-    public static final String PREF_LANG = "pref_lang";
-    public static final String PREF_CONT = "pref_cont";
-    public static final String PREF_CORR = "pref_corr";
-    public static final String PREF_FARE = "pref_fare";
-
-    public static final String COUNT = "count";
-    public static final String SOLVED = "solved";
-
     public static final String PUZZLE_0 = "puzzle_0";
     public static final String PUZZLE_1 = "puzzle_1";
     public static final String PUZZLE_2 = "puzzle_2";
@@ -103,25 +94,6 @@ public class Large extends Activity
     public static final String GRIDLE_4 = "gridle_4";
     public static final String GRIDLE_5 = "gridle_5";
     public static final String GRIDLE_6 = "gridle_6";
-
-    public static final String GRIDLE_IMAGE = "Gridle.png";
-    public static final String IMAGE_PNG = "image/png";
-
-    public static final String FILE_PROVIDER =
-        "org.billthefarmer.gridle.fileprovider";
-
-    public static final int GREY    = 0;
-    public static final int DARK    = 1;
-    public static final int BLUE    = 2;
-    public static final int CYAN    = 3;
-    public static final int GREEN   = 4;
-    public static final int MAGENTA = 5;
-    public static final int ORANGE  = 6;
-    public static final int PURPLE  = 7;
-    public static final int RED     = 8;
-    public static final int YELLOW  = 9;
-    public static final int BLACK   = 10;
-    public static final int WHITE   = 11;
 
     private TextView display[][];
     private TextView customView;
@@ -159,40 +131,42 @@ public class Large extends Activity
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
 
-        theme = preferences.getInt(PREF_THEME, DARK);
-        language = preferences.getInt(PREF_LANG, Gridle.ENGLISH);
-        contains = preferences.getInt(PREF_CONT, Gridle.getColour(YELLOW));
-        correct = preferences.getInt(PREF_CORR, Gridle.getColour(GREEN));
-        fanfare = preferences.getBoolean(PREF_FARE, true);
+        theme = preferences.getInt(Gridle.PREF_THEME, Gridle.DARK);
+        language = preferences.getInt(Gridle.PREF_LANG, Gridle.ENGLISH);
+        contains = preferences.getInt(Gridle.PREF_CONT,
+                                      Gridle.getColour(Gridle.YELLOW));
+        correct = preferences.getInt(Gridle.PREF_CORR,
+                                     Gridle.getColour(Gridle.GREEN));
+        fanfare = preferences.getBoolean(Gridle.PREF_FARE, true);
 
         switch (theme)
         {
         default:
-        case DARK:
+        case Gridle.DARK:
             setTheme(R.style.AppTheme);
             break;
 
-        case CYAN:
+        case Gridle.CYAN:
             setTheme(R.style.AppCyanTheme);
             break;
 
-        case BLUE:
+        case Gridle.BLUE:
             setTheme(R.style.AppBlueTheme);
             break;
 
-        case ORANGE:
+        case Gridle.ORANGE:
             setTheme(R.style.AppOrangeTheme);
             break;
 
-        case PURPLE:
+        case Gridle.PURPLE:
             setTheme(R.style.AppPurpleTheme);
             break;
 
-        case RED:
+        case Gridle.RED:
             setTheme(R.style.AppRedTheme);
             break;
 
-        case BLACK:
+        case Gridle.BLACK:
             setTheme(R.style.AppBlackTheme);
             break;
         }
@@ -290,8 +264,8 @@ public class Large extends Activity
 
         if (savedInstanceState != null)
         {
-            count = savedInstanceState.getInt(COUNT);
-            solved = savedInstanceState.getBoolean(SOLVED);
+            count = savedInstanceState.getInt(Gridle.COUNT);
+            solved = savedInstanceState.getBoolean(Gridle.SOLVED);
 
             if (savedInstanceState.getCharArray(GRIDLE_0) == null)
                 return;
@@ -362,10 +336,10 @@ public class Large extends Activity
             PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
 
-        editor.putInt(PREF_THEME, theme);
-        editor.putInt(PREF_CONT, contains);
-        editor.putInt(PREF_CORR, correct);
-        editor.putBoolean(PREF_FARE, fanfare);
+        editor.putInt(Gridle.PREF_THEME, theme);
+        editor.putInt(Gridle.PREF_CONT, contains);
+        editor.putInt(Gridle.PREF_CORR, correct);
+        editor.putBoolean(Gridle.PREF_FARE, fanfare);
         editor.apply();
     }
 
@@ -375,8 +349,8 @@ public class Large extends Activity
     {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(COUNT, count);
-        outState.putBoolean(SOLVED, solved);
+        outState.putInt(Gridle.COUNT, count);
+        outState.putBoolean(Gridle.SOLVED, solved);
 
         if (puzzle == null)
             return;
@@ -476,14 +450,14 @@ public class Large extends Activity
         String title = getString(R.string.appName);
         intent.putExtra(Intent.EXTRA_TITLE, title);
         intent.putExtra(Intent.EXTRA_SUBJECT, title);
-        intent.setType(IMAGE_PNG);
+        intent.setType(Gridle.IMAGE_PNG);
 
         View root = findViewById(android.R.id.content).getRootView();
         root.setDrawingCacheEnabled(true);
         Bitmap bitmap = Bitmap.createBitmap(root.getDrawingCache());
         root.setDrawingCacheEnabled(false);
 
-        File image = new File(getCacheDir(), GRIDLE_IMAGE);
+        File image = new File(getCacheDir(), Gridle.GRIDLE_IMAGE);
         try (BufferedOutputStream out = new
              BufferedOutputStream(new FileOutputStream(image)))
         {
@@ -493,7 +467,7 @@ public class Large extends Activity
         catch (Exception e) {}
 
         Uri imageUri = FileProvider
-            .getUriForFile(this, FILE_PROVIDER, image);
+            .getUriForFile(this, Gridle.FILE_PROVIDER, image);
         intent.putExtra(Intent.EXTRA_STREAM, imageUri);
 
         startActivity(Intent.createChooser(intent, null));
@@ -512,7 +486,7 @@ public class Large extends Activity
         {
             for (int col = 0; col < SIZE; col++)
             {
-                display[row][col].setTextColor(Gridle.getColour(GREY));
+                display[row][col].setTextColor(Gridle.getColour(Gridle.GREY));
             }
         }
 
