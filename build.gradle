@@ -29,8 +29,8 @@ android {
         applicationId "org.billthefarmer.gridle"
         minSdkVersion 14
         targetSdkVersion 28
-        versionName "1.05"
-        versionCode 105
+        versionName "1.06"
+        versionCode 106
 
         buildConfigField "long", "BUILT", System.currentTimeMillis() + "L"
     }
