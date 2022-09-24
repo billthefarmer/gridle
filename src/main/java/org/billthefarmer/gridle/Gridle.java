@@ -80,6 +80,7 @@ public class Gridle extends Activity
     public static final int SIZE = 5;
 
     public static final String PREF_THEME = "pref_theme";
+    public static final String PREF_WRONG = "pref_wrong";
     public static final String PREF_LANG = "pref_lang";
     public static final String PREF_CONT = "pref_cont";
     public static final String PREF_CORR = "pref_corr";
@@ -154,6 +155,7 @@ public class Gridle extends Activity
     private int language;
     private int contains;
     private int correct;
+    private int wrong;
     private int count;
     private int theme;
 
@@ -167,6 +169,7 @@ public class Gridle extends Activity
             PreferenceManager.getDefaultSharedPreferences(this);
 
         theme = preferences.getInt(PREF_THEME, DARK);
+        wrong = preferences.getInt(PREF_WRONG, getColour(GREY));
         language = preferences.getInt(PREF_LANG, ENGLISH);
         contains = preferences.getInt(PREF_CONT, getColour(YELLOW));
         correct = preferences.getInt(PREF_CORR, getColour(GREEN));
@@ -364,6 +367,7 @@ public class Gridle extends Activity
         SharedPreferences.Editor editor = preferences.edit();
 
         editor.putInt(PREF_THEME, theme);
+        editor.putInt(PREF_WRONG, wrong);
         editor.putInt(PREF_LANG, language);
         editor.putInt(PREF_CONT, contains);
         editor.putInt(PREF_CORR, correct);
@@ -561,6 +565,7 @@ public class Gridle extends Activity
         {
             contains = getColour(YELLOW);
             correct = getColour(GREEN);
+            wrong = getColour(GREY);
         });
 
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -574,6 +579,8 @@ public class Gridle extends Activity
                 .getDefaultColor();
             correct = ((TextView) words.getChildAt(0)).getTextColors()
                 .getDefaultColor();
+            wrong = ((TextView) those.getChildAt(0)).getTextColors()
+                .getDefaultColor();
         });
 
         Dialog dialog = builder.show();
@@ -583,7 +590,7 @@ public class Gridle extends Activity
         for (int l: grey)
         {
             TextView t = (TextView) those.getChildAt(l);
-            t.setTextColor(getColour(GREY));
+            t.setTextColor(wrong);
         }
 
         int cont[] = {2, 3};
@@ -620,6 +627,12 @@ public class Gridle extends Activity
                 for (int l = 0; l < words.getChildCount(); l++)
                     ((TextView) words.getChildAt(l)).setTextColor(colour);
                 break;
+
+            case R.id.wrong:
+                ((TextView) those.getChildAt(0)).setTextColor(colour);
+                ((TextView) those.getChildAt(1)).setTextColor(colour);
+                ((TextView) those.getChildAt(4)).setTextColor(colour);
+                break;
             }
 
             return false;
@@ -628,6 +641,8 @@ public class Gridle extends Activity
         view = dialog.findViewById(R.id.contains);
         view.setOnTouchListener(listener);
         view = dialog.findViewById(R.id.correct);
+        view.setOnTouchListener(listener);
+        view = dialog.findViewById(R.id.wrong);
         view.setOnTouchListener(listener);
     }
 
@@ -675,7 +690,7 @@ public class Gridle extends Activity
         {
             for (int col = 0; col < SIZE; col++)
             {
-                display[row][col].setTextColor(getColour(GREY));
+                display[row][col].setTextColor(wrong);
             }
         }
 

@@ -119,6 +119,7 @@ public class Large extends Activity
     private int language;
     private int contains;
     private int correct;
+    private int wrong;
     private int count;
     private int theme;
 
@@ -132,6 +133,8 @@ public class Large extends Activity
             PreferenceManager.getDefaultSharedPreferences(this);
 
         theme = preferences.getInt(Gridle.PREF_THEME, Gridle.DARK);
+        wrong = preferences.getInt(Gridle.PREF_WRONG,
+                                   Gridle.getColour(Gridle.GREY));
         language = preferences.getInt(Gridle.PREF_LANG, Gridle.ENGLISH);
         contains = preferences.getInt(Gridle.PREF_CONT,
                                       Gridle.getColour(Gridle.YELLOW));
@@ -331,16 +334,6 @@ public class Large extends Activity
             mediaPlayer.release();
             mediaPlayer = null;
         }
-
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        editor.putInt(Gridle.PREF_THEME, theme);
-        editor.putInt(Gridle.PREF_CONT, contains);
-        editor.putInt(Gridle.PREF_CORR, correct);
-        editor.putBoolean(Gridle.PREF_FARE, fanfare);
-        editor.apply();
     }
 
     // onSaveInstanceState
@@ -486,7 +479,7 @@ public class Large extends Activity
         {
             for (int col = 0; col < SIZE; col++)
             {
-                display[row][col].setTextColor(Gridle.getColour(Gridle.GREY));
+                display[row][col].setTextColor(wrong);
             }
         }
 
