@@ -41,6 +41,8 @@ import android.preference.PreferenceManager;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.ActionMode;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -59,7 +61,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.text.Normalizer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -109,6 +111,14 @@ public class Gridle extends Activity
     public static final String FILE_PROVIDER =
         "org.billthefarmer.gridle.fileprovider";
 
+    public static final String A_ACCENTS[] = {"A", "À", "Á", "Â"};
+    public static final String C_ACCENTS[] = {"C", "Ç"};
+    public static final String E_ACCENTS[] = {"E", "È", "É", "Ê"};
+    public static final String I_ACCENTS[] = {"I", "Ì", "Í", "Î"};
+    public static final String N_ACCENTS[] = {"N", "Ñ"};
+    public static final String O_ACCENTS[] = {"O", "Ò", "Ó", "Ô"};
+    public static final String U_ACCENTS[] = {"U", "Ù", "Ú", "Û"};
+
     public static final int ENGLISH    = 0;
     public static final int ITALIAN    = 1;
     public static final int SPANISH    = 2;
@@ -131,8 +141,12 @@ public class Gridle extends Activity
     public static final int BLACK   = 10;
     public static final int WHITE   = 11;
 
+    private ActionMode.Callback actionModeCallback;
+    private ActionMode actionMode;
+
     private TextView display[][];
     private TextView customView;
+    private TextView actionView;
 
     private Toast toast;
 
@@ -213,6 +227,9 @@ public class Gridle extends Activity
 
         View.OnTouchListener listener = (view, event) ->
         {
+            if (solved)
+                return false;
+
             View item = findViewById(R.id.item);
             View grid = findViewById(R.id.puzzle);
 
@@ -252,7 +269,7 @@ public class Gridle extends Activity
                     scorePuzzle(view);
 
                 else
-                    search(view);
+                    showToast(R.string.finish);
 
                 // Put the selected view back, move it into the top
                 // corner, and make it invisible
@@ -270,6 +287,58 @@ public class Gridle extends Activity
             return true;
         };
 
+        actionModeCallback = new ActionMode.Callback()
+        {
+            // Called when the action mode is created;
+            // startActionMode() was called
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu)
+            {
+                addAccents(actionView, menu);
+                return true;
+            }
+
+            // Called each time the action mode is shown. Always
+            // called after onCreateActionMode, but may be called
+            // multiple times if the mode is invalidated.
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu)
+            {
+                return false; // Return false if nothing is done
+            }
+
+            // Called when the user selects a contextual menu item
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item)
+            {
+                actionView.setText(item.getTitle());
+                ViewGroup parent = (ViewGroup) actionView.getParent();
+                int index = parent.indexOfChild(actionView);
+                int r = index / SIZE;
+                int c = index % SIZE;
+
+                puzzle[r][c] = item.getTitle().toString()
+                    .toLowerCase(Locale.getDefault()).charAt(0);
+
+                mode.finish(); // Action picked, so close the CAB
+                return true;
+            }
+
+            // Called when the user exits the action mode
+            @Override
+            public void onDestroyActionMode(ActionMode mode)
+            {
+                actionMode = null;
+            }
+        };
+
+        View layout = findViewById(android.R.id.content);
+        layout.setOnClickListener((v) ->
+        {
+            if (actionMode != null)
+                actionMode.finish();
+        });
+
         display = new TextView[SIZE][];
         for (int i = 0; i < display.length; i++)
             display[i] = new TextView[SIZE];
@@ -279,11 +348,23 @@ public class Gridle extends Activity
         {
             display[i / SIZE][i % SIZE] = (TextView) grid.getChildAt(i);
             display[i / SIZE][i % SIZE].setOnTouchListener(listener);
+            display[i / SIZE][i % SIZE].setOnClickListener((v) -> search(v));
+            display[i / SIZE][i % SIZE].setOnLongClickListener((v) ->
+                                                               accents(v));
+            registerForContextMenu(display[i / SIZE][i % SIZE]);
         }
 
         getActionBar().setCustomView(R.layout.custom);
         getActionBar().setDisplayShowCustomEnabled(true);
         customView = (TextView) getActionBar().getCustomView();
+
+        used = new boolean[SIZE][];
+        scored = new boolean[SIZE][];
+        for (int row = 0; row < SIZE; row++)
+        {
+            used[row] = new boolean[SIZE];
+            scored[row] = new boolean[SIZE];
+        }
 
         if (savedInstanceState != null)
         {
@@ -323,24 +404,16 @@ public class Gridle extends Activity
                 display[i][j].setText
                     (new String(new char[] {puzzle[i][j]})
                      .toUpperCase(Locale.getDefault()));
+                if (solved)
+                    display[i][j].setTextColor(correct);
             }
         }
 
-        used = new boolean[SIZE][];
-        for (int row = 0; row < SIZE; row++)
-        {
-            used[row] = new boolean[SIZE];
-            Arrays.fill(used[row], false);
-        }
+        if (solved)
+            customView.setText(Integer.toString(count));
 
-        scored = new boolean[SIZE][];
-        for (int row = 0; row < SIZE; row++)
-        {
-            scored[row] = new boolean[SIZE];
-            Arrays.fill(scored[row], false);
-        }
-
-        scorePuzzle();
+        else
+            scorePuzzle();
     }
 
     // onResume
@@ -397,13 +470,6 @@ public class Gridle extends Activity
         outState.putCharArray(GRIDLE_4, gridle[4]);
     }
 
-    // scale
-    private void scale(View view, float scale)
-    {
-        view.setScaleX(scale);
-        view.setScaleY(scale);
-    }
-
     // On create options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -423,6 +489,15 @@ public class Gridle extends Activity
         menu.findItem(R.id.fanfare).setChecked(fanfare);
 
         return true;
+    }
+
+    // onCreateContextMenu
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo)
+    {
+        // Inflate a menu resource providing context menu items
+        addAccents((TextView) v, menu);
     }
 
     // On options item selected
@@ -526,6 +601,68 @@ public class Gridle extends Activity
         }
 
         return true;
+    }
+
+    // onContextItemSelected
+    @Override
+    public boolean onContextItemSelected(MenuItem item)
+    {
+        actionView.setText(item.getTitle());
+
+        ViewGroup parent = (ViewGroup) actionView.getParent();
+        int index = parent.indexOfChild(actionView);
+        int r = index / SIZE;
+        int c = index % SIZE;
+
+        puzzle[r][c] = item.getTitle().toString()
+            .toLowerCase(Locale.getDefault()).charAt(0);
+
+        return true;
+    }
+
+    // addAccents
+    public static void addAccents(TextView textView, Menu menu)
+    {
+        char c = removeAccents(textView.getText()).charAt(0);
+
+        String items[];
+        switch (c)
+        {
+        case 'A':
+            items = A_ACCENTS;
+            break;
+
+        case 'C':
+            items = C_ACCENTS;
+            break;
+
+        case 'E':
+            items = E_ACCENTS;
+            break;
+
+        case 'I':
+            items = I_ACCENTS;
+            break;
+
+        case 'N':
+            items = N_ACCENTS;
+            break;
+
+        case 'O':
+            items = O_ACCENTS;
+            break;
+
+        case 'U':
+            items = U_ACCENTS;
+            break;
+
+        default:
+            menu.add(textView.getText());
+            return;
+        }
+
+        for (String item: items)
+            menu.add(item);
     }
 
     // theme
@@ -880,6 +1017,19 @@ public class Gridle extends Activity
         scorePuzzle();
     }
 
+    // accents
+    private boolean accents(View view)
+    {
+        actionView = (TextView) view;
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return false;
+
+        actionMode = view.startActionMode(actionModeCallback,
+                                          ActionMode.TYPE_FLOATING);
+        return true;
+    }
+
     // getColour
     public static int getColour(int c)
     {
@@ -993,6 +1143,9 @@ public class Gridle extends Activity
     // search
     private void search(View view)
     {
+        if (actionMode != null)
+            actionMode.finish();
+
         if (!solved)
         {
             showToast(R.string.finish);
@@ -1010,7 +1163,7 @@ public class Gridle extends Activity
         case 1:
         case 3:
             for (int i = 0; i < SIZE; i++)
-                builder.append(gridle[i][col]);
+                builder.append(puzzle[i][col]);
         }
 
         switch(col)
@@ -1018,7 +1171,7 @@ public class Gridle extends Activity
         case 1:
         case 3:
             for (int i = 0; i < SIZE; i++)
-                builder.append(gridle[row][i]);
+                builder.append(puzzle[row][i]);
         }
 
         if (builder.length() == 0)
@@ -1039,6 +1192,13 @@ public class Gridle extends Activity
     {
         Intent intent = new Intent(this, Help.class);
         startActivity(intent);
+    }
+
+    // removeAccents
+    public static String removeAccents(CharSequence cs)
+    {
+        return Normalizer.normalize(cs, Normalizer.Form.NFKD)
+            .replaceAll("\\p{M}", "");
     }
 
     // showToast
