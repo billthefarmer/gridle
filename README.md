@@ -36,6 +36,11 @@ and rotating working symbol while the larger puzzle is
 created. Similarly, tapping the refresh button will not create a new
 puzzle immediately.
 
+## Add accents
+Long press on a letter in the solved word grid. This will show a
+pop-up menu of unaccented and accented letters. Pick the required
+unaccented or accented letter.
+
 ## Meaning
 Once you have solved the word grid, tap on a letter that uniquely
 identifies a word to display the meaning.
