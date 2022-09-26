@@ -1,0 +1,2 @@
+ * Add accents to solved word grid
+ * Update highlight colours dialog
