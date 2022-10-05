@@ -178,6 +178,10 @@ public class Large extends Activity
         case Gridle.BLACK:
             setTheme(R.style.AppBlackTheme);
             break;
+
+        case Gridle.LIGHT:
+            setTheme(R.style.AppLightTheme);
+            break;
         }
 
         setContentView(R.layout.large);

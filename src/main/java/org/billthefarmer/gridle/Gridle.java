@@ -140,6 +140,7 @@ public class Gridle extends Activity
     public static final int YELLOW  = 9;
     public static final int BLACK   = 10;
     public static final int WHITE   = 11;
+    public static final int LIGHT   = 12;
 
     private ActionMode.Callback actionModeCallback;
     private ActionMode actionMode;
@@ -218,6 +219,10 @@ public class Gridle extends Activity
 
         case BLACK:
             setTheme(R.style.AppBlackTheme);
+            break;
+
+        case LIGHT:
+            setTheme(R.style.AppLightTheme);
             break;
         }
 
@@ -546,6 +551,10 @@ public class Gridle extends Activity
 
         case R.id.black:
             theme(BLACK);
+            break;
+
+        case R.id.light:
+            theme(LIGHT);
             break;
 
         case R.id.english:

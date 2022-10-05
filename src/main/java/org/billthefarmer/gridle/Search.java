@@ -87,6 +87,10 @@ public class Search extends Activity
         case Gridle.BLACK:
             setTheme(R.style.AppBlackTheme);
             break;
+
+        case Gridle.LIGHT:
+            setTheme(R.style.AppLightTheme);
+            break;
         }
 
         // Set content
