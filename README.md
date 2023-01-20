@@ -31,9 +31,9 @@ Tap the **Share** button in the toolbar to share an image of the
 current display.
 
 ## Large
-Solve a larger 7x7 grid of words. This will show an initial blank grid
+Solve a larger 7x7 grid of words. This may show an initial blank grid
 and rotating working symbol while the larger puzzle is
-created. Similarly, tapping the refresh button will not create a new
+created. Similarly, tapping the refresh button may not create a new
 puzzle immediately.
 
 ## Add accents
