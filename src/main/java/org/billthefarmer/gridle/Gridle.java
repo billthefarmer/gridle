@@ -80,6 +80,7 @@ public class Gridle extends Activity
     public static final String TAG = "Gridle";
 
     public static final int SIZE = 5;
+    public static final int VERSION_CODE_S_V2 = 32;
 
     public static final String PREF_THEME = "pref_theme";
     public static final String PREF_WRONG = "pref_wrong";
@@ -1229,7 +1230,7 @@ public class Gridle extends Activity
         toast.setGravity(Gravity.CENTER, 0, 0);
         // Fix for android 13
         View view = toast.getView();
-        if (view != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.P)
+        if (view != null && Build.VERSION.SDK_INT > VERSION_CODE_S_V2)
             view.setBackgroundResource(R.drawable.toast_frame);
         toast.show();
     }
