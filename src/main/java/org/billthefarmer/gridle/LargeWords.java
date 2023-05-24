@@ -45,14 +45,15 @@ import java.util.Set;
 
 public class LargeWords
 {
-    public static final String WORDS_FILE       = "Words-large.txt";
-    public static final String ITALIAN_FILE     = "Italian-large.txt";
-    public static final String SPANISH_FILE     = "Spanish-large.txt";
-    public static final String CATALAN_FILE     = "Catalan-large.txt";
-    public static final String FRENCH_FILE      = "French-large.txt";
-    public static final String PORTUGUESE_FILE  = "Portuguese-large.txt";
-    public static final String GERMAN_FILE      = "German-large.txt";
-    public static final String DUTCH_FILE       = "Dutch-large.txt";
+    public static final String WORDS_FILE      = "Words-large.txt";
+    public static final String ITALIAN_FILE    = "Italian-large.txt";
+    public static final String SPANISH_FILE    = "Spanish-large.txt";
+    public static final String CATALAN_FILE    = "Catalan-large.txt";
+    public static final String FRENCH_FILE     = "French-large.txt";
+    public static final String PORTUGUESE_FILE = "Portuguese-large.txt";
+    public static final String GERMAN_FILE     = "German-large.txt";
+    public static final String DUTCH_FILE      = "Dutch-large.txt";
+    public static final String AFRIKAANS_FILE  = "Afrikaans-large.txt";
 
     private static char gridle[][];
 
@@ -514,6 +515,10 @@ public class LargeWords
 
         case Gridle.DUTCH:
             readWords(context, DUTCH_FILE, words);
+            break;
+
+        case Gridle.AFRIKAANS:
+            readWords(context, AFRIKAANS_FILE, words);
             break;
         }
     }

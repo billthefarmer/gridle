@@ -128,6 +128,7 @@ public class Gridle extends Activity
     public static final int PORTUGUESE = 5;
     public static final int GERMAN     = 6;
     public static final int DUTCH      = 7;
+    public static final int AFRIKAANS  = 8;
 
     public static final int GREY    = 0;
     public static final int DARK    = 1;
@@ -397,9 +398,7 @@ public class Gridle extends Activity
         else
         {
             gridle = Words.getGridle();
-
             puzzle = Words.randomise(gridle);
-
             solved = false;
         }
 
@@ -588,6 +587,10 @@ public class Gridle extends Activity
 
         case R.id.dutch:
            setLanguage(DUTCH);
+           break;
+
+        case R.id.afrikaans:
+           setLanguage(AFRIKAANS);
            break;
 
         case R.id.fanfare:
@@ -1090,6 +1093,9 @@ public class Gridle extends Activity
 
         case DUTCH:
 		return "nl";
+
+        case AFRIKAANS:
+		return "af";
         }
     }
 
@@ -1139,6 +1145,10 @@ public class Gridle extends Activity
 
         case DUTCH:
             getActionBar().setSubtitle(R.string.dutch);
+            break;
+
+        case AFRIKAANS:
+            getActionBar().setSubtitle(R.string.afrikaans);
             break;
         }
     }

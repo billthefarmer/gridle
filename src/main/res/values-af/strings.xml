@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="appName">Gridle</string>
+  <string name="help">Help</string>
+  <string name="refresh">Verfris</string>
+  <string name="share">Deel</string>
+  <string name="large">Groot</string>
+  <string name="fanfare">Trompetgeskal</string>
+  <string name="about">Aangaande</string>
+
+  <string name="language">Taal</string>
+  <string name="afrikaans">Afrikaans</string>
+  <string name="english">Engels</string>
+  <string name="italian">Italiaans</string>
+  <string name="spanish">Spaans</string>
+  <string name="catalan">Katalaans</string>
+  <string name="french">Frans</string>
+  <string name="portuguese">Portugees</string>
+  <string name="german">Duits</string>
+  <string name="dutch">Nederlands</string>
+
+  <string name="theme">Tema</string>
+  <string name="dark">Donker</string>
+  <string name="blue">Blou</string>
+  <string name="cyan">Siaan</string>
+  <string name="orange">Oranje</string>
+  <string name="purple">Pers</string>
+  <string name="black">Swart</string>
+  <string name="light">Lig</string>
+  <string name="red">Rooi</string>
+
+  <string name="highlight">Beklemtoon kleure</string>
+  <string name="reset">Herstel</string>
+  <string name="selectHighlight">
+    Kies beklemtoon kleure
+  </string>
+
+  <string name="finish">Voltooi eers die woord rooster</string>
+  <string name="solved">Opgelos, tik verfris</string>
+  <string name="which">Watter woord?</string>
+
+  <string name="congratulations">
+    Geluk! U het Gridle korrek opgelos
+  </string>
+
+  <string name="version" formatted="false"><a
+  href="https://github.com/billthefarmer/gridle/releases/latest">%s</a>\n\nBuilt
+  %s\n\nKopiereg \u00A9 2022 <a
+  href="https://github.com/billthefarmer">Bill
+  Farmer</a>\n\nLisensie <a
+  href="https://www.gnu.org/licenses/gpl.txt">GNU GPLv3</a>
+  </string>
+
+</resources>

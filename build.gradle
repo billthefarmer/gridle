@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.0'
+        classpath 'com.android.tools.build:gradle:7.4.2'
     }
 }
 
@@ -38,7 +38,8 @@ android {
 
     lintOptions {
         disable 'NonConstantResourceId', 'ExpiredTargetSdkVersion',
-            'ClickableViewAccessibility', 'SetJavaScriptEnabled', 'SetTextI18n'
+            'ClickableViewAccessibility', 'SetJavaScriptEnabled', 'SetTextI18n',
+	    'AndroidGradlePluginVersion'
         // abortOnError false
     }
 
