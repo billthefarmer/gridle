@@ -340,4 +340,9 @@
       android:visibility="invisible"
       android:textAppearance="?android:attr/textAppearanceLarge" />
 
+  <nl.dionsegijn.konfetti.xml.KonfettiView
+      android:id="@+id/konfettiView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
 </merge>

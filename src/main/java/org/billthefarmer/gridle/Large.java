@@ -72,8 +72,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import java.util.concurrent.TimeUnit;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import nl.dionsegijn.konfetti.core.Angle;
+import nl.dionsegijn.konfetti.core.Party;
+import nl.dionsegijn.konfetti.core.PartyFactory;
+import nl.dionsegijn.konfetti.core.Spread;
+import nl.dionsegijn.konfetti.core.emitter.Emitter;
+import nl.dionsegijn.konfetti.core.emitter.EmitterConfig;
+import nl.dionsegijn.konfetti.xml.KonfettiView;
 
 public class Large extends Activity
 {
@@ -100,11 +110,13 @@ public class Large extends Activity
     private ActionMode.Callback actionModeCallback;
     private ActionMode actionMode;
 
+    private KonfettiView konfettiView;
     private TextView display[][];
     private TextView customView;
     private TextView actionView;
 
     private Toast toast;
+    private Party party;
 
     private MediaPlayer mediaPlayer;
 
@@ -114,6 +126,7 @@ public class Large extends Activity
     private char gridle[][];
     private char puzzle[][];
 
+    private boolean confetti;
     private boolean fanfare;
     private boolean solved;
 
@@ -146,6 +159,7 @@ public class Large extends Activity
                                       Gridle.getColour(Gridle.YELLOW));
         correct = preferences.getInt(Gridle.PREF_CORR,
                                      Gridle.getColour(Gridle.GREEN));
+        confetti = preferences.getBoolean(Gridle.PREF_CONF, true);
         fanfare = preferences.getBoolean(Gridle.PREF_FARE, true);
 
         switch (theme)
@@ -304,6 +318,15 @@ public class Large extends Activity
             if (actionMode != null)
                 actionMode.finish();
         });
+
+        konfettiView = findViewById(R.id.konfettiView);
+        EmitterConfig emitterConfig = new
+            Emitter(5, TimeUnit.SECONDS).perSecond(50);
+        party = new PartyFactory(emitterConfig)
+            .angle(Angle.TOP)
+            .spread(Spread.WIDE)
+            .setSpeedBetween(10, 30)
+            .build();
 
         display = new TextView[SIZE][];
         for (int i = 0; i < display.length; i++)
@@ -668,6 +691,9 @@ public class Large extends Activity
                 mediaPlayer = MediaPlayer.create(this, R.raw.fanfare);
                 mediaPlayer.start();
             }
+
+            if (confetti)
+                konfettiView.start(party);
 
             showToast(R.string.congratulations);
             solved = true;

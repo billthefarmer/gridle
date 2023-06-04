@@ -72,8 +72,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import java.util.concurrent.TimeUnit;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import nl.dionsegijn.konfetti.core.Angle;
+import nl.dionsegijn.konfetti.core.Party;
+import nl.dionsegijn.konfetti.core.PartyFactory;
+import nl.dionsegijn.konfetti.core.Spread;
+import nl.dionsegijn.konfetti.core.emitter.Emitter;
+import nl.dionsegijn.konfetti.core.emitter.EmitterConfig;
+import nl.dionsegijn.konfetti.xml.KonfettiView;
 
 public class Gridle extends Activity
 {
@@ -87,6 +97,7 @@ public class Gridle extends Activity
     public static final String PREF_LANG = "pref_lang";
     public static final String PREF_CONT = "pref_cont";
     public static final String PREF_CORR = "pref_corr";
+    public static final String PREF_CONF = "pref_conf";
     public static final String PREF_FARE = "pref_fare";
 
     public static final String SOLVED = "solved";
@@ -147,11 +158,13 @@ public class Gridle extends Activity
     private ActionMode.Callback actionModeCallback;
     private ActionMode actionMode;
 
+    private KonfettiView konfettiView;
     private TextView display[][];
     private TextView customView;
     private TextView actionView;
 
     private Toast toast;
+    private Party party;
 
     private MediaPlayer mediaPlayer;
 
@@ -161,6 +174,7 @@ public class Gridle extends Activity
     private char gridle[][];
     private char puzzle[][];
 
+    private boolean confetti;
     private boolean fanfare;
     private boolean solved;
 
@@ -190,6 +204,7 @@ public class Gridle extends Activity
         language = preferences.getInt(PREF_LANG, ENGLISH);
         contains = preferences.getInt(PREF_CONT, getColour(YELLOW));
         correct = preferences.getInt(PREF_CORR, getColour(GREEN));
+        confetti = preferences.getBoolean(PREF_CONF, true);
         fanfare = preferences.getBoolean(PREF_FARE, true);
 
         switch (theme)
@@ -346,6 +361,15 @@ public class Gridle extends Activity
                 actionMode.finish();
         });
 
+        konfettiView = findViewById(R.id.konfettiView);
+        EmitterConfig emitterConfig = new
+            Emitter(5, TimeUnit.SECONDS).perSecond(50);
+        party = new PartyFactory(emitterConfig)
+            .angle(Angle.TOP)
+            .spread(Spread.WIDE)
+            .setSpeedBetween(10, 30)
+            .build();
+
         display = new TextView[SIZE][];
         for (int i = 0; i < display.length; i++)
             display[i] = new TextView[SIZE];
@@ -449,6 +473,7 @@ public class Gridle extends Activity
         editor.putInt(PREF_LANG, language);
         editor.putInt(PREF_CONT, contains);
         editor.putInt(PREF_CORR, correct);
+        editor.putBoolean(PREF_CONF, confetti);
         editor.putBoolean(PREF_FARE, fanfare);
         editor.apply();
     }
@@ -491,6 +516,7 @@ public class Gridle extends Activity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu)
     {
+        menu.findItem(R.id.confetti).setChecked(confetti);
         menu.findItem(R.id.fanfare).setChecked(fanfare);
 
         return true;
@@ -593,6 +619,10 @@ public class Gridle extends Activity
            setLanguage(AFRIKAANS);
            break;
 
+        case R.id.confetti:
+            confetti(item);
+            break;
+
         case R.id.fanfare:
             fanfare(item);
             break;
@@ -684,6 +714,13 @@ public class Gridle extends Activity
         theme = c;
         if (Build.VERSION.SDK_INT != Build.VERSION_CODES.M)
             recreate();
+    }
+
+    // confetti
+    private void confetti(MenuItem item)
+    {
+        confetti = !confetti;
+        item.setChecked(confetti);
     }
 
     // fanfare
@@ -928,6 +965,9 @@ public class Gridle extends Activity
                 mediaPlayer = MediaPlayer.create(this, R.raw.fanfare);
                 mediaPlayer.start();
             }
+
+            if (confetti)
+                konfettiView.start(party);
 
             showToast(R.string.congratulations);
             solved = true;

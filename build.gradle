@@ -23,12 +23,12 @@ allprojects {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
     namespace "org.billthefarmer.gridle"
 
     defaultConfig {
         applicationId "org.billthefarmer.gridle"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 28
         versionName "1.10"
         versionCode 110
@@ -46,5 +46,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dependencies {
+        implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
     }
 }
