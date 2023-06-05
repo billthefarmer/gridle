@@ -2,9 +2,6 @@
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
     tools:ignore="RtlHardcoded">
 
   <GridLayout
@@ -15,8 +12,7 @@
       android:layout_gravity="center_horizontal"
       android:rowCount="7"
       android:columnCount="7"
-      android:useDefaultMargins="true"
-      tools:ignore="UselessParent">
+      android:useDefaultMargins="true">
 
     <TextView
         android:layout_width="wrap_content"
