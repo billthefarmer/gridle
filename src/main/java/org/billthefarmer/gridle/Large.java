@@ -233,6 +233,7 @@ public class Large extends Activity
                     // text.
                     item.setX(x + grid.getX());
                     item.setY(y + grid.getY());
+                    view.setVisibility(View.INVISIBLE);
                     item.setVisibility(View.VISIBLE);
                     ((TextView) item).setText(((TextView) view).getText());
                     ((TextView) item).setTextColor(((TextView)
@@ -262,6 +263,7 @@ public class Large extends Activity
                     view.setY(y);
                     item.setX(0);
                     item.setY(0);
+                    view.setVisibility(View.VISIBLE);
                     item.setVisibility(View.INVISIBLE);
                     break;
 
