@@ -41,6 +41,7 @@ import android.preference.PreferenceManager;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.Gravity;
@@ -130,11 +131,6 @@ public class Large extends Activity
     private boolean fanfare;
     private boolean solved;
 
-    private float x;
-    private float y;
-    private float dX;
-    private float dY;
-
     private int language;
     private int contains;
     private int correct;
@@ -205,66 +201,76 @@ public class Large extends Activity
         // Enable back navigation on action bar
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        View.OnTouchListener listener = (view, event) ->
+        View.OnTouchListener listener = new View.OnTouchListener()
         {
-            if (solved)
-                return false;
+            private float x;
+            private float y;
+            private float dX;
+            private float dY;
 
-            View item = findViewById(R.id.item);
-            View grid = findViewById(R.id.puzzle);
-
-            switch (event.getActionMasked())
+            @Override
+            public boolean onTouch(View view, MotionEvent event)
             {
-                // Because views at the top of the grid will appear to
-                // slide under views further down when moved, due to
-                // z-order, use another text view outside the grid as
-                // a proxy. This view will not be clipped if it is
-                // moved outside the grid.
-            case MotionEvent.ACTION_DOWN:
-                x = view.getX();
-                y = view.getY();
-                dX = x - event.getRawX();
-                dY = y - event.getRawY();
-                // Move the proxy view, make it visible, and copy the
-                // text.
-                item.setX(x + grid.getX());
-                item.setY(y + grid.getY());
-                item.setVisibility(View.VISIBLE);
-                ((TextView) item).setText(((TextView) view).getText());
-                ((TextView) item).setTextColor(((TextView) view).getTextColors());
-                break;
+                if (solved)
+                    return false;
 
-            case MotionEvent.ACTION_MOVE:
-                // Move the selected view and the proxy above it
-                view.setX(event.getRawX() + dX);
-                view.setY(event.getRawY() + dY);
-                item.setX(event.getRawX() + grid.getX() + dX);
-                item.setY(event.getRawY() + grid.getY() + dY);
-                break;
+                View item = findViewById(R.id.item);
+                View grid = findViewById(R.id.puzzle);
 
-            case MotionEvent.ACTION_UP:
-                // Swap texts and colour letters
-                if (Math.hypot(view.getX() - x, view.getY() - y) >
-                    Math.hypot(view.getWidth() / 2, view.getHeight() / 2))
-                    scorePuzzle(view);
+                switch (event.getActionMasked())
+                {
+                    // Because views at the top of the grid will appear to
+                    // slide under views further down when moved, due to
+                    // z-order, use another text view outside the grid as
+                    // a proxy. This view will not be clipped if it is
+                    // moved outside the grid.
+                case MotionEvent.ACTION_DOWN:
+                    x = view.getX();
+                    y = view.getY();
+                    dX = x - event.getRawX();
+                    dY = y - event.getRawY();
+                    // Move the proxy view, make it visible, and copy the
+                    // text.
+                    item.setX(x + grid.getX());
+                    item.setY(y + grid.getY());
+                    item.setVisibility(View.VISIBLE);
+                    ((TextView) item).setText(((TextView) view).getText());
+                    ((TextView) item).setTextColor(((TextView)
+                                                    view).getTextColors());
+                    break;
 
-                else
-                    showToast(R.string.finish);
+                case MotionEvent.ACTION_MOVE:
+                    // Move the selected view and the proxy above it
+                    view.setX(event.getRawX() + dX);
+                    view.setY(event.getRawY() + dY);
+                    item.setX(event.getRawX() + grid.getX() + dX);
+                    item.setY(event.getRawY() + grid.getY() + dY);
+                    break;
 
-                // Put the selected view back, move it into the top
-                // corner, and make it invisible
-                view.setX(x);
-                view.setY(y);
-                item.setX(0);
-                item.setY(0);
-                item.setVisibility(View.INVISIBLE);
-                break;
+                case MotionEvent.ACTION_UP:
+                    // Swap texts and colour letters
+                    if (Math.hypot(view.getX() - x, view.getY() - y) >
+                        Math.hypot(view.getWidth() / 2, view.getHeight() / 2))
+                        scorePuzzle(view);
 
-            default:
-                return false;
-            }
+                    else
+                        showToast(R.string.finish);
 
-            return true;
+                    // Put the selected view back, move proxy into the
+                    // top corner, and make it invisible
+                    view.setX(x);
+                    view.setY(y);
+                    item.setX(0);
+                    item.setY(0);
+                    item.setVisibility(View.INVISIBLE);
+                    break;
+
+                default:
+                    return false;
+                }
+
+                return true;
+            };
         };
 
         actionModeCallback = new ActionMode.Callback()
@@ -312,8 +318,8 @@ public class Large extends Activity
             }
         };
 
-        View layout = findViewById(android.R.id.content);
-        layout.setOnClickListener((v) ->
+        View content = findViewById(android.R.id.content);
+        content.setOnClickListener((v) ->
         {
             if (actionMode != null)
                 actionMode.finish();
@@ -342,6 +348,26 @@ public class Large extends Activity
                                                                accents(v));
             registerForContextMenu(display[i / SIZE][i % SIZE]);
         }
+
+        // Delay resizing
+        grid.postDelayed(() ->
+        {
+            View layout = findViewById(R.id.layout);
+            float scaleX = (float) layout.getWidth() / grid.getWidth();
+            float scaleY = (float) layout.getHeight() / grid.getHeight();
+            float scale = Math.min(scaleX, scaleY);
+            for (int i = 0; i < grid.getChildCount(); i++)
+            {
+                TextView v = (TextView) grid.getChildAt(i);
+                v.setMinimumWidth(Math.round(v.getMinimumWidth() * scale));
+                v.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                              v.getTextSize() * scale);
+            }
+            TextView item = findViewById(R.id.item);
+            item.setMinimumWidth(Math.round(item.getMinimumWidth() * scale));
+            item.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                             item.getTextSize() * scale);
+        }, Gridle.DELAY);
 
         getActionBar().setCustomView(R.layout.custom);
         getActionBar().setDisplayShowCustomEnabled(true);

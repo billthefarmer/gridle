@@ -338,7 +338,7 @@
     <Space
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="2" />
+        android:layout_weight="1" />
 
   </LinearLayout>
 
@@ -353,9 +353,9 @@
       android:background="@drawable/box"
       android:minWidth="38dp"
       android:gravity="center"
-      android:scaleX="1.5"
-      android:scaleY="1.5"
-      android:visibility="invisible"
+      android:scaleX="1.4"
+      android:scaleY="1.4"
+      android:visibility="gone"
       android:textAppearance="?android:attr/textAppearanceLarge" />
 
   <nl.dionsegijn.konfetti.xml.KonfettiView
