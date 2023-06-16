@@ -249,6 +249,8 @@ public class Large extends Activity
                     break;
 
                 case MotionEvent.ACTION_UP:
+                    view.setVisibility(View.VISIBLE);
+                    item.setVisibility(View.INVISIBLE);
                     // Swap texts and colour letters
                     if (Math.hypot(view.getX() - x, view.getY() - y) >
                         Math.hypot(view.getWidth() / 2, view.getHeight() / 2))
@@ -263,8 +265,6 @@ public class Large extends Activity
                     view.setY(y);
                     item.setX(0);
                     item.setY(0);
-                    view.setVisibility(View.VISIBLE);
-                    item.setVisibility(View.INVISIBLE);
                     break;
 
                 default:
