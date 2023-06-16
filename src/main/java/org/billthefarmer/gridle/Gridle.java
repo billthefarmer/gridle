@@ -364,8 +364,8 @@ public class Gridle extends Activity
             }
         };
 
-        View content = findViewById(android.R.id.content);
-        content.setOnClickListener((v) ->
+        View layout = findViewById(R.id.layout);
+        layout.setOnClickListener((v) ->
         {
             if (actionMode != null)
                 actionMode.finish();
@@ -398,7 +398,6 @@ public class Gridle extends Activity
         // Delay resizing
         grid.postDelayed(() ->
         {
-            View layout = findViewById(R.id.layout);
             float scaleX = (float) layout.getWidth() / grid.getWidth();
             float scaleY = (float) layout.getHeight() / grid.getHeight();
             float scale = Math.min(scaleX, scaleY);
