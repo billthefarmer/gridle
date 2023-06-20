@@ -38,6 +38,7 @@ import java.net.URLEncoder;
 import java.util.Locale;
 
 // SearchActivity
+@SuppressWarnings("deprecation")
 public class Search extends Activity
 {
     public static final String UTF_8 = "UTF-8";

@@ -29,7 +29,7 @@ android {
     defaultConfig {
         applicationId "org.billthefarmer.gridle"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 31
         versionName "1.12"
         versionCode 112
 
@@ -39,13 +39,13 @@ android {
     lintOptions {
         disable 'NonConstantResourceId', 'ExpiredTargetSdkVersion',
             'ClickableViewAccessibility', 'SetJavaScriptEnabled', 'SetTextI18n',
-	    'AndroidGradlePluginVersion'
+	    'AndroidGradlePluginVersion', 'OldTargetApi'
         // abortOnError false
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_9
+        targetCompatibility JavaVersion.VERSION_1_9
     }
 
     dependencies {

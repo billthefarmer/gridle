@@ -86,6 +86,7 @@ import nl.dionsegijn.konfetti.core.emitter.Emitter;
 import nl.dionsegijn.konfetti.core.emitter.EmitterConfig;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
 
+@SuppressWarnings("deprecation")
 public class Gridle extends Activity
 {
     public static final String TAG = "Gridle";
