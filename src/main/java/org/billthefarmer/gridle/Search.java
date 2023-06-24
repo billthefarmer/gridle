@@ -35,13 +35,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 // SearchActivity
 @SuppressWarnings("deprecation")
 public class Search extends Activity
 {
-    public static final String UTF_8 = "UTF-8";
     public static final String FORMAT =
         "https://%s.wiktionary.org/wiki/%s";
 
@@ -142,7 +142,8 @@ public class Search extends Activity
 
 		try
 		{
-                    word = URLEncoder.encode(word, UTF_8);
+                    word = URLEncoder
+                        .encode(word, StandardCharsets.UTF_8.toString());
 		}
 
 		catch (Exception e) {}
