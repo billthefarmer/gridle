@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+@SuppressWarnings("deprecation")
 public class LargeWords
 {
     public static final String WORDS_FILE      = "Words-large.txt";
