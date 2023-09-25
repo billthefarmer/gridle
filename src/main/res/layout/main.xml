@@ -27,6 +27,7 @@
         android:layout_gravity="center"
         android:rowCount="5"
         android:columnCount="5"
+        android:splitMotionEvents="false"
         android:useDefaultMargins="true">
 
       <TextView

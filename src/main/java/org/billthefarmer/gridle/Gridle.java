@@ -252,21 +252,12 @@ public class Gridle extends Activity
             private float y;
             private float dX;
             private float dY;
-            private View tv = null;
 
             @Override
             public boolean onTouch(View view, MotionEvent event)
             {
                 if (solved)
                     return false;
-
-                // Save current view
-                if (tv == null)
-                    tv = view;
-
-                // Check multi touch and ignore
-                if (view != tv)
-                    return true;
 
                 View item = findViewById(R.id.item);
                 View grid = findViewById(R.id.puzzle);
@@ -319,7 +310,6 @@ public class Gridle extends Activity
                     view.setY(y);
                     item.setX(0);
                     item.setY(0);
-                    tv = null;
                     break;
 
                 default:
