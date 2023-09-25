@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         applicationId "org.billthefarmer.gridle"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 31
         versionName "1.13"
         versionCode 113

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item
+      android:id="@+id/gridle"
+      android:title="@string/appName" />
+
+  <item
+      android:id="@+id/large"
+      android:title="@string/large" />
+
+  <item
+      android:id="@+id/help"
+      android:title="@string/help" />
+
+</menu>

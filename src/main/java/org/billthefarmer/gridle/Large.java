@@ -52,8 +52,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import android.support.v4.content.FileProvider;
 
@@ -88,6 +90,7 @@ import nl.dionsegijn.konfetti.xml.KonfettiView;
 
 @SuppressWarnings("deprecation")
 public class Large extends Activity
+    implements PopupMenu.OnMenuItemClickListener
 {
     public static final String TAG = "Large";
 
@@ -116,6 +119,7 @@ public class Large extends Activity
     private TextView display[][];
     private TextView customView;
     private TextView actionView;
+    private Toolbar toolbar;
 
     private Toast toast;
     private Party party;
@@ -198,9 +202,6 @@ public class Large extends Activity
         setContentView(R.layout.large);
 
         setLanguage();
-
-        // Enable back navigation on action bar
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         View.OnTouchListener listener = new View.OnTouchListener()
         {
@@ -336,6 +337,20 @@ public class Large extends Activity
         {
             if (actionMode != null)
                 actionMode.finish();
+        });
+
+        // Find toolbar
+        ViewGroup root = (ViewGroup) getWindow().getDecorView();
+        toolbar = findToolbar(root);
+
+        // Set up navigation
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_36dp);
+        toolbar.setNavigationOnClickListener((v) ->
+        {
+            PopupMenu popup = new PopupMenu(this, v);
+            popup.inflate(R.menu.navigation);
+            popup.setOnMenuItemClickListener(this);
+            popup.show();
         });
 
         konfettiView = findViewById(R.id.konfettiView);
@@ -567,6 +582,51 @@ public class Large extends Activity
             .toLowerCase(Locale.getDefault()).charAt(0);
 
         return true;
+    }
+
+    // onMenuItemClick
+    @Override
+    public boolean onMenuItemClick(MenuItem item)
+    {
+        // Get id
+        int id = item.getItemId();
+        switch (id)
+        {
+        // Gridle
+        case R.id.gridle:
+            finish();
+            break;
+
+        // Help
+        case R.id.help:
+            help();
+
+        default:
+            return false;
+        }
+
+        return true;
+    }
+
+    // findToolbar
+    private Toolbar findToolbar(ViewGroup group)
+    {
+        View result = null;
+        final int count = group.getChildCount();
+        for (int i = 0; i < count; i++)
+        {
+            View view = group.getChildAt(i);
+            if (view instanceof Toolbar)
+                return (Toolbar) view;
+
+            if (view instanceof ViewGroup)
+                result = findToolbar((ViewGroup) view);
+
+            if (result != null)
+                break;
+        }
+
+        return (Toolbar) result;
     }
 
     public void setGridle(char gridle[][])
