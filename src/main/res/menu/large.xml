@@ -15,10 +15,5 @@
       android:icon="@drawable/ic_share_white_36dp"
       android:showAsAction="always"
       android:title="@string/share" />
-  <!--
-  <item
-      android:id="@+id/help"
-      android:showAsAction="never"
-      android:title="@string/help" />
-  -->
+
 </menu>
