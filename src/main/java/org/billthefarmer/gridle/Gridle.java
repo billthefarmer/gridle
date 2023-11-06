@@ -29,10 +29,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -433,6 +435,26 @@ public class Gridle extends Activity
                              item.getTextSize() * scale);
         }, DELAY);
 
+        // Attempt to disable system gestures for the display grid in
+        // portrait
+        Configuration config = getResources().getConfiguration();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+            config.orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            View content = findViewById(android.R.id.content);
+            grid.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) ->
+            {
+                int top = (int) grid.getY();
+                int left = (int) content.getX();
+                int right = left + content.getWidth();
+                int bottom = top + grid.getHeight();
+                Rect rect = new Rect(left, top, right, bottom);
+                List<Rect> list = new ArrayList<Rect>();
+                list.add(rect);
+                content.setSystemGestureExclusionRects(list);
+            });
+        }
+
         getActionBar().setCustomView(R.layout.custom);
         getActionBar().setDisplayShowCustomEnabled(true);
         customView = (TextView) getActionBar().getCustomView();
@@ -734,6 +756,24 @@ public class Gridle extends Activity
         }
 
         return true;
+    }
+
+    // onBackPressed
+    @Override
+    public void onBackPressed()
+    {
+        // Ignore back gestures if system gestures are enabled and a
+        // game is in progress
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+            getWindow().getDecorView().getRootWindowInsets()
+            .getSystemGestureInsets().left > 0)
+        {
+            if (count == 0 || solved)
+                finish();
+        }
+
+        else
+            finish();
     }
 
     // addAccents

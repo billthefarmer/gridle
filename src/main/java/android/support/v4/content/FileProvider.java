@@ -321,6 +321,7 @@ import java.util.Map;
  *    <a href="{@docRoot}training/secure-file-sharing/index.html">Sharing Files Securely with URIs</a>.
  * </p>
  */
+@SuppressWarnings("deprecation")
 public class FileProvider extends ContentProvider {
     private static final String[] COLUMNS = {
             OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE };

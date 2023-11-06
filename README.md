@@ -36,6 +36,12 @@ and rotating working symbol while the larger puzzle is
 created. Similarly, tapping the refresh button may not create a new
 puzzle immediately.
 
+## System gestures
+Because dragging letters can inadvertently close the app if system
+gestures are enabled, back gestures are disabled over most of the
+letter grid. Also back gestures are ignored if a game is in
+progress. Use the navigation menu or refresh to use the back gesture.
+
 ## Add accents
 Long press on a letter in the solved word grid. This will show a
 pop-up menu of unaccented and accented letters. Pick the required

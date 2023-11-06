@@ -29,10 +29,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -332,8 +334,8 @@ public class Large extends Activity
             }
         };
 
-        View content = findViewById(android.R.id.content);
-        content.setOnClickListener((v) ->
+        View layout = findViewById(R.id.layout);
+        layout.setOnClickListener((v) ->
         {
             if (actionMode != null)
                 actionMode.finish();
@@ -379,7 +381,6 @@ public class Large extends Activity
         // Delay resizing
         grid.postDelayed(() ->
         {
-            View layout = findViewById(R.id.layout);
             float scaleX = (float) layout.getWidth() / grid.getWidth();
             float scaleY = (float) layout.getHeight() / grid.getHeight();
             float scale = Math.min(scaleX, scaleY);
@@ -395,6 +396,26 @@ public class Large extends Activity
             item.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                              item.getTextSize() * scale);
         }, Gridle.DELAY);
+
+        // Attempt to disable system gestures for the display grid in
+        // portrait
+        Configuration config = getResources().getConfiguration();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+            config.orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            View content = findViewById(android.R.id.content);
+            grid.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) ->
+            {
+                int top = (int) grid.getY();
+                int left = (int) content.getX();
+                int right = left + content.getWidth();
+                int bottom = top + grid.getHeight();
+                Rect rect = new Rect(left, top, right, bottom);
+                List<Rect> list = new ArrayList<Rect>();
+                list.add(rect);
+                content.setSystemGestureExclusionRects(list);
+            });
+        }
 
         getActionBar().setCustomView(R.layout.custom);
         getActionBar().setDisplayShowCustomEnabled(true);
@@ -608,11 +629,31 @@ public class Large extends Activity
         return true;
     }
 
+    // onBackPressed
+    @Override
+    public void onBackPressed()
+    {
+        // Ignore back gestures if system gestures are enabled and a
+        // game is in progress
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+            getWindow().getDecorView().getRootWindowInsets()
+            .getSystemGestureInsets().left > 0)
+        {
+            if (count == 0 || solved)
+                finish();
+        }
+
+        else
+            finish();
+    }
+
+    // setGridle
     public void setGridle(char gridle[][])
     {
         this.gridle = gridle;
     }
 
+    // setPuzzle
     public void setPuzzle(char puzzle[][])
     {
         this.puzzle = puzzle;
