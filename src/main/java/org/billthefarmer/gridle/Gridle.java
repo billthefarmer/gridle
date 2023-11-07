@@ -259,6 +259,11 @@ public class Gridle extends Activity
             private float y;
             private float dX;
             private float dY;
+            private float gridX;
+            private float gridY;
+
+            private TextView item;
+            private ViewGroup grid;
 
             @Override
             public boolean onTouch(View view, MotionEvent event)
@@ -266,8 +271,11 @@ public class Gridle extends Activity
                 if (solved)
                     return false;
 
-                View item = findViewById(R.id.item);
-                View grid = findViewById(R.id.puzzle);
+                item = findViewById(R.id.item);
+                grid = findViewById(R.id.puzzle);
+
+                gridX = grid.getX();
+                gridY = grid.getY();
 
                 switch (event.getActionMasked())
                 {
@@ -283,26 +291,26 @@ public class Gridle extends Activity
                     dY = y - event.getRawY();
                     // Move the proxy view, make it visible, and copy
                     // the text and colour.
-                    item.setX(x + grid.getX());
-                    item.setY(y + grid.getY());
+                    item.setX(x + gridX);
+                    item.setY(y + gridY);
                     view.setVisibility(View.INVISIBLE);
                     item.setVisibility(View.VISIBLE);
-                    ((TextView) item).setText(((TextView) view).getText());
-                    ((TextView) item).setTextColor(((TextView)
-                                                    view).getTextColors());
+                    item.setText(((TextView) view).getText());
+                    item.setTextColor(((TextView) view).getTextColors());
                     break;
 
                 case MotionEvent.ACTION_MOVE:
                     // Move the selected view and the proxy above it
                     view.setX(event.getRawX() + dX);
                     view.setY(event.getRawY() + dY);
-                    item.setX(event.getRawX() + grid.getX() + dX);
-                    item.setY(event.getRawY() + grid.getY() + dY);
+                    item.setX(event.getRawX() + gridX + dX);
+                    item.setY(event.getRawY() + gridY + dY);
                     break;
 
                 case MotionEvent.ACTION_UP:
                     view.setVisibility(View.VISIBLE);
                     item.setVisibility(View.INVISIBLE);
+
                     // Swap texts and colour letters
                     if (Math.hypot(view.getX() - x, view.getY() - y) >
                         Math.hypot(view.getWidth() / 2, view.getHeight() / 2))
@@ -770,6 +778,9 @@ public class Gridle extends Activity
         {
             if (count == 0 || solved)
                 finish();
+
+            else
+                recreate();
         }
 
         else

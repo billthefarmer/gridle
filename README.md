@@ -39,8 +39,9 @@ puzzle immediately.
 ## System gestures
 Because dragging letters can inadvertently close the app if system
 gestures are enabled, back gestures are disabled over most of the
-letter grid. Also back gestures are ignored if a game is in
-progress. Use the navigation menu or refresh to use the back gesture.
+letter grid. Also back gestures will refresh the display if a game is
+in progress. Use the navigation menu or refresh to enable the back
+gesture.
 
 ## Add accents
 Long press on a letter in the solved word grid. This will show a
