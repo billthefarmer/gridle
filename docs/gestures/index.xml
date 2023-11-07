@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Gridle</title>
-    <link>https://billthefarmer.github.io/gridle/</link>
-    <description>Recent content on Gridle</description>
+    <title>System gestures on Gridle</title>
+    <link>https://billthefarmer.github.io/gridle/gestures/</link>
+    <description>Recent content in System gestures on Gridle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <copyright>Copyright &amp;copy; 2006 Bill Farmer</copyright>
     <lastBuildDate>Tue, 07 Nov 2023 20:22:01 +0000</lastBuildDate>
-    <atom:link href="https://billthefarmer.github.io/gridle/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://billthefarmer.github.io/gridle/gestures/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
