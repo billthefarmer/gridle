@@ -16,4 +16,9 @@
       android:showAsAction="always"
       android:title="@string/share" />
 
+  <item
+      android:id="@+id/about"
+      android:showAsAction="never"
+      android:title="@string/about" />
+
 </menu>

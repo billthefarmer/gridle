@@ -36,6 +36,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -112,6 +113,7 @@ public class Gridle extends Activity
     public static final String PREF_LANG = "pref_lang";
 
     public static final String SOLVED = "solved";
+    public static final String CHEAT = "cheat";
     public static final String COUNT = "count";
     public static final String LANG = "lang";
     public static final String WORD = "word";
@@ -176,7 +178,8 @@ public class Gridle extends Activity
     public static final int WHITE   = 11;
     public static final int LIGHT   = 12;
 
-    public static final int DELAY   = 100;
+    public static final int DELAY = 100;
+    public static final int LONG_DELAY = 2000;
 
     private ActionMode.Callback actionModeCallback;
     private ActionMode actionMode;
@@ -201,6 +204,7 @@ public class Gridle extends Activity
     private boolean confetti;
     private boolean fanfare;
     private boolean solved;
+    private boolean cheat;
 
     private int language;
     private int contains;
@@ -283,7 +287,7 @@ public class Gridle extends Activity
             @Override
             public boolean onTouch(View view, MotionEvent event)
             {
-                if (solved)
+                if (solved || cheat)
                     return false;
 
                 item = findViewById(R.id.item);
@@ -493,6 +497,7 @@ public class Gridle extends Activity
         if (savedInstanceState != null)
         {
             count = savedInstanceState.getInt(COUNT);
+            cheat = savedInstanceState.getBoolean(CHEAT);
             solved = savedInstanceState.getBoolean(SOLVED);
 
             gridle = new char[SIZE][];
@@ -579,6 +584,7 @@ public class Gridle extends Activity
         super.onSaveInstanceState(outState);
 
         outState.putInt(COUNT, count);
+        outState.putBoolean(CHEAT, cheat);
         outState.putBoolean(SOLVED, solved);
 
         outState.putCharArray(PUZZLE_0, puzzle[0]);
@@ -630,6 +636,13 @@ public class Gridle extends Activity
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo)
     {
+        // No cheating
+        if (cheat)
+        {
+            showToast(R.string.finish);
+            return;
+        }
+
         // Inflate a menu resource providing context menu items
         addAccents((TextView) v, menu);
     }
@@ -813,7 +826,7 @@ public class Gridle extends Activity
             getWindow().getDecorView().getRootWindowInsets()
             .getSystemGestureInsets().left > 0)
         {
-            if (count == 0 || solved)
+            if (count == 0 || solved || cheat)
                 finish();
 
             else
@@ -1138,6 +1151,9 @@ public class Gridle extends Activity
     // scorePuzzle
     private void scorePuzzle(View view)
     {
+        if (puzzle == null)
+            return;
+
         if (solved)
         {
             showToast(R.string.solved);
@@ -1228,12 +1244,20 @@ public class Gridle extends Activity
 
         count = 0;
         solved = false;
+        cheat = false;
         scorePuzzle();
     }
 
     // accents
     private boolean accents(View view)
     {
+        // No cheating
+        if (cheat)
+        {
+            showToast(R.string.finish);
+            return false;
+        }
+
         actionView = (TextView) view;
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
@@ -1367,7 +1391,8 @@ public class Gridle extends Activity
         if (actionMode != null)
             actionMode.finish();
 
-        if (!solved)
+        // No cheating
+        if (!solved || cheat)
         {
             showToast(R.string.finish);
             return;
@@ -1520,6 +1545,7 @@ public class Gridle extends Activity
 
         // Add the button
         builder.setPositiveButton(android.R.string.ok, null);
+        builder.setNeutralButton(R.string.help, (d, i) -> cheat());
 
         // Create the AlertDialog
         Dialog dialog = builder.show();
@@ -1531,6 +1557,36 @@ public class Gridle extends Activity
             text.setTextAppearance(builder.getContext(),
                                    android.R.style.TextAppearance_Small);
             text.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+    }
+
+    // cheat
+    void cheat()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.appName);
+        builder.setIcon(R.drawable.ic_launcher);
+        // Build message
+        StringBuilder message = new StringBuilder();
+        for (char r[]: gridle)
+        {
+            for (char c: r)
+                message.append(" ").append(c);
+
+            message.append("\n");
+        }
+        builder.setMessage(message.toString().toUpperCase(Locale.getDefault()));
+
+        // No cheating
+        cheat = true;
+        // Create the AlertDialog
+        Dialog dialog = builder.show();
+        // Set typeface
+        TextView text = dialog.findViewById(android.R.id.message);
+        if (text != null)
+        {
+            text.setTypeface(Typeface.MONOSPACE);
+            text.postDelayed(() -> dialog.dismiss(), LONG_DELAY);
         }
     }
 }

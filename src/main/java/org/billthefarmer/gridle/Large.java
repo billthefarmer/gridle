@@ -35,6 +35,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -137,6 +138,7 @@ public class Large extends Activity
     private boolean confetti;
     private boolean fanfare;
     private boolean solved;
+    private boolean cheat;
 
     private int language;
     private int contains;
@@ -220,7 +222,7 @@ public class Large extends Activity
             @Override
             public boolean onTouch(View view, MotionEvent event)
             {
-                if (solved)
+                if (solved || cheat)
                     return false;
 
                 item = findViewById(R.id.item);
@@ -430,6 +432,7 @@ public class Large extends Activity
         if (savedInstanceState != null)
         {
             count = savedInstanceState.getInt(Gridle.COUNT);
+            cheat = savedInstanceState.getBoolean(Gridle.CHEAT);
             solved = savedInstanceState.getBoolean(Gridle.SOLVED);
 
             if (savedInstanceState.getCharArray(GRIDLE_0) == null)
@@ -511,6 +514,7 @@ public class Large extends Activity
         super.onSaveInstanceState(outState);
 
         outState.putInt(Gridle.COUNT, count);
+        outState.putBoolean(Gridle.CHEAT, cheat);
         outState.putBoolean(Gridle.SOLVED, solved);
 
         if (puzzle == null)
@@ -550,6 +554,13 @@ public class Large extends Activity
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo)
     {
+        // No cheating
+        if (cheat)
+        {
+            showToast(R.string.finish);
+            return;
+        }
+
         // Inflate a menu resource providing context menu items
         Gridle.addAccents((TextView) v, menu);
     }
@@ -576,6 +587,10 @@ public class Large extends Activity
 
         case R.id.help:
             help();
+            break;
+
+        case R.id.about:
+            about();
             break;
 
         default:
@@ -637,7 +652,7 @@ public class Large extends Activity
             getWindow().getDecorView().getRootWindowInsets()
             .getSystemGestureInsets().left > 0)
         {
-            if (count == 0 || solved)
+            if (count == 0 || solved || cheat)
                 finish();
 
             else
@@ -670,6 +685,7 @@ public class Large extends Activity
         }
 
         count = 0;
+        cheat = false;
         solved = false;
         scorePuzzle();
 
@@ -883,6 +899,13 @@ public class Large extends Activity
     // accents
     private boolean accents(View view)
     {
+        // No cheating
+        if (cheat)
+        {
+            showToast(R.string.finish);
+            return false;
+        }
+
         actionView = (TextView) view;
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
@@ -945,7 +968,7 @@ public class Large extends Activity
         if (actionMode != null)
             actionMode.finish();
 
-        if (!solved)
+        if (!solved || cheat)
         {
             showToast(R.string.finish);
             return;
@@ -1017,5 +1040,74 @@ public class Large extends Activity
         if (view != null && Build.VERSION.SDK_INT > Gridle.VERSION_CODE_S_V2)
             view.setBackgroundResource(R.drawable.toast_frame);
         toast.show();
+    }
+
+    // about
+    @SuppressWarnings("deprecation")
+    private void about()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.appName);
+        builder.setIcon(R.drawable.ic_launcher);
+
+        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        SpannableStringBuilder spannable =
+            new SpannableStringBuilder(getText(R.string.version));
+        Pattern pattern = Pattern.compile("%s");
+        Matcher matcher = pattern.matcher(spannable);
+        if (matcher.find())
+            spannable.replace(matcher.start(), matcher.end(),
+                              BuildConfig.VERSION_NAME);
+        matcher.reset(spannable);
+        if (matcher.find())
+            spannable.replace(matcher.start(), matcher.end(),
+                              dateFormat.format(BuildConfig.BUILT));
+        builder.setMessage(spannable);
+
+        // Add the button
+        builder.setPositiveButton(android.R.string.ok, null);
+        builder.setNeutralButton(R.string.help, (d, i) -> cheat());
+
+        // Create the AlertDialog
+        Dialog dialog = builder.show();
+
+        // Set movement method
+        TextView text = dialog.findViewById(android.R.id.message);
+        if (text != null)
+        {
+            text.setTextAppearance(builder.getContext(),
+                                   android.R.style.TextAppearance_Small);
+            text.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+    }
+
+    // cheat
+    void cheat()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.appName);
+        builder.setIcon(R.drawable.ic_launcher);
+        // Build message
+        StringBuilder message = new StringBuilder();
+        for (char r[]: gridle)
+        {
+            for (char c: r)
+                message.append(" ").append(c);
+
+            message.append("\n");
+        }
+        builder.setMessage(message.toString().toUpperCase(Locale.getDefault()));
+
+        // No cheating
+        cheat = true;
+        // Create the AlertDialog
+        Dialog dialog = builder.show();
+        // Set typeface
+        TextView text = dialog.findViewById(android.R.id.message);
+        if (text != null)
+        {
+            text.setTypeface(Typeface.MONOSPACE);
+            text.postDelayed(() -> dialog.dismiss(), Gridle.LONG_DELAY);
+        }
     }
 }
