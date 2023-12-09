@@ -26,6 +26,7 @@ package org.billthefarmer.gridle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,6 +53,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
@@ -102,11 +104,12 @@ public class Gridle extends Activity
 
     public static final String PREF_THEME = "pref_theme";
     public static final String PREF_WRONG = "pref_wrong";
-    public static final String PREF_LANG = "pref_lang";
+    public static final String PREF_CONF = "pref_conf";
     public static final String PREF_CONT = "pref_cont";
     public static final String PREF_CORR = "pref_corr";
-    public static final String PREF_CONF = "pref_conf";
+    public static final String PREF_DICT = "pref_dict";
     public static final String PREF_FARE = "pref_fare";
+    public static final String PREF_LANG = "pref_lang";
 
     public static final String SOLVED = "solved";
     public static final String COUNT = "count";
@@ -128,6 +131,12 @@ public class Gridle extends Activity
     public static final String GRIDLE_IMAGE = "Gridle.png";
     public static final String IMAGE_PNG = "image/png";
 
+    public static final String EXTRA_TO = "to";
+    public static final String EXTRA_FROM = "from";
+    public static final String AARD2_LOOKUP = "aard2.lookup";
+    public static final String SEARCH_DICT =
+        "com.hughes.action.ACTION_SEARCH_DICT";
+
     public static final String FILE_PROVIDER =
         "org.billthefarmer.gridle.fileprovider";
 
@@ -136,8 +145,8 @@ public class Gridle extends Activity
     public static final String E_ACCENTS[] = {"E", "È", "É", "Ê"};
     public static final String I_ACCENTS[] = {"I", "Ì", "Í", "Î"};
     public static final String N_ACCENTS[] = {"N", "Ñ"};
-    public static final String O_ACCENTS[] = {"O", "Ò", "Ó", "Ô"};
-    public static final String U_ACCENTS[] = {"U", "Ù", "Ú", "Û"};
+    public static final String O_ACCENTS[] = {"O", "Ò", "Ó", "Ô", "Ö", "Ő"};
+    public static final String U_ACCENTS[] = {"U", "Ù", "Ú", "Û", "Ü", "Ű"};
 
     public static final int ENGLISH    = 0;
     public static final int ITALIAN    = 1;
@@ -148,6 +157,10 @@ public class Gridle extends Activity
     public static final int GERMAN     = 6;
     public static final int DUTCH      = 7;
     public static final int AFRIKAANS  = 8;
+
+    public static final int WIKTIONARY = 0;
+    public static final int AARD2      = 1;
+    public static final int QUICKDIC   = 2;
 
     public static final int GREY    = 0;
     public static final int DARK    = 1;
@@ -195,6 +208,7 @@ public class Gridle extends Activity
     private int wrong;
     private int count;
     private int theme;
+    private int dict;
 
     // Called when the activity is first created.
     @Override
@@ -205,13 +219,14 @@ public class Gridle extends Activity
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
 
-        theme = preferences.getInt(PREF_THEME, DARK);
-        wrong = preferences.getInt(PREF_WRONG, getColour(GREY));
-        language = preferences.getInt(PREF_LANG, ENGLISH);
+        confetti = preferences.getBoolean(PREF_CONF, true);
         contains = preferences.getInt(PREF_CONT, getColour(YELLOW));
         correct = preferences.getInt(PREF_CORR, getColour(GREEN));
-        confetti = preferences.getBoolean(PREF_CONF, true);
+        dict = preferences.getInt(PREF_DICT, WIKTIONARY);
         fanfare = preferences.getBoolean(PREF_FARE, true);
+        language = preferences.getInt(PREF_LANG, ENGLISH);
+        theme = preferences.getInt(PREF_THEME, DARK);
+        wrong = preferences.getInt(PREF_WRONG, getColour(GREY));
 
         switch (theme)
         {
@@ -546,11 +561,12 @@ public class Gridle extends Activity
             PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
 
-        editor.putInt(PREF_THEME, theme);
-        editor.putInt(PREF_WRONG, wrong);
-        editor.putInt(PREF_LANG, language);
         editor.putInt(PREF_CONT, contains);
         editor.putInt(PREF_CORR, correct);
+        editor.putInt(PREF_DICT, dict);
+        editor.putInt(PREF_LANG, language);
+        editor.putInt(PREF_THEME, theme);
+        editor.putInt(PREF_WRONG, wrong);
         editor.putBoolean(PREF_CONF, confetti);
         editor.putBoolean(PREF_FARE, fanfare);
         editor.apply();
@@ -596,6 +612,15 @@ public class Gridle extends Activity
     {
         menu.findItem(R.id.confetti).setChecked(confetti);
         menu.findItem(R.id.fanfare).setChecked(fanfare);
+
+        MenuItem item = menu.findItem(R.id.dict);
+        if (item.hasSubMenu())
+        {
+            SubMenu submenu = item.getSubMenu();
+            item = submenu.getItem(dict);
+            if (item != null)
+                item.setChecked(true);
+        }
 
         return true;
     }
@@ -703,6 +728,18 @@ public class Gridle extends Activity
 
         case R.id.fanfare:
             fanfare(item);
+            break;
+
+        case R.id.aard2:
+            aard2(item);
+            break;
+
+        case R.id.quickdic:
+            quickdic(item);
+            break;
+
+        case R.id.wikt:
+            wikt(item);
             break;
 
         case R.id.highlight:
@@ -1364,11 +1401,61 @@ public class Gridle extends Activity
             return;
         }
 
-        // Start the web search
-        Intent intent = new Intent(this, Search.class);
-        intent.putExtra(WORD, builder.toString());
-        intent.putExtra(LANG, languageToString(language));
-        startActivity(intent);
+        // Check dictionary
+        Intent intent;
+        switch (dict)
+        {
+        case AARD2:
+            // Start Aard2 search
+            intent = new Intent(AARD2_LOOKUP);
+            intent.putExtra(Intent.EXTRA_TEXT, builder.toString());
+            if (intent.resolveActivity(getPackageManager()) != null)
+            {
+                startActivity(intent);
+                break;
+            }
+
+        case QUICKDIC:
+            // Start quickdic search
+            intent = new Intent(SEARCH_DICT);
+            intent.putExtra(SearchManager.QUERY, builder.toString());
+            intent.putExtra(EXTRA_FROM, languageToString(language));
+            intent.putExtra(EXTRA_TO, Locale.getDefault().getLanguage());
+            if (intent.resolveActivity(getPackageManager()) != null)
+            {
+                startActivity(intent);
+                break;
+            }
+
+        default:
+        case WIKTIONARY:
+            // Start the web search
+            intent = new Intent(this, Search.class);
+            intent.putExtra(WORD, builder.toString());
+            intent.putExtra(LANG, languageToString(language));
+            startActivity(intent);
+        }
+    }
+
+    // aard2
+    private void aard2(MenuItem item)
+    {
+        dict = AARD2;
+        item.setChecked(true);
+    }
+
+    // quickdic
+    private void quickdic(MenuItem item)
+    {
+        dict = QUICKDIC;
+        item.setChecked(true);
+    }
+
+    // wikt
+    private void wikt(MenuItem item)
+    {
+        dict = WIKTIONARY;
+        item.setChecked(true);
     }
 
     // help

@@ -5,11 +5,15 @@
   <string name="help">Aiuto</string>
   <string name="refresh">Aggiorna</string>
   <string name="share">Condividi</string>
+  <string name="large">Grande</string>
   <string name="options">Opzioni</string>
   <string name="confetti">Coriandoli</string>
   <string name="fanfare">Fanfara</string>
+  <string name="dict">Dizionario</string>
+  <string name="aard2">Aard2</string>
+  <string name="quickdic">Quickdic</string>
+  <string name="wikt">Wictionary</string>
   <string name="about">Informazioni</string>
-  <string name="large">Grande</string>
 
   <string name="language">Lingua</string>
   <string name="afrikaans">Afrikaans</string>
