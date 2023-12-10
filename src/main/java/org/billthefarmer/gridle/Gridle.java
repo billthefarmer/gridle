@@ -179,7 +179,7 @@ public class Gridle extends Activity
     public static final int LIGHT   = 12;
 
     public static final int DELAY = 100;
-    public static final int LONG_DELAY = 2000;
+    public static final int LONG_DELAY = 5000;
 
     private ActionMode.Callback actionModeCallback;
     private ActionMode actionMode;
