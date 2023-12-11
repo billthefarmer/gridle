@@ -132,6 +132,7 @@ public class Gridle extends Activity
 
     public static final String GRIDLE_IMAGE = "Gridle.png";
     public static final String IMAGE_PNG = "image/png";
+    public static final String TEXT_PLAIN = "text/plain";
 
     public static final String EXTRA_TO = "to";
     public static final String EXTRA_FROM = "from";
@@ -203,6 +204,7 @@ public class Gridle extends Activity
 
     private boolean confetti;
     private boolean fanfare;
+    private boolean select;
     private boolean solved;
     private boolean cheat;
 
@@ -287,7 +289,8 @@ public class Gridle extends Activity
             @Override
             public boolean onTouch(View view, MotionEvent event)
             {
-                if (solved || cheat)
+                // Check if drag allowed
+                if (solved || select || cheat)
                     return false;
 
                 item = findViewById(R.id.item);
@@ -659,8 +662,12 @@ public class Gridle extends Activity
             refresh();
             break;
 
-        case R.id.share:
+        case R.id.image:
             shareImage();
+            break;
+
+        case R.id.text:
+            selectText();
             break;
 
         case R.id.large:
@@ -829,6 +836,7 @@ public class Gridle extends Activity
             if (count == 0 || solved || cheat)
                 finish();
 
+            // Recreate because system gestures break display
             else
                 recreate();
         }
@@ -1038,6 +1046,14 @@ public class Gridle extends Activity
         startActivity(Intent.createChooser(intent, null));
     }
 
+    // selectText
+    void selectText()
+    {
+        // Set flag and show toast
+        select = true;
+        showToast(R.string.select);
+    }
+
     // scorePuzzle
     private void scorePuzzle()
     {
@@ -1243,6 +1259,7 @@ public class Gridle extends Activity
         }
 
         count = 0;
+        select = false;
         solved = false;
         cheat = false;
         scorePuzzle();
@@ -1391,6 +1408,13 @@ public class Gridle extends Activity
         if (actionMode != null)
             actionMode.finish();
 
+        // Check share text
+        if (select && !cheat)
+        {
+            shareText(view);
+            return;
+        }
+
         // No cheating
         if (!solved || cheat)
         {
@@ -1481,6 +1505,81 @@ public class Gridle extends Activity
     {
         dict = WIKTIONARY;
         item.setChecked(true);
+    }
+
+    // shareText
+    private void shareText(View view)
+    {
+        ViewGroup parent = (ViewGroup) view.getParent();
+        int index = parent.indexOfChild(view);
+        int row = index / SIZE;
+        int col = index % SIZE;
+
+        StringBuilder builder = new StringBuilder();
+        switch(row)
+        {
+        case 1:
+        case 3:
+            // Get green letters
+            for (int i = 0; i < SIZE; i++)
+            {
+                if (display[i][col].getTextColors()
+                    .getDefaultColor() == correct)
+                    builder.append(puzzle[i][col]);
+
+                else
+                    builder.append(".");
+            }
+            builder.append(",");
+
+            // Get yellow letters
+            for (int i = 0; i < SIZE; i++)
+            {
+                if (display[i][col].getTextColors()
+                    .getDefaultColor() == contains)
+                    builder.append(puzzle[i][col]);
+            }
+        }
+
+        switch(col)
+        {
+        case 1:
+        case 3:
+            // Get green letters
+            for (int i = 0; i < SIZE; i++)
+            {
+                if (display[row][i].getTextColors()
+                    .getDefaultColor() == correct)
+                    builder.append(puzzle[row][i]);
+
+                else
+                    builder.append(".");
+            }
+            builder.append(",");
+
+            // Get yellow letters
+            for (int i = 0; i < SIZE; i++)
+            {
+                if (display[row][i].getTextColors()
+                    .getDefaultColor() == contains)
+                    builder.append(puzzle[row][i]);
+            }
+        }
+
+        if (builder.length() == 0)
+        {
+            showToast(R.string.which);
+            return;
+        }
+
+        // Clear select
+        select = false;
+
+        // Send intent
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, builder.toString());
+        intent.setType(TEXT_PLAIN);
+        startActivity(Intent.createChooser(intent, null));
     }
 
     // help
@@ -1585,6 +1684,8 @@ public class Gridle extends Activity
         TextView text = dialog.findViewById(android.R.id.message);
         if (text != null)
         {
+            text.setTextAppearance(builder.getContext(),
+                                   android.R.style.TextAppearance_Large);
             text.setTypeface(Typeface.MONOSPACE);
             text.postDelayed(() -> dialog.dismiss(), LONG_DELAY);
         }

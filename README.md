@@ -27,8 +27,19 @@ generate another gridle of words. Words are chosen at random from a list,
 and are checked that they haven't been used recently.
 
 ## Share
-Tap the **Share** button in the toolbar to share an image of the
-current display.
+Tap the **Share** button in the toolbar to share an image or text
+from the display.
+
+### Image
+Share an image of the display.
+
+### Text
+Share text from the display. Tap a letter to select a word. The
+letters and colours of the word will be shared. Select the
+[Crossword](https://github.com/billthefarmer/crossword) app to find
+possibilities for that word. **Hint:** If the crossword app fails to
+produce any suggestions, try moving any letter which might be in
+the other direction.
 
 ## Large
 Solve a larger 7x7 grid of words. This may show an initial blank grid

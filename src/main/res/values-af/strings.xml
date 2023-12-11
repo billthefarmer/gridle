@@ -5,6 +5,8 @@
   <string name="help">Help</string>
   <string name="refresh">Verfris</string>
   <string name="share">Deel</string>
+  <string name="image">Prent</string>
+  <string name="text">Teks</string>
   <string name="large">Groot</string>
   <string name="options">Opsies</string>
   <string name="confetti">Konfetti</string>
@@ -44,6 +46,7 @@
 
   <string name="finish">Voltooi eers die woord rooster</string>
   <string name="solved">Opgelos, tik verfris</string>
+  <string name="select">Kies \'n woord</string>
   <string name="which">Watter woord?</string>
 
   <string name="congratulations">

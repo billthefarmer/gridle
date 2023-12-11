@@ -137,6 +137,7 @@ public class Large extends Activity
 
     private boolean confetti;
     private boolean fanfare;
+    private boolean select;
     private boolean solved;
     private boolean cheat;
 
@@ -222,7 +223,8 @@ public class Large extends Activity
             @Override
             public boolean onTouch(View view, MotionEvent event)
             {
-                if (solved || cheat)
+                // Check if drag allowed
+                if (solved || select || cheat)
                     return false;
 
                 item = findViewById(R.id.item);
@@ -581,8 +583,12 @@ public class Large extends Activity
             refresh();
             break;
 
-        case R.id.share:
+        case R.id.image:
             shareImage();
+            break;
+
+        case R.id.text:
+            selectText();
             break;
 
         case R.id.help:
@@ -686,6 +692,7 @@ public class Large extends Activity
 
         count = 0;
         cheat = false;
+        select = false;
         solved = false;
         scorePuzzle();
 
@@ -722,6 +729,14 @@ public class Large extends Activity
         intent.putExtra(Intent.EXTRA_STREAM, imageUri);
 
         startActivity(Intent.createChooser(intent, null));
+    }
+
+    // selectText
+    void selectText()
+    {
+        // Set flag and show toast
+        select = true;
+        showToast(R.string.select);
     }
 
     // scorePuzzle
@@ -968,6 +983,13 @@ public class Large extends Activity
         if (actionMode != null)
             actionMode.finish();
 
+        // Check share text
+        if (select && !cheat)
+        {
+            shareText(view);
+            return;
+        }
+
         if (!solved || cheat)
         {
             showToast(R.string.finish);
@@ -1009,6 +1031,83 @@ public class Large extends Activity
         intent.putExtra(Gridle.WORD, builder.toString());
         intent.putExtra(Gridle.LANG, Gridle.languageToString(language));
         startActivity(intent);
+    }
+
+    // shareText
+    private void shareText(View view)
+    {
+        ViewGroup parent = (ViewGroup) view.getParent();
+        int index = parent.indexOfChild(view);
+        int row = index / SIZE;
+        int col = index % SIZE;
+
+        StringBuilder builder = new StringBuilder();
+        switch(row)
+        {
+        case 1:
+        case 3:
+        case 5:
+            // Get green letters
+            for (int i = 0; i < SIZE; i++)
+            {
+                if (display[i][col].getTextColors()
+                    .getDefaultColor() == correct)
+                    builder.append(puzzle[i][col]);
+
+                else
+                    builder.append(".");
+            }
+            builder.append(",");
+
+            // Get yellow letters
+            for (int i = 0; i < SIZE; i++)
+            {
+                if (display[i][col].getTextColors()
+                    .getDefaultColor() == contains)
+                    builder.append(puzzle[i][col]);
+            }
+        }
+
+        switch(col)
+        {
+        case 1:
+        case 3:
+        case 5:
+            // Get green letters
+            for (int i = 0; i < SIZE; i++)
+            {
+                if (display[row][i].getTextColors()
+                    .getDefaultColor() == correct)
+                    builder.append(puzzle[row][i]);
+
+                else
+                    builder.append(".");
+            }
+            builder.append(",");
+
+            // Get yellow letters
+            for (int i = 0; i < SIZE; i++)
+            {
+                if (display[row][i].getTextColors()
+                    .getDefaultColor() == contains)
+                    builder.append(puzzle[row][i]);
+            }
+        }
+
+        if (builder.length() == 0)
+        {
+            showToast(R.string.which);
+            return;
+        }
+
+        // Clear select
+        select = false;
+
+        // Send intent
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, builder.toString());
+        intent.setType(Gridle.TEXT_PLAIN);
+        startActivity(Intent.createChooser(intent, null));
     }
 
     // help
@@ -1106,6 +1205,8 @@ public class Large extends Activity
         TextView text = dialog.findViewById(android.R.id.message);
         if (text != null)
         {
+            text.setTextAppearance(builder.getContext(),
+                                   android.R.style.TextAppearance_Large);
             text.setTypeface(Typeface.MONOSPACE);
             text.postDelayed(() -> dialog.dismiss(), Gridle.LONG_DELAY);
         }

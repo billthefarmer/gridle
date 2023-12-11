@@ -5,6 +5,8 @@
   <string name="help">Aiuto</string>
   <string name="refresh">Aggiorna</string>
   <string name="share">Condividi</string>
+  <string name="image">Immagine</string>
+  <string name="text">Testo</string>
   <string name="large">Grande</string>
   <string name="options">Opzioni</string>
   <string name="confetti">Coriandoli</string>
@@ -44,6 +46,7 @@
 
   <string name="finish">Completa prima la griglia di parole</string>
   <string name="solved">Risolto, tocca Aggiorna</string>
+  <string name="select">Seleziona una parola</string>
   <string name="which">Quale parola?</string>
 
   <string name="congratulations">
