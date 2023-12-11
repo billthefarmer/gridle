@@ -38,7 +38,7 @@ Share text from the display. Tap a letter to select a word. The
 letters and colours of the word will be shared. Select the
 [Crossword](https://github.com/billthefarmer/crossword) app to find
 possibilities for that word. **Hint:** If the crossword app fails to
-produce any suggestions, try moving any letter which might be in
+produce any suggestions, try moving any letter which might belong to
 the other direction.
 
 ## Large
