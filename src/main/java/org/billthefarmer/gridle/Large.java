@@ -26,6 +26,7 @@ package org.billthefarmer.gridle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -147,6 +148,7 @@ public class Large extends Activity
     private int wrong;
     private int count;
     private int theme;
+    private int dict;
 
     // Called when the activity is first created.
     @Override
@@ -165,6 +167,7 @@ public class Large extends Activity
                                       Gridle.getColour(Gridle.YELLOW));
         correct = preferences.getInt(Gridle.PREF_CORR,
                                      Gridle.getColour(Gridle.GREEN));
+        dict = preferences.getInt(Gridle.PREF_DICT, Gridle.WIKTIONARY);
         confetti = preferences.getBoolean(Gridle.PREF_CONF, true);
         fanfare = preferences.getBoolean(Gridle.PREF_FARE, true);
 
@@ -1026,11 +1029,42 @@ public class Large extends Activity
             return;
         }
 
-        // Start the web search
-        Intent intent = new Intent(this, Search.class);
-        intent.putExtra(Gridle.WORD, builder.toString());
-        intent.putExtra(Gridle.LANG, Gridle.languageToString(language));
-        startActivity(intent);
+
+        // Check dictionary
+        Intent intent;
+        switch (dict)
+        {
+        case Gridle.AARD2:
+            // Start Aard2 search
+            intent = new Intent(Gridle.AARD2_LOOKUP);
+            intent.putExtra(Intent.EXTRA_TEXT, builder.toString());
+            if (intent.resolveActivity(getPackageManager()) != null)
+            {
+                startActivity(intent);
+                break;
+            }
+
+        case Gridle.QUICKDIC:
+            // Start quickdic search
+            intent = new Intent(Gridle.SEARCH_DICT);
+            intent.putExtra(SearchManager.QUERY, builder.toString());
+            intent.putExtra(Gridle.EXTRA_FROM,
+                            Gridle.languageToString(language));
+            intent.putExtra(Gridle.EXTRA_TO, Locale.getDefault().getLanguage());
+            if (intent.resolveActivity(getPackageManager()) != null)
+            {
+                startActivity(intent);
+                break;
+            }
+
+        default:
+        case Gridle.WIKTIONARY:
+            // Start the web search
+            intent = new Intent(this, Search.class);
+            intent.putExtra(Gridle.WORD, builder.toString());
+            intent.putExtra(Gridle.LANG, Gridle.languageToString(language));
+            startActivity(intent);
+        }
     }
 
     // shareText
