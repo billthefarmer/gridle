@@ -1057,12 +1057,14 @@ public class Gridle extends Activity
     // scorePuzzle
     private void scorePuzzle()
     {
+        // Fill used and scored arrays with false
         for (int row = 0; row < SIZE; row++)
         {
             Arrays.fill(used[row], false);
             Arrays.fill(scored[row], false);
         }
 
+        // Set text colour of whole grid wrong
         for (int row = 0; row < SIZE; row++)
         {
             for (int col = 0; col < SIZE; col++)
@@ -1071,14 +1073,17 @@ public class Gridle extends Activity
             }
         }
 
+        // Set maybe correct true
         boolean maybe = true;
         for (int row = 0; row < SIZE; row++)
         {
             for (int col = 0; col < SIZE; col++)
             {
+                // Skip invisible slots (no letter)
                 if (display[row][col].getVisibility() == View.INVISIBLE)
                     continue;
 
+                // If letter matches, set used, scored and colour correct
                 if (puzzle[row][col] == gridle[row][col])
                 {
                     used[row][col] = true;
@@ -1086,6 +1091,7 @@ public class Gridle extends Activity
                     display[row][col].setTextColor(correct);
                 }
 
+                // If no match set maybe false
                 else
                     maybe = false;
             }
@@ -1095,12 +1101,15 @@ public class Gridle extends Activity
         {
             for (int col = 0; col < SIZE; col++)
             {
+                // Skip invisible slots (no letter)
                 if (display[row][col].getVisibility() == View.INVISIBLE)
                     continue;
 
+                // Skip already scored slots
                 if (scored[row][col])
                     continue;
 
+                // Only score complete rows
                 switch (row)
                 {
                 case 0:
@@ -1108,9 +1117,12 @@ public class Gridle extends Activity
                 case 4:
                     for (int c = 0; c < SIZE; c++)
                     {
+                        // Skip used slots
                         if (used[row][c])
                            continue;
 
+                        // If letter matches, set used, scored and
+                        // colour contains
                         if (puzzle[row][col] == gridle[row][c])
                         {
                             used[row][c] = true;
@@ -1128,9 +1140,12 @@ public class Gridle extends Activity
                 case 4:
                     for (int r = 0; r < SIZE; r++)
                     {
+                        // Skip used slots
                         if (used[r][col])
                             continue;
 
+                        // If letter matches, set used, scored and
+                        // colour contains
                         if (puzzle[row][col] == gridle[r][col])
                         {
                             used[r][col] = true;
@@ -1143,11 +1158,14 @@ public class Gridle extends Activity
             }
         }
 
+        // Show move count
         customView.setText(Integer.toString(count));
 
+        // Don't repeat fanfare etc
         if (solved)
             return;
 
+        // Solved
         if (maybe)
         {
             if (fanfare)
