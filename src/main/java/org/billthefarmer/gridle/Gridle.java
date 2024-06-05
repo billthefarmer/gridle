@@ -1125,7 +1125,7 @@ public class Gridle extends Activity
                         // colour contains
                         if (puzzle[row][col] == gridle[row][c])
                         {
-                            used[row][c] = true;
+                            used[row][col] = true;
                             scored[row][col] = true;
                             display[row][col].setTextColor(contains);
                             break;
@@ -1148,7 +1148,7 @@ public class Gridle extends Activity
                         // colour contains
                         if (puzzle[row][col] == gridle[r][col])
                         {
-                            used[r][col] = true;
+                            used[row][col] = true;
                             scored[row][col] = true;
                             display[row][col].setTextColor(contains);
                             break;
