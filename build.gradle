@@ -39,7 +39,7 @@ android {
     lintOptions {
         disable 'NonConstantResourceId', 'ExpiredTargetSdkVersion',
             'ClickableViewAccessibility', 'SetJavaScriptEnabled', 'SetTextI18n',
-	    'AndroidGradlePluginVersion', 'OldTargetApi'
+	    'AndroidGradlePluginVersion', 'OldTargetApi', 'NonConstantResourceId'
         // abortOnError false
     }
 
@@ -48,7 +48,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_9
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     dependencies {
-        implementation 'nl.dionsegijn:konfetti-xml:2.0.3'
+        implementation 'nl.dionsegijn:konfetti-xml:2.0.5'
     }
 }

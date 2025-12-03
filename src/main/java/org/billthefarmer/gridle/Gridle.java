@@ -143,7 +143,7 @@ public class Gridle extends Activity
     public static final String FILE_PROVIDER =
         "org.billthefarmer.gridle.fileprovider";
 
-    public static final String A_ACCENTS[] = {"A", "À", "Á", "Â"};
+    public static final String A_ACCENTS[] = {"A", "À", "Á", "Â", "Ä", "Å"};
     public static final String C_ACCENTS[] = {"C", "Ç"};
     public static final String E_ACCENTS[] = {"E", "È", "É", "Ê"};
     public static final String I_ACCENTS[] = {"I", "Ì", "Í", "Î"};
@@ -160,6 +160,7 @@ public class Gridle extends Activity
     public static final int GERMAN     = 6;
     public static final int DUTCH      = 7;
     public static final int AFRIKAANS  = 8;
+    public static final int SWEDISH    = 9;
 
     public static final int WIKTIONARY = 0;
     public static final int AARD2      = 1;
@@ -740,6 +741,10 @@ public class Gridle extends Activity
 
         case R.id.afrikaans:
            setLanguage(AFRIKAANS);
+           break;
+
+        case R.id.swedish:
+           setLanguage(SWEDISH);
            break;
 
         case R.id.confetti:
@@ -1356,6 +1361,9 @@ public class Gridle extends Activity
 
         case AFRIKAANS:
 		return "af";
+
+        case SWEDISH:
+        	return "sv";
         }
     }
 
@@ -1409,6 +1417,10 @@ public class Gridle extends Activity
 
         case AFRIKAANS:
             getActionBar().setSubtitle(R.string.afrikaans);
+            break;
+
+        case SWEDISH:
+            getActionBar().setSubtitle(R.string.swedish);
             break;
         }
     }
