@@ -116,6 +116,7 @@ public class Gridle extends Activity
     public static final String CHEAT = "cheat";
     public static final String COUNT = "count";
     public static final String LANG = "lang";
+    public static final String SECS = "secs";
     public static final String WORD = "word";
 
     public static final String PUZZLE_0 = "puzzle_0";
@@ -181,12 +182,14 @@ public class Gridle extends Activity
     public static final int LIGHT   = 12;
 
     public static final int DELAY = 100;
+    public static final int SECS_DELAY = 1000;
     public static final int LONG_DELAY = 5000;
 
     private ActionMode.Callback actionModeCallback;
     private ActionMode actionMode;
 
     private KonfettiView konfettiView;
+    private Runnable incrementSecs;
     private TextView display[][];
     private TextView customView;
     private TextView actionView;
@@ -216,6 +219,7 @@ public class Gridle extends Activity
     private int count;
     private int theme;
     private int dict;
+    private int secs;
 
     // Called when the activity is first created.
     @Override
@@ -541,7 +545,7 @@ public class Gridle extends Activity
         }
 
         if (solved)
-            customView.setText(Integer.toString(count));
+            customView.setText("99 " + Integer.toString(count));
 
         else
             scorePuzzle();
@@ -1164,7 +1168,7 @@ public class Gridle extends Activity
         }
 
         // Show move count
-        customView.setText(Integer.toString(count));
+        customView.setText("99 " + Integer.toString(count));
 
         // Don't repeat fanfare etc
         if (solved)
@@ -1281,6 +1285,7 @@ public class Gridle extends Activity
             }
         }
 
+        secs = 0;
         count = 0;
         select = false;
         solved = false;
@@ -1719,5 +1724,15 @@ public class Gridle extends Activity
             text.setTypeface(Typeface.MONOSPACE);
             text.postDelayed(() -> dialog.dismiss(), LONG_DELAY);
         }
+    }
+
+    // CountSecs
+    private class CountSecs() implements Runnable
+    // countSecs
+    public void run()
+    {
+        customView.setText(Integer.toString(secs++) + "  "
+                           + Integer.toString(count));
+        customview.postDelayed(countSecs, SECS_DELAY);
     }
 }
