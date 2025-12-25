@@ -120,6 +120,7 @@ public class Large extends Activity
     private ActionMode actionMode;
 
     private KonfettiView konfettiView;
+    private Runnable incrementSecs;
     private TextView display[][];
     private TextView customView;
     private TextView actionView;
@@ -149,6 +150,7 @@ public class Large extends Activity
     private int count;
     private int theme;
     private int dict;
+    private int secs;
 
     // Called when the activity is first created.
     @Override
@@ -426,6 +428,13 @@ public class Large extends Activity
         getActionBar().setDisplayShowCustomEnabled(true);
         customView = (TextView) getActionBar().getCustomView();
 
+        incrementSecs = () ->
+        {
+            customView.setText(Integer.toString(secs++) + "  "
+                               + Integer.toString(count));
+            customView.postDelayed(incrementSecs, SECS_DELAY);
+        };
+
         used = new boolean[SIZE][];
         scored = new boolean[SIZE][];
         for (int row = 0; row < SIZE; row++)
@@ -436,6 +445,7 @@ public class Large extends Activity
 
         if (savedInstanceState != null)
         {
+            secs = savedInstanceState.getInt(Gridle.SECS);
             count = savedInstanceState.getInt(Gridle.COUNT);
             cheat = savedInstanceState.getBoolean(Gridle.CHEAT);
             solved = savedInstanceState.getBoolean(Gridle.SOLVED);
@@ -476,7 +486,8 @@ public class Large extends Activity
             }
 
             if (solved)
-                customView.setText(Integer.toString(count));
+                customView.setText(Integer.toString(secs) + "  "
+                                   + Integer.toString(count));
 
             else
                 scorePuzzle();
@@ -497,6 +508,10 @@ public class Large extends Activity
     protected void onResume()
     {
         super.onResume();
+
+        if (customView != null &&
+            incrementSecs != null)
+            customView.postDelayed(incrementSecs, Gridle.SECS_DELAY);
     }
 
     // onPause
@@ -510,6 +525,10 @@ public class Large extends Activity
             mediaPlayer.release();
             mediaPlayer = null;
         }
+
+        if (customView != null &&
+            incrementSecs != null)
+            customView.removeCallbacks(incrementSecs);
     }
 
     // onSaveInstanceState
@@ -518,6 +537,7 @@ public class Large extends Activity
     {
         super.onSaveInstanceState(outState);
 
+        outState.putInt(Gridle.SECS, secs);
         outState.putInt(Gridle.COUNT, count);
         outState.putBoolean(Gridle.CHEAT, cheat);
         outState.putBoolean(Gridle.SOLVED, solved);
@@ -693,11 +713,19 @@ public class Large extends Activity
             }
         }
 
+        secs = 0;
         count = 0;
         cheat = false;
         select = false;
         solved = false;
         scorePuzzle();
+
+        if (customView != null &&
+            incrementSecs != null)
+        {
+            customView.removeCallbacks(incrementSecs);
+            customView.postDelayed(incrementSecs, SECS_DELAY);
+        }
 
         View progress = findViewById(R.id.progress);
         progress.setVisibility(View.GONE);
@@ -833,13 +861,18 @@ public class Large extends Activity
             }
         }
 
-        customView.setText(Integer.toString(count));
+        customView.setText(Integer.toString(secs) + "  "
+                           + Integer.toString(count));
 
         if (solved)
             return;
 
         if (maybe)
         {
+            if (customView != null &&
+                incrementSecs != null)
+                customView.removeCallbacks(incrementSecs);
+
             if (fanfare)
             {
                 mediaPlayer = MediaPlayer.create(this, R.raw.fanfare);

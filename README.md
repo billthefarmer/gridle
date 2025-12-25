@@ -21,6 +21,11 @@ will turn grey. Keep trying until you have guessed all the the
 words. The colours may be changed by selecting **Highlight colours**
 in the menu.
 
+## Scoring
+The seconds since the game started and the move count is displayed in
+the toolbar. The timing will stop if the app is in the background and
+restart when brought back.
+
 ## Refresh
 Tap the **Refresh** button in the toolbar to clear the display and
 generate another gridle of words. Words are chosen at random from a list,
