@@ -494,6 +494,13 @@ public class Gridle extends Activity
         getActionBar().setDisplayShowCustomEnabled(true);
         customView = (TextView) getActionBar().getCustomView();
 
+        incrementSecs = () ->
+        {
+            customView.setText(Integer.toString(secs++) + "  "
+                               + Integer.toString(count));
+            customView.postDelayed(incrementSecs, SECS_DELAY);
+        };
+
         used = new boolean[SIZE][];
         scored = new boolean[SIZE][];
         for (int row = 0; row < SIZE; row++)
@@ -504,6 +511,7 @@ public class Gridle extends Activity
 
         if (savedInstanceState != null)
         {
+            secs = savedInstanceState.getInt(SECS);
             count = savedInstanceState.getInt(COUNT);
             cheat = savedInstanceState.getBoolean(CHEAT);
             solved = savedInstanceState.getBoolean(SOLVED);
@@ -545,10 +553,17 @@ public class Gridle extends Activity
         }
 
         if (solved)
-            customView.setText("99 " + Integer.toString(count));
+            customView.setText(Integer.toString(secs) + "  "
+                               + Integer.toString(count));
 
         else
+        {
             scorePuzzle();
+
+            if (customView != null &&
+                incrementSecs != null)
+                customView.postDelayed(incrementSecs, SECS_DELAY);
+        }
     }
 
     // onResume
@@ -556,6 +571,10 @@ public class Gridle extends Activity
     protected void onResume()
     {
         super.onResume();
+
+        if (customView != null &&
+            incrementSecs != null)
+            customView.postDelayed(incrementSecs, SECS_DELAY);
     }
 
     // onPause
@@ -569,6 +588,10 @@ public class Gridle extends Activity
             mediaPlayer.release();
             mediaPlayer = null;
         }
+
+        if (customView != null &&
+            incrementSecs != null)
+            customView.removeCallbacks(incrementSecs);
 
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
@@ -591,6 +614,7 @@ public class Gridle extends Activity
     {
         super.onSaveInstanceState(outState);
 
+        outState.putInt(SECS, secs);
         outState.putInt(COUNT, count);
         outState.putBoolean(CHEAT, cheat);
         outState.putBoolean(SOLVED, solved);
@@ -1168,7 +1192,8 @@ public class Gridle extends Activity
         }
 
         // Show move count
-        customView.setText("99 " + Integer.toString(count));
+        customView.setText(Integer.toString(secs) + "  "
+                           + Integer.toString(count));
 
         // Don't repeat fanfare etc
         if (solved)
@@ -1177,6 +1202,10 @@ public class Gridle extends Activity
         // Solved
         if (maybe)
         {
+            if (customView != null &&
+                incrementSecs != null)
+                customView.removeCallbacks(incrementSecs);
+
             if (fanfare)
             {
                 mediaPlayer = MediaPlayer.create(this, R.raw.fanfare);
@@ -1291,6 +1320,13 @@ public class Gridle extends Activity
         solved = false;
         cheat = false;
         scorePuzzle();
+
+        if (customView != null &&
+            incrementSecs != null)
+        {
+            customView.removeCallbacks(incrementSecs);
+            customView.postDelayed(incrementSecs, SECS_DELAY);
+        }
     }
 
     // accents
@@ -1724,15 +1760,5 @@ public class Gridle extends Activity
             text.setTypeface(Typeface.MONOSPACE);
             text.postDelayed(() -> dialog.dismiss(), LONG_DELAY);
         }
-    }
-
-    // CountSecs
-    private class CountSecs() implements Runnable
-    // countSecs
-    public void run()
-    {
-        customView.setText(Integer.toString(secs++) + "  "
-                           + Integer.toString(count));
-        customview.postDelayed(countSecs, SECS_DELAY);
     }
 }

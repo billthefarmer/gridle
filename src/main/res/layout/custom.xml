@@ -6,7 +6,5 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="right"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     android:textAppearance="?android:attr/textAppearanceLarge"
     tools:ignore="RtlHardcoded" />
