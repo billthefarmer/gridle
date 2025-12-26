@@ -432,7 +432,7 @@ public class Large extends Activity
         {
             customView.setText(Integer.toString(secs++) + "  "
                                + Integer.toString(count));
-            customView.postDelayed(incrementSecs, SECS_DELAY);
+            customView.postDelayed(incrementSecs, Gridle.SECS_DELAY);
         };
 
         used = new boolean[SIZE][];
@@ -511,7 +511,10 @@ public class Large extends Activity
 
         if (customView != null &&
             incrementSecs != null)
+        {
+            customView.removeCallbacks(incrementSecs);
             customView.postDelayed(incrementSecs, Gridle.SECS_DELAY);
+        }
     }
 
     // onPause
@@ -724,7 +727,7 @@ public class Large extends Activity
             incrementSecs != null)
         {
             customView.removeCallbacks(incrementSecs);
-            customView.postDelayed(incrementSecs, SECS_DELAY);
+            customView.postDelayed(incrementSecs, Gridle.SECS_DELAY);
         }
 
         View progress = findViewById(R.id.progress);

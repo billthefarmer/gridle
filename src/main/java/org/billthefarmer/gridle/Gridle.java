@@ -562,7 +562,10 @@ public class Gridle extends Activity
 
             if (customView != null &&
                 incrementSecs != null)
+            {
+                customView.removeCallbacks(incrementSecs);
                 customView.postDelayed(incrementSecs, SECS_DELAY);
+            }
         }
     }
 
@@ -574,7 +577,10 @@ public class Gridle extends Activity
 
         if (customView != null &&
             incrementSecs != null)
+        {
+            customView.removeCallbacks(incrementSecs);
             customView.postDelayed(incrementSecs, SECS_DELAY);
+        }
     }
 
     // onPause
