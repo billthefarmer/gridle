@@ -182,6 +182,11 @@
           android:showAsAction="never"
           android:title="@string/swedish" />
 
+      <item
+          android:id="@+id/greek"
+          android:showAsAction="never"
+          android:title="@string/greek" />
+
     </menu>
   </item>
 

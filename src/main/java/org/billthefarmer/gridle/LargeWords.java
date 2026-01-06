@@ -56,6 +56,7 @@ public class LargeWords
     public static final String DUTCH_FILE      = "Dutch-large.txt";
     public static final String AFRIKAANS_FILE  = "Afrikaans-large.txt";
     public static final String SWEDISH_FILE    = "Swedish-large.txt";
+    public static final String GREEK_FILE      = "Greek-large.txt";
 
     private static char gridle[][];
 
@@ -162,31 +163,55 @@ public class LargeWords
             switch (word.charAt(0))
             {
             case 'a': aList.add(word); break;
+            case 'α': aList.add(word); break;
             case 'b': bList.add(word); break;
+            case 'β': bList.add(word); break;
             case 'c': cList.add(word); break;
+            case 'ψ': cList.add(word); break;
             case 'd': dList.add(word); break;
+            case 'δ': dList.add(word); break;
             case 'e': eList.add(word); break;
+            case 'ε': eList.add(word); break;
             case 'f': fList.add(word); break;
+            case 'φ': fList.add(word); break;
             case 'g': gList.add(word); break;
+            case 'γ': gList.add(word); break;
             case 'h': hList.add(word); break;
+            case 'η': hList.add(word); break;
             case 'i': iList.add(word); break;
+            case 'ι': iList.add(word); break;
             case 'j': jList.add(word); break;
+            case 'ξ': jList.add(word); break;
             case 'k': kList.add(word); break;
+            case 'κ': kList.add(word); break;
             case 'l': lList.add(word); break;
+            case 'λ': lList.add(word); break;
             case 'm': mList.add(word); break;
+            case 'μ': mList.add(word); break;
             case 'n': nList.add(word); break;
+            case 'ν': nList.add(word); break;
             case 'o': oList.add(word); break;
+            case 'ο': oList.add(word); break;
             case 'p': pList.add(word); break;
+            case 'π': pList.add(word); break;
             case 'q': qList.add(word); break;
             case 'r': rList.add(word); break;
+            case 'ρ': rList.add(word); break;
             case 's': sList.add(word); break;
+            case 'σ': sList.add(word); break;
             case 't': tList.add(word); break;
+            case 'τ': tList.add(word); break;
             case 'u': uList.add(word); break;
+            case 'θ': uList.add(word); break;
             case 'v': vList.add(word); break;
+            case 'ω': vList.add(word); break;
             case 'w': wList.add(word); break;
             case 'x': xList.add(word); break;
+            case 'χ': xList.add(word); break;
             case 'y': yList.add(word); break;
+            case 'υ': yList.add(word); break;
             case 'z': zList.add(word); break;
+            case 'ζ': zList.add(word); break;
             }
         }
 
@@ -360,7 +385,7 @@ public class LargeWords
     private static String getWord(char a, char b, char c, char d)
     {
         Iterator<String> iterator = getIterator(a);
-        while (iterator.hasNext())
+        while (iterator != null && iterator.hasNext())
         {
             String word = iterator.next();
             if (usedSet.contains(word))
@@ -381,7 +406,7 @@ public class LargeWords
     private static String getWord(char c)
     {
         Iterator<String> iterator = getIterator(c);
-        while (iterator.hasNext())
+        while (iterator != null && iterator.hasNext())
         {
             String word = iterator.next();
             if (usedSet.contains(word))
@@ -400,31 +425,55 @@ public class LargeWords
         switch (c)
         {
         case 'a': return aIterator;
+        case 'α': return aIterator;
         case 'b': return bIterator;
+        case 'β': return bIterator;
         case 'c': return cIterator;
+        case 'ψ': return cIterator;
         case 'd': return dIterator;
+        case 'δ': return dIterator;
         case 'e': return eIterator;
+        case 'ε': return eIterator;
         case 'f': return fIterator;
+        case 'φ': return fIterator;
         case 'g': return gIterator;
+        case 'γ': return gIterator;
         case 'h': return hIterator;
+        case 'η': return hIterator;
         case 'i': return iIterator;
+        case 'ι': return iIterator;
         case 'j': return jIterator;
+        case 'ξ': return jIterator;
         case 'k': return kIterator;
+        case 'κ': return kIterator;
         case 'l': return lIterator;
+        case 'λ': return lIterator;
         case 'm': return mIterator;
+        case 'μ': return mIterator;
         case 'n': return nIterator;
+        case 'ν': return nIterator;
         case 'o': return oIterator;
+        case 'ο': return oIterator;
         case 'p': return pIterator;
+        case 'π': return pIterator;
         case 'q': return qIterator;
         case 'r': return rIterator;
+        case 'ρ': return rIterator;
         case 's': return sIterator;
+        case 'σ': return sIterator;
         case 't': return tIterator;
+        case 'τ': return tIterator;
         case 'u': return uIterator;
+        case 'θ': return uIterator;
         case 'v': return vIterator;
+        case 'ω': return vIterator;
         case 'w': return wIterator;
         case 'x': return xIterator;
+        case 'χ': return xIterator;
         case 'y': return yIterator;
+        case 'υ': return yIterator;
         case 'z': return zIterator;
+        case 'ζ': return zIterator;
         }
 
         return null;
@@ -525,6 +574,10 @@ public class LargeWords
 
         case Gridle.SWEDISH:
             readWords(context, SWEDISH_FILE, words);
+            break;
+
+        case Gridle.GREEK:
+            readWords(context, GREEK_FILE, words);
             break;
         }
     }
