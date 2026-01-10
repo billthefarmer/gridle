@@ -37,11 +37,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
 public class Words
 {
+    public static final String TAG = "Words";
 
     public static final String WORDS_FILE      = "Words.txt";
     public static final String ENGLISH_FILE    = "English.txt";

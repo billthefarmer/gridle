@@ -40,12 +40,15 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
 @SuppressWarnings("deprecation")
 public class LargeWords
 {
+    public static final String TAG = "LargeWords";
+
     public static final String WORDS_FILE      = "Words-large.txt";
     public static final String ITALIAN_FILE    = "Italian-large.txt";
     public static final String SPANISH_FILE    = "Spanish-large.txt";

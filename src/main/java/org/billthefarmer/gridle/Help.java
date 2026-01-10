@@ -88,6 +88,10 @@ public class Help extends Activity
         case Gridle.LIGHT:
             setTheme(R.style.AppLightTheme);
             break;
+
+        case Gridle.WHITE:
+            setTheme(R.style.AppWhiteTheme);
+            break;
         }
 
         setContentView(R.layout.help);

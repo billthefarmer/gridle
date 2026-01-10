@@ -207,6 +207,10 @@ public class Large extends Activity
         case Gridle.LIGHT:
             setTheme(R.style.AppLightTheme);
             break;
+
+        case Gridle.WHITE:
+            setTheme(R.style.AppWhiteTheme);
+            break;
         }
 
         setContentView(R.layout.large);
@@ -352,7 +356,17 @@ public class Large extends Activity
         toolbar = findViewById(getResources().getIdentifier("action_bar",
                                                             "id", "android"));
         // Set up navigation
-        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+        switch (theme)
+        {
+        case Gridle.WHITE:
+            toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
+            break;
+
+        default:
+            toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+            break;
+        }
+
         toolbar.setNavigationOnClickListener((v) ->
         {
             PopupMenu popup = new PopupMenu(this, v);
