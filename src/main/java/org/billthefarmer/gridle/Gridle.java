@@ -987,8 +987,7 @@ public class Gridle extends Activity
         builder.setTitle(R.string.selectHighlight);
         builder.setIcon(R.drawable.ic_launcher);
 
-        View view = ((LayoutInflater) builder.getContext()
-                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+        View view = ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE))
             .inflate(R.layout.colours, null);
         builder.setView(view);
 
@@ -997,6 +996,9 @@ public class Gridle extends Activity
             contains = getColour(YELLOW);
             correct = getColour(GREEN);
             wrong = getColour(GREY);
+
+            if (Build.VERSION.SDK_INT != Build.VERSION_CODES.M)
+                recreate();
         });
 
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -1012,6 +1014,9 @@ public class Gridle extends Activity
                 .getDefaultColor();
             wrong = ((TextView) those.getChildAt(0)).getTextColors()
                 .getDefaultColor();
+
+            if (Build.VERSION.SDK_INT != Build.VERSION_CODES.M)
+                recreate();
         });
 
         Dialog dialog = builder.show();
@@ -1393,7 +1398,7 @@ public class Gridle extends Activity
             return 0xff00ff00;
 
         case GREY:
-            return 0x3fffffff;
+            return 0xff7f7f7f;
         }
 
         return 0;
