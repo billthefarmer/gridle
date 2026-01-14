@@ -7,6 +7,7 @@ Fairly simple android word game.
 ![Gridle](https://github.com/billthefarmer/billthefarmer.github.io/raw/master/images/Gridle.png) ![Large](https://github.com/billthefarmer/billthefarmer.github.io/raw/master/images/Gridle-large.png)
 
  * Multiple coloured themes
+ * Multiple languages
 
 ## Guess those words
 Move letters in the grid to make a gridle of words. It's a good idea

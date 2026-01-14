@@ -31,7 +31,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 31
         versionName "1.21"
-        versionCode 120
+        versionCode 121
 
         buildConfigField "long", "BUILT", System.currentTimeMillis() + "L"
     }
