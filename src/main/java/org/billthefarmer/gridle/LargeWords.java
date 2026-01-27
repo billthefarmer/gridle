@@ -60,6 +60,7 @@ public class LargeWords
     public static final String AFRIKAANS_FILE  = "Afrikaans-large.txt";
     public static final String SWEDISH_FILE    = "Swedish-large.txt";
     public static final String GREEK_FILE      = "Greek-large.txt";
+    public static final String DANISH_FILE     = "Danish-large.txt";
 
     private static char gridle[][];
 
@@ -581,6 +582,10 @@ public class LargeWords
 
         case Gridle.GREEK:
             readWords(context, GREEK_FILE, words);
+            break;
+
+        case Gridle.DANISH:
+            readWords(context, DANISH_FILE, words);
             break;
         }
     }

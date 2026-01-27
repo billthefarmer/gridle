@@ -57,6 +57,7 @@ public class Words
     public static final String AFRIKAANS_FILE  = "Afrikaans.txt";
     public static final String SWEDISH_FILE    = "Swedish.txt";
     public static final String GREEK_FILE      = "Greek.txt";
+    public static final String DANISH_FILE     = "Danish.txt";
 
     private static char gridle[][];
 
@@ -493,6 +494,10 @@ public class Words
 
         case Gridle.GREEK:
             readWords(context, GREEK_FILE, words);
+            break;
+
+        case Gridle.DANISH:
+            readWords(context, DANISH_FILE, words);
             break;
         }
     }

@@ -1035,6 +1035,10 @@ public class Large extends Activity
         case Gridle.GREEK:
             getActionBar().setSubtitle(R.string.greek);
             break;
+
+        case Gridle.DANISH:
+            getActionBar().setSubtitle(R.string.danish);
+            break;
         }
     }
 

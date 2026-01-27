@@ -163,6 +163,7 @@ public class Gridle extends Activity
     public static final int AFRIKAANS  = 8;
     public static final int SWEDISH    = 9;
     public static final int GREEK      = 10;
+    public static final int DANISH     = 11;
 
     public static final int WIKTIONARY = 0;
     public static final int AARD2      = 1;
@@ -804,6 +805,10 @@ public class Gridle extends Activity
            setLanguage(GREEK);
            break;
 
+        case R.id.danish:
+           setLanguage(DANISH);
+           break;
+
         case R.id.confetti:
             confetti(item);
             break;
@@ -1442,6 +1447,9 @@ public class Gridle extends Activity
 
         case GREEK:
         	return "el";
+
+        case DANISH:
+        	return "da";
         }
     }
 
@@ -1503,6 +1511,10 @@ public class Gridle extends Activity
 
         case GREEK:
             getActionBar().setSubtitle(R.string.greek);
+            break;
+
+        case DANISH:
+            getActionBar().setSubtitle(R.string.danish);
             break;
         }
     }
