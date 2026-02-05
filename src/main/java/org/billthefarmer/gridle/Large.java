@@ -512,8 +512,7 @@ public class Large extends Activity
             View progress = findViewById(R.id.progress);
             progress.setVisibility(View.VISIBLE);
 
-            LargeWords.WordsTask task = new LargeWords.WordsTask(this);
-            task.execute();
+            LargeWords.makeGridle(this);
         }
     }
 
@@ -960,8 +959,7 @@ public class Large extends Activity
         View progress = findViewById(R.id.progress);
         progress.setVisibility(View.VISIBLE);
 
-        LargeWords.WordsTask task = new LargeWords.WordsTask(this);
-        task.execute();
+        LargeWords.makeGridle(this);
     }
 
     // accents

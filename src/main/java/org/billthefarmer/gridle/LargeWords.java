@@ -24,7 +24,8 @@
 package org.billthefarmer.gridle;
 
 import android.content.Context;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
@@ -43,6 +44,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 @SuppressWarnings("deprecation")
 public class LargeWords
@@ -122,6 +126,8 @@ public class LargeWords
     private static Iterator<String> zIterator;
 
     private static Set<String> usedSet;
+    private static ExecutorService executor;
+    private static Handler handler;
 
     private static Random random;
 
@@ -483,54 +489,31 @@ public class LargeWords
         return null;
     }
 
-    // WordsTask
-    public static class WordsTask
-            extends AsyncTask<Void, char[][], char[][]>
+    // makeGridle
+    public static void makeGridle(Large large)
     {
-        private WeakReference<Large> largeWeakReference;
+        // Handler
+        if (handler == null)
+            handler = new Handler(Looper.getMainLooper());
 
-        // WordsTask
-        public WordsTask(Large large)
+        // Executor
+        if (executor == null)
+            executor = Executors.newSingleThreadExecutor();
+
+        executor.execute(() ->
         {
-            largeWeakReference = new WeakReference<>(large);
-        }
+            char grid[][] = getGridle();
+            while (grid == null)
+                grid = getGridle();
+            char gridle[][] = grid;
+            char puzzle[][] = randomise(grid);
 
-        // doInBackground
-        @Override
-        protected char[][] doInBackground(Void... params)
-        {
-            final Large large = largeWeakReference.get();
-            if (large == null)
-                return null;
-
-            char gridle[][] = getGridle();
-            while (gridle == null)
-                gridle = getGridle();
-            publishProgress(gridle);
-
-            return randomise(gridle);
-        }
-
-        // onProgressUpdate
-        protected void onProgressUpdate(char[][]... gridles)
-        {
-            final Large large = largeWeakReference.get();
-            if (large == null)
-                return;
-
-            large.setGridle(gridles[0]);
-        }
-
-        // onPostExecute
-        @Override
-        protected void onPostExecute(char puzzle[][])
-        {
-            final Large large = largeWeakReference.get();
-            if (large == null)
-                return;
-
-            large.setPuzzle(puzzle);
-        }
+            handler.post(() ->
+            {
+                large.setGridle(gridle);
+                large.setPuzzle(puzzle);
+            });
+        });
     }
 
     public static void setLanguage(Context context, int l)
