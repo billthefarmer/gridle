@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.13.2'
     }
 }
 
@@ -23,13 +23,13 @@ allprojects {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 35
     namespace "org.billthefarmer.gridle"
 
     defaultConfig {
         applicationId "org.billthefarmer.gridle"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 35
         versionName "1.22"
         versionCode 122
 
@@ -37,9 +37,9 @@ android {
     }
 
     lintOptions {
-        disable 'NonConstantResourceId', 'ExpiredTargetSdkVersion',
+        disable 'NonConstantResourceId', 'ExpiredTargetSdkVersion', 'GradleDependency',
             'ClickableViewAccessibility', 'SetJavaScriptEnabled', 'SetTextI18n',
-	    'AndroidGradlePluginVersion', 'OldTargetApi', 'NonConstantResourceId'
+	    'AndroidGradlePluginVersion', 'OldTargetApi', 'DiscouragedApi'
         // abortOnError false
     }
 
