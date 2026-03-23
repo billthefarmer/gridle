@@ -24,14 +24,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 35
-    namespace "org.billthefarmer.gridle"
+    namespace = "org.billthefarmer.gridle"
 
     defaultConfig {
         applicationId "org.billthefarmer.gridle"
         minSdkVersion 21
         targetSdkVersion 35
-        versionName "1.22"
-        versionCode 122
+        versionName "1.23"
+        versionCode 123
 
         buildConfigField "long", "BUILT", System.currentTimeMillis() + "L"
     }
