@@ -24,6 +24,7 @@
 package org.billthefarmer.gridle;
 
 import android.content.Context;
+import android.util.Base64;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -518,5 +519,48 @@ public class Words
         {
             e.printStackTrace();
         }
+    }
+
+    // getCode
+    public static String getCode()
+    {
+        long seed = new Date().getTime();
+
+        random = new Random(seed);
+        if (usedSet != null)
+            usedSet.clear();
+
+        byte bytes[] = String.valueOf(seed).getBytes();
+        String code = Base64.encodeToString(bytes, Base64.DEFAULT);
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, String.format(Locale.getDefault(),
+                                     "%d, %s", seed, code));
+        return code;
+    }
+
+    // setCode
+    public static boolean setCode(String code)
+    {
+        try
+        {
+            byte bytes[] = Base64.decode(code, Base64.DEFAULT);
+            long seed = Long.valueOf(new String(bytes));
+            random = new Random(seed);
+
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, String.format(Locale.getDefault(),
+                                         "%d, %s", seed, code));
+        }
+
+        catch (Exception e)
+        {
+            return false;
+        }
+
+        if (usedSet != null)
+            usedSet.clear();
+
+        return true;
     }
 }

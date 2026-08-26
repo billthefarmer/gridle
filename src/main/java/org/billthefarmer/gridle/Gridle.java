@@ -28,6 +28,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -37,11 +38,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -57,6 +62,7 @@ import android.view.MotionEvent;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +70,17 @@ import android.widget.Toolbar;
 
 import android.support.v4.content.FileProvider;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.Binarizer;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Result;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
+import com.google.zxing.qrcode.QRCodeWriter;
+
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -79,6 +96,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import java.util.concurrent.TimeUnit;
 
@@ -101,7 +119,6 @@ public class Gridle extends Activity
     public static final String TAG = "Gridle";
 
     public static final int SIZE = 5;
-    public static final int VERSION_CODE_S_V2 = 32;
 
     public static final String PREF_THEME = "pref_theme";
     public static final String PREF_WRONG = "pref_wrong";
@@ -118,6 +135,7 @@ public class Gridle extends Activity
     public static final String LANG = "lang";
     public static final String SECS = "secs";
     public static final String WORD = "word";
+    public static final String DATA = "data";
 
     public static final String PUZZLE_0 = "puzzle_0";
     public static final String PUZZLE_1 = "puzzle_1";
@@ -131,8 +149,11 @@ public class Gridle extends Activity
     public static final String GRIDLE_3 = "gridle_3";
     public static final String GRIDLE_4 = "gridle_4";
 
+    public static final String DOT_PNG = ".png";
     public static final String GRIDLE_IMAGE = "Gridle.png";
     public static final String IMAGE_PNG = "image/png";
+    public static final String IMAGE_JPG = "image/jpg";
+    public static final String IMAGE_WILD = "image/*";
     public static final String TEXT_PLAIN = "text/plain";
 
     public static final String EXTRA_TO = "to";
@@ -182,6 +203,10 @@ public class Gridle extends Activity
     public static final int BLACK   = 10;
     public static final int WHITE   = 11;
     public static final int LIGHT   = 12;
+
+    public static final int REQUEST_IMAGE = 1;
+
+    public static final int BITMAP_SCALE = 8;
 
     public static final int DELAY = 100;
     public static final int SECS_DELAY = 1000;
@@ -721,6 +746,10 @@ public class Gridle extends Activity
             selectText();
             break;
 
+        case R.id.code:
+            showCode();
+            break;
+
         case R.id.large:
             large();
             break;
@@ -808,6 +837,14 @@ public class Gridle extends Activity
         case R.id.danish:
            setLanguage(DANISH);
            break;
+
+        case R.id.getText:
+            getText();
+            break;
+
+        case R.id.getImage:
+            getImage();
+            break;
 
         case R.id.confetti:
             confetti(item);
@@ -912,6 +949,64 @@ public class Gridle extends Activity
             finish();
     }
 
+    // onNewIntent
+    @Override
+    public void onNewIntent(Intent intent)
+    {
+        if (Intent.ACTION_SEND.contentEquals(intent.getAction()))
+        {
+            String type = intent.getType();
+            if (IMAGE_PNG.contentEquals(type) ||
+                IMAGE_JPG.contentEquals(type) ||
+                IMAGE_WILD.contentEquals(type))
+            {
+                Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                if (uri != null)
+                {
+                    try (BufferedInputStream is = new BufferedInputStream
+                        (getContentResolver().openInputStream(uri)))
+                    {
+                        BitmapDrawable drawable =
+                            new BitmapDrawable(getResources(), is);
+                        Bitmap bitmap = drawable.getBitmap();
+                        if (decodeImage(bitmap) && count == 0)
+                            refresh();
+                    }
+
+                    catch (Exception e) {}
+                }
+            }
+
+            else if (TEXT_PLAIN.contentEquals(type))
+            {
+                String code = intent.getStringExtra(Intent.EXTRA_TEXT);
+                if (Words.setCode(code))
+                {
+                    showToast(R.string.newCode);
+                    if (count == 0)
+                        refresh();
+                }
+
+                else
+                {
+                    showToast(R.string.notRecognised);
+                }
+            }
+        }
+    }
+
+    // onActivityResult
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data)
+    {
+        if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK)
+        {
+            Bitmap bitmap = data.getParcelableExtra(DATA);
+            decodeImage(bitmap);
+        }
+    }
+
     // addAccents
     public static void addAccents(TextView textView, Menu menu)
     {
@@ -955,6 +1050,45 @@ public class Gridle extends Activity
 
         for (String item: items)
             menu.add(item);
+    }
+
+    // decodeImage
+    private boolean decodeImage(Bitmap bitmap)
+    {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        int pixels[] = new int[width * height];
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+        RGBLuminanceSource source = new
+            RGBLuminanceSource(width, height, pixels);
+        Binarizer binarizer = new HybridBinarizer(source);
+        BinaryBitmap image = new BinaryBitmap(binarizer);
+        QRCodeReader reader = new QRCodeReader();
+        try
+        {
+            Result result = reader.decode(image);
+            String code = result.getText();
+
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "Code " + code);
+
+            if (Words.setCode(code))
+            {
+                showToast(R.string.newCode);
+                return true;
+            }
+
+            else
+                showToast(R.string.notRecognised);
+        }
+
+        catch (Exception e)
+        {
+            showToast(R.string.notRecognised);
+        }
+
+        return false;
     }
 
     // theme
@@ -1116,6 +1250,193 @@ public class Gridle extends Activity
         intent.putExtra(Intent.EXTRA_STREAM, imageUri);
 
         startActivity(Intent.createChooser(intent, null));
+    }
+
+    // showCode
+    private void showCode()
+    {
+        String code = Words.getCode();
+        codeDialog(code, (dialog, id)->
+        {
+            switch (id)
+            {
+            case DialogInterface.BUTTON_POSITIVE:
+                shareCode(code);
+                break;
+
+            case DialogInterface.BUTTON_NEUTRAL:
+                shareQRCode(code);
+                break;
+            }
+        });
+    }
+
+    // codeDialog
+    private void codeDialog(String code,
+                            DialogInterface.OnClickListener listener)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.appName);
+        builder.setIcon(R.drawable.ic_launcher);
+        builder.setMessage(code);
+        builder.setPositiveButton(R.string.code, listener);
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.setNeutralButton(R.string.qrCode, listener);
+        Dialog dialog = builder.show();
+
+        TextView text = (TextView) dialog.findViewById(android.R.id.message);
+        if (text != null)
+        {
+            ViewGroup.MarginLayoutParams layout =
+                (ViewGroup.MarginLayoutParams) text.getLayoutParams();
+            layout.topMargin += 32;
+            text.setLayoutParams(layout);
+            text.setGravity(Gravity.CENTER);
+            text.setTextIsSelectable(true);
+            Drawable drawable = getDrawable(code);
+            text.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                                                         null, drawable);
+        }
+    }
+
+    // shareCode
+    private void shareCode(String s)
+    {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        String title = getString(R.string.appName);
+        String code = getString(R.string.code);
+        intent.putExtra(Intent.EXTRA_TITLE, title);
+        intent.putExtra(Intent.EXTRA_SUBJECT, code);
+        intent.putExtra(Intent.EXTRA_TEXT, s);
+        intent.setType(TEXT_PLAIN);
+        startActivity(Intent.createChooser(intent, null));
+    }
+
+    // shareQRCode
+    private void shareQRCode(String s)
+    {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        String title = getString(R.string.appName);
+        String code = getString(R.string.code);
+        intent.putExtra(Intent.EXTRA_TITLE, title);
+        intent.putExtra(Intent.EXTRA_SUBJECT, code);
+        intent.setType(IMAGE_PNG);
+
+        Bitmap bitmap = getBitmap(s, BITMAP_SCALE);
+        String name = UUID.randomUUID().toString() + DOT_PNG;
+        File image = new File(getCacheDir(), name);
+        try (BufferedOutputStream out = new
+             BufferedOutputStream(new FileOutputStream(image)))
+        {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+        }
+
+        catch (Exception e) {}
+
+        Uri imageUri = FileProvider
+            .getUriForFile(this, FILE_PROVIDER, image);
+        intent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        startActivity(Intent.createChooser(intent, null));
+    }
+
+    // getDrawable
+    private Drawable getDrawable(String code)
+    {
+        float density = getResources().getDisplayMetrics().density;
+        int scale = (int) (BITMAP_SCALE * density);
+        Bitmap bitmap = getBitmap(code, scale);
+        return new BitmapDrawable(getResources(), bitmap);
+    }
+
+    // getBitmap
+    private Bitmap getBitmap(String code, int scale)
+    {
+        try
+        {
+            QRCodeWriter writer = new QRCodeWriter();
+            BitMatrix matrix = writer.encode(code, BarcodeFormat.QR_CODE, 0, 0);
+            int width = matrix.getWidth();
+            int height = matrix.getHeight();
+            Bitmap bitmap = Bitmap.createBitmap(width * scale,
+                                                height * scale,
+                                                Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            canvas.drawColor(Color.WHITE);
+            Paint paint = new Paint();
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(Color.BLACK);
+            for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
+                    if (matrix.get(x, y))
+                        canvas.drawRect(x * scale, y * scale,
+                                        (x * scale) + scale,
+                                        (y * scale) + scale, paint);
+            return bitmap;
+        }
+
+        catch (Exception e) {}
+
+        return null;
+    }
+
+    // getText
+    private void getText()
+    {
+        textDialog((dialog, id) ->
+        {
+            switch (id)
+            {
+            case DialogInterface.BUTTON_POSITIVE:
+                TextView text = (TextView)
+                    ((Dialog) dialog).findViewById(R.id.code);
+                String code = text.getText().toString();
+
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "Code " + code);
+
+                if (Words.setCode(code))
+                {
+                    showToast(R.string.newCode);
+                    if (count == 0)
+                        refresh();
+                }
+
+                else
+                    showToast(R.string.notRecognised);
+                break;
+            }
+        });
+    }
+
+    // textDialog
+    private void textDialog(DialogInterface.OnClickListener listener)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.enterCode);
+        builder.setIcon(R.drawable.ic_launcher);
+        builder.setPositiveButton(android.R.string.ok, listener);
+        builder.setNegativeButton(android.R.string.cancel, null);
+
+        // Create edit text
+        EditText text = new EditText(builder.getContext());
+        text.setId(R.id.code);
+        text.setHint(R.string.code);
+        text.setInputType(InputType.TYPE_CLASS_TEXT);
+        AlertDialog dialog = builder.create();
+        dialog.setView(text, 40, 0, 40, 0);
+        dialog.show();
+    }
+
+    // getImage
+    private void getImage()
+    {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try
+        {
+            startActivityForResult(intent, REQUEST_IMAGE);
+        }
+
+        catch (Exception e) {}
     }
 
     // selectText
@@ -1739,7 +2060,7 @@ public class Gridle extends Activity
         toast.setGravity(Gravity.CENTER, 0, 0);
         // Fix for android 13
         View view = toast.getView();
-        if (view != null && Build.VERSION.SDK_INT > VERSION_CODE_S_V2)
+        if (view != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2)
             view.setBackgroundResource(R.drawable.toast_frame);
         toast.show();
     }

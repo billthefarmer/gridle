@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
 
   <string name="appName">Gridle</string>
   <string name="help">Help</string>
@@ -15,6 +18,10 @@
   <string name="aard2">Aard2</string>
   <string name="quickdic">Quickdic</string>
   <string name="wikt">Wictionary</string>
+  <string name="code">Code</string>
+  <string name="qrCode">QR code</string>
+  <string name="getCode">Get code</string>
+  <string name="enterCode">Enter code</string>
   <string name="about">About</string>
 
   <string name="language">Language</string>
@@ -52,6 +59,8 @@
   <string name="finish">Finish the word grid first</string>
   <string name="select">Select a word</string>
   <string name="which">Which word?</string>
+  <string name="newCode">New code set</string>
+  <string name="notRecognised">Code not recognised</string>
 
   <string name="congratulations">
     Congratulations! You have solved Gridle correctly
