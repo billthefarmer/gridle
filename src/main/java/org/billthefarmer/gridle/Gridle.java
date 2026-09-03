@@ -576,6 +576,41 @@ public class Gridle extends Activity
 
         else
         {
+            Intent intent = getIntent();
+            if (Intent.ACTION_SEND.contentEquals(intent.getAction()))
+            {
+                String type = intent.getType();
+                if (IMAGE_PNG.contentEquals(type) ||
+                    IMAGE_JPG.contentEquals(type) ||
+                    IMAGE_WILD.contentEquals(type))
+                {
+                    Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                    if (uri != null)
+                    {
+                        try (BufferedInputStream is = new BufferedInputStream
+                             (getContentResolver().openInputStream(uri)))
+                        {
+                            BitmapDrawable drawable =
+                                new BitmapDrawable(getResources(), is);
+                            Bitmap bitmap = drawable.getBitmap();
+                            decodeImage(bitmap);
+                        }
+
+                        catch (Exception e) {}
+                    }
+                }
+
+                else if (TEXT_PLAIN.contentEquals(type))
+                {
+                    String code = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    if (Words.setCode(code))
+                        showToast(R.string.newCode);
+
+                    else
+                        showToast(R.string.notRecognised);
+                }
+            }
+
             gridle = Words.getGridle();
             puzzle = Words.randomise(gridle);
             solved = false;
@@ -1003,7 +1038,8 @@ public class Gridle extends Activity
         if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK)
         {
             Bitmap bitmap = data.getParcelableExtra(DATA);
-            decodeImage(bitmap);
+            if (decodeImage(bitmap) && count == 0)
+                refresh();
         }
     }
 

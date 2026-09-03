@@ -528,6 +528,41 @@ public class Large extends Activity
 
         else
         {
+            Intent intent = getIntent();
+            if (Intent.ACTION_SEND.contentEquals(intent.getAction()))
+            {
+                String type = intent.getType();
+                if (IMAGE_PNG.contentEquals(type) ||
+                    IMAGE_JPG.contentEquals(type) ||
+                    IMAGE_WILD.contentEquals(type))
+                {
+                    Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                    if (uri != null)
+                    {
+                        try (BufferedInputStream is = new BufferedInputStream
+                             (getContentResolver().openInputStream(uri)))
+                        {
+                            BitmapDrawable drawable =
+                                new BitmapDrawable(getResources(), is);
+                            Bitmap bitmap = drawable.getBitmap();
+                            decodeImage(bitmap);
+                        }
+
+                        catch (Exception e) {}
+                    }
+                }
+
+                else if (TEXT_PLAIN.contentEquals(type))
+                {
+                    String code = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    if (LargeWords.setCode(code))
+                        showToast(R.string.newCode);
+
+                    else
+                        showToast(R.string.notRecognised);
+                }
+            }
+
             View progress = findViewById(R.id.progress);
             progress.setVisibility(View.VISIBLE);
 
@@ -782,7 +817,7 @@ public class Large extends Activity
             else if (Gridle.TEXT_PLAIN.contentEquals(type))
             {
                 String code = intent.getStringExtra(Intent.EXTRA_TEXT);
-                if (Words.setCode(code))
+                if (LargeWords.setCode(code))
                 {
                     showToast(R.string.newCode);
                     if (count == 0)
@@ -818,7 +853,7 @@ public class Large extends Activity
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "Code " + code);
 
-            if (Words.setCode(code))
+            if (LargeWords.setCode(code))
             {
                 showToast(R.string.newCode);
                 return true;
