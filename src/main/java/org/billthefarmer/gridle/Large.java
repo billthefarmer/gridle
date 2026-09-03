@@ -532,9 +532,9 @@ public class Large extends Activity
             if (Intent.ACTION_SEND.contentEquals(intent.getAction()))
             {
                 String type = intent.getType();
-                if (IMAGE_PNG.contentEquals(type) ||
-                    IMAGE_JPG.contentEquals(type) ||
-                    IMAGE_WILD.contentEquals(type))
+                if (Gridle.IMAGE_PNG.contentEquals(type) ||
+                    Gridle.IMAGE_JPG.contentEquals(type) ||
+                    Gridle.IMAGE_WILD.contentEquals(type))
                 {
                     Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
                     if (uri != null)
@@ -552,7 +552,7 @@ public class Large extends Activity
                     }
                 }
 
-                else if (TEXT_PLAIN.contentEquals(type))
+                else if (Gridle.TEXT_PLAIN.contentEquals(type))
                 {
                     String code = intent.getStringExtra(Intent.EXTRA_TEXT);
                     if (LargeWords.setCode(code))
