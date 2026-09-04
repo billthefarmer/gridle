@@ -8,6 +8,7 @@ Fairly simple android word game.
 
  * Multiple coloured themes
  * Multiple languages
+ * Look up word meaning
 
 ## Guess those words
 Move letters in the grid to make a gridle of words. It's a good idea
@@ -34,7 +35,7 @@ and are checked that they haven't been used recently.
 
 ## Share
 Tap the **Share** button in the toolbar to share an image or text
-from the display.
+from the display, or code.
 
 ### Image
 Share an image of the display.
@@ -46,6 +47,13 @@ letters and colours of the word will be shared. Select the
 possibilities for that word. **Hint:** If the crossword app fails to
 produce any suggestions, try moving any letter which might belong to
 the other direction.
+
+### Code
+Display an alphanumeric code and a QR code which represents a new
+sequence of words to guess. This code may be shared with another copy
+of Gridle on another device to set the grid of words. Tapping the QR
+code button on the dialog shares the QR code image. Tapping the code
+button shares the alphanumeric code.
 
 ## Large
 Solve a larger 7x7 grid of words. This may show an initial blank grid
@@ -74,6 +82,25 @@ Select coloured themes from the **Theme** item in the menu.
 
 ## Language
 Select **Language** from the menu.
+
+## Get code
+### Code
+Enter the code shared by another copy of Gurgle to set the same
+sequence of words. If a game is in progress tap the refresh button to
+start the new sequence. You may also make up your own code. It doesn't
+need the two equals symbols on the end ('='), but will fail with just
+one.
+
+### QR code
+Opens the camera app on the phone to take a photo of a QR code. The
+app will attempt to decode it. There are plenty of very good QR code
+and barcode scanner apps that do a better job.
+
+### Receiving a code
+If the app is sent a code or a QR code image it will set a new
+sequence of words if the code is decoded successfully. This does not
+affect the current game. If a game is in progress tap the refresh
+button to start the new sequence.
 
 ## Highlight colours
 A dialog will pop up showing two guesses, one containing some letters
