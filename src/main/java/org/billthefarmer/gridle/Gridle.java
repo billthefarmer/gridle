@@ -150,7 +150,6 @@ public class Gridle extends Activity
     public static final String GRIDLE_4 = "gridle_4";
 
     public static final String DOT_PNG = ".png";
-    public static final String GRIDLE_IMAGE = "Gridle.png";
     public static final String IMAGE_PNG = "image/png";
     public static final String IMAGE_JPG = "image/jpg";
     public static final String IMAGE_WILD = "image/*";
@@ -1268,11 +1267,14 @@ public class Gridle extends Activity
         intent.setType(IMAGE_PNG);
 
         View root = findViewById(android.R.id.content).getRootView();
-        root.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(root.getDrawingCache());
-        root.setDrawingCacheEnabled(false);
+        int w = root.getWidth();
+        int h = root.getHeight();
+        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        root.draw(canvas);
 
-        File image = new File(getCacheDir(), GRIDLE_IMAGE);
+        String name = UUID.randomUUID().toString() + DOT_PNG;
+        File image = new File(getCacheDir(), name);
         try (BufferedOutputStream out = new
              BufferedOutputStream(new FileOutputStream(image)))
         {

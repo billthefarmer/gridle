@@ -921,11 +921,14 @@ public class Large extends Activity
         intent.setType(Gridle.IMAGE_PNG);
 
         View root = findViewById(android.R.id.content).getRootView();
-        root.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(root.getDrawingCache());
-        root.setDrawingCacheEnabled(false);
+        int w = root.getWidth();
+        int h = root.getHeight();
+        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        root.draw(canvas);
 
-        File image = new File(getCacheDir(), Gridle.GRIDLE_IMAGE);
+        String name = UUID.randomUUID().toString() + Gridle.DOT_PNG;
+        File image = new File(getCacheDir(), name);
         try (BufferedOutputStream out = new
              BufferedOutputStream(new FileOutputStream(image)))
         {
