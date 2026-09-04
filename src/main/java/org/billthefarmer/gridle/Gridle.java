@@ -577,7 +577,7 @@ public class Gridle extends Activity
         else
         {
             Intent intent = getIntent();
-            if (Intent.ACTION_SEND.contentEquals(intent.getAction()))
+            if (Intent.ACTION_SEND.equals(intent.getAction()))
             {
                 String type = intent.getType();
                 if (IMAGE_PNG.contentEquals(type) ||
