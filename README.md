@@ -85,7 +85,7 @@ Select **Language** from the menu.
 
 ## Get code
 ### Code
-Enter the code shared by another copy of Gurgle to set the same
+Enter the code shared by another copy of Gridle to set the same
 sequence of words. If a game is in progress tap the refresh button to
 start the new sequence. You may also make up your own code. It doesn't
 need the two equals symbols on the end ('='), but will fail with just
