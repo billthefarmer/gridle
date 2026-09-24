@@ -1086,7 +1086,7 @@ public class Large extends Activity
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "Code " + code);
 
-                if (Words.setCode(code))
+                if (LargeWords.setCode(code))
                 {
                     showToast(R.string.newCode);
                     if (count == 0)
